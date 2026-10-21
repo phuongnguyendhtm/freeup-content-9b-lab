@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "status": "design_contract_not_executable",
+  "package_id": "freeup-content-gon-lab",
+  "root": "Nội dung của tôi",
+  "paths": {
+    "resources": "Tài nguyên của tôi",
+    "broll": "Tài nguyên của tôi/Video cảnh quay",
+    "music": "Tài nguyên của tôi/Nhạc nền",
+    "voice": "Tài nguyên của tôi/Giọng đọc",
+    "supplemental_images": "Tài nguyên của tôi/Ảnh bổ sung",
+    "brand_assets": "Tài nguyên của tôi/Logo và nhận diện",
+    "knowledge_drafts": "Hồ sơ cần hoàn thiện",
+    "outputs": "Nội dung đã tạo"
+  },
+  "optional_paths": ["supplemental_images", "brand_assets"],
+  "delivery_files": {
+    "post_text": "Bài viết.txt",
+    "preview": "Xem bài.html",
+    "image_pattern": "Ảnh {number:02}.png",
+    "video": "Video.mp4",
+    "subtitles": "Phụ đề.srt"
+  },
+  "policy": {
+    "resolve_root_in_customer_workspace": true,
+    "create_and_verify_before_returning_absolute_paths": true,
+    "never_return_guide_machine_paths": true,
+    "primary_images": "native_9b_business_image_library",
+    "preserve_original_native_asset_ids": true,
+    "knowledge_final_destination": "native_9b_knowledge_correct_business",
+    "phone_uploads": "customer_owned_connected_drive_with_verified_permissions_if_selected",
+    "unicode_and_spaces_required": true,
+    "shell_arguments": "argument_arrays_not_command_string_interpolation",
+    "empty_folder_is_ready": false,
+    "output_files_only_if_actually_created_and_verified": true,
+    "internal_caption_file_may_remain": "caption.txt",
+    "internal_system_names_may_remain_english": true,
+    "existing_live_paths_moved": false
+  }
+}

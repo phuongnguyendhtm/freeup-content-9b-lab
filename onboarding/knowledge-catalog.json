@@ -60,7 +60,8 @@
         "brand.fonts",
         "brand.visual_style"
       ],
-      "when_needed": "Business identity or USP missing; brand identity missing for visual formats."
+      "when_needed": "Business identity or USP missing; brand identity missing for visual formats.",
+      "customer_filename": "01. Thông tin công ty và nhận diện.md"
     },
     {
       "id": "T02",
@@ -86,7 +87,8 @@
         "founder.expertise",
         "founder.viewpoints"
       ],
-      "when_needed": "Founder/personal-brand content requested and relevant founder facts missing."
+      "when_needed": "Founder/personal-brand content requested and relevant founder facts missing.",
+      "customer_filename": "02. Thông tin nhà sáng lập.md"
     },
     {
       "id": "T03",
@@ -113,7 +115,8 @@
         "offers.differentiator",
         "offers.evidence"
       ],
-      "when_needed": "Offer/promotional content requested and relevant offer facts missing; explicit no-offer accepted for other content."
+      "when_needed": "Offer/promotional content requested and relevant offer facts missing; explicit no-offer accepted for other content.",
+      "customer_filename": "03. Sản phẩm và dịch vụ.md"
     },
     {
       "id": "T04",
@@ -138,7 +141,8 @@
         "audience.journey",
         "audience.objections"
       ],
-      "when_needed": "Audience/problem unclear for the requested content."
+      "when_needed": "Audience/problem unclear for the requested content.",
+      "customer_filename": "04. Chân dung khách hàng.md"
     },
     {
       "id": "T05",
@@ -163,7 +167,8 @@
         "sales.price_rules",
         "sales.escalation"
       ],
-      "when_needed": "Sales-conversion content, objections or commercial boundaries missing."
+      "when_needed": "Sales-conversion content, objections or commercial boundaries missing.",
+      "customer_filename": "05. Kịch bản bán hàng.md"
     },
     {
       "id": "T06",
@@ -188,7 +193,8 @@
         "marketing.cta",
         "marketing.campaigns"
       ],
-      "when_needed": "Content goal/channel/CTA or campaign context missing."
+      "when_needed": "Content goal/channel/CTA or campaign context missing.",
+      "customer_filename": "06. Kế hoạch marketing.md"
     },
     {
       "id": "T07",
@@ -213,7 +219,8 @@
         "support.escalation",
         "support.faq"
       ],
-      "when_needed": "FAQ or after-sales/support content requested and confirmed answers missing."
+      "when_needed": "FAQ or after-sales/support content requested and confirmed answers missing.",
+      "customer_filename": "07. Chăm sóc khách hàng.md"
     },
     {
       "id": "T08",
@@ -238,7 +245,8 @@
         "work.restricted_actions",
         "work.unknowns"
       ],
-      "when_needed": "Workflow preferences or escalation boundaries need clarification; never overrides host permissions."
+      "when_needed": "Workflow preferences or escalation boundaries need clarification; never overrides host permissions.",
+      "customer_filename": "08. Cách AI làm việc.md"
     },
     {
       "id": "T09",
@@ -263,7 +271,8 @@
         "content.do_avoid",
         "content.examples"
       ],
-      "when_needed": "Writing structure/length/CTA/sample preferences missing; accept confirmed defaults as preferences."
+      "when_needed": "Writing structure/length/CTA/sample preferences missing; accept confirmed defaults as preferences.",
+      "customer_filename": "09. Phong cách nội dung.md"
     },
     {
       "id": "T10",
@@ -288,7 +297,8 @@
         "voice.avoid_words",
         "voice.good_bad_examples"
       ],
-      "when_needed": "Writing tone/pronouns/word preferences missing; accept equivalent approved samples."
+      "when_needed": "Writing tone/pronouns/word preferences missing; accept equivalent approved samples.",
+      "customer_filename": "10. Giọng điệu và ngôn ngữ.md"
     }
   ]
 }

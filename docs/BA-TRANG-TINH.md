@@ -1,6 +1,6 @@
 # Thiết kế đúng ba trang tính
 
-**Bản đặc tả để duyệt, chưa tạo Google Sheet · Schema dự kiến `content-gon-lab-v1`.**
+**Bản đặc tả để duyệt · 22/10/2026 · Chưa tạo Google Sheet · Schema dự kiến `content-gon-lab-v1`. Menu ngang v2 đã có tệp thật, chưa tích hợp mở/gửi trong chat 9B.**
 
 Không copy bảy tab rồi ẩn bốn tab. File mới có đúng ba trang tính thực. Không dùng validator/template ID của gói FREEUP đang vận hành.
 
@@ -39,7 +39,9 @@ Nếu nguồn chưa đọc được, báo giới hạn hoặc hỏi quyền; kh�
 
 ### Hồ sơ không nằm ở tab này
 
-Không nhét USP, giọng, màu, sản phẩm hoặc câu hỏi onboarding vào tab Nguồn. Phần thiếu được hướng dẫn bằng link mẫu, khách nộp vào Tri thức rồi nhắn Tôi đã hoàn tất; hệ thống đọc lại trước khi hiện menu ảnh.
+Không nhét USP, giọng, màu, sản phẩm hoặc câu hỏi onboarding vào tab Nguồn. Phần thiếu được hướng dẫn bằng link mẫu, khách nộp vào Tri thức rồi nhắn Tôi đã hoàn tất; hệ thống đọc lại phần cần cho công việc. Việc chưa hoàn tất onboarding không chặn xem menu: khách nhắn **“hệ thống content”** là hiện ngay [menu ngang v2](../assets/menu/he-thong-content-ngang-v2.png), kèm số/tên; sau thiết lập ban đầu đã kiểm cũng tự hiện cùng menu.
+
+Tệp v2 đã có, **1672 × 941**, nhưng luồng chat này còn phải được tích hợp và nghiệm thu. Trước khi gửi phải kiểm tệp đọc được và đúng nhãn; nếu kênh không hiển thị ảnh, dùng bảng chữ và nói rõ. Mở menu không tạo bài. Chữ số đơn lẻ chỉ chọn định dạng khi hội thoại lab đang ở ngữ cảnh menu/chờ lựa chọn; ngoài ngữ cảnh không tự tạo job. Sau khi khách chọn số/tên, chỉ hỏi thông tin còn thiếu cần cho định dạng đã chọn.
 
 ## 3. Tab `01. Ý tưởng`
 
@@ -53,12 +55,28 @@ Tám cột hiển thị:
 | B | Ý tưởng | AI hoặc khách | Một tiêu đề dễ hiểu |
 | C | Góc triển khai / yêu cầu | AI gợi ý; khách có thể sửa | Làm rõ thông điệp và yêu cầu riêng |
 | D | Nguồn | Hệ thống hoặc khách | Link nguồn/hồ sơ nguồn có bài và ảnh gốc khi đọc được |
-| E | Định dạng | AI gợi ý; khách có thể chọn | Bài chữ, ảnh, carousel, infographic, video khi có công cụ |
+| E | Định dạng | AI gợi ý; khách có thể chọn | Một trong chín định dạng riêng theo menu; chọn đúng tên/số, không gộp chung thành “ảnh” hoặc “video” |
 | F | Chọn làm | Khách | `Chưa chọn` / `Làm bài` / `Bỏ qua` |
 | G | Ghi chú | Khách | Điều muốn bổ sung/tránh |
 | H | Tiến độ | Hệ thống | `Chờ chọn` / `Đã nhận` / `Đang làm` / `Có bản nháp` / `Cần bổ sung` |
 
 Một cột mã ý tưởng có thể được bảo vệ/ẩn phía sau để nhận diện ổn định. Ngoài cột đó, nguồn gốc đầy đủ, hash và tiến trình nằm trong hồ sơ gói, không trải thành hàng chục cột.
+
+Chín lựa chọn tại cột E đồng bộ với menu:
+
+| Số | Định dạng |
+|---|---|
+| 1 | Bài viết |
+| 2 | Bài đăng kèm sản phẩm |
+| 3 | Ảnh cá nhân + quan điểm |
+| 4 | Ảnh minh họa insight |
+| 5 | Carousel / album |
+| 6 | Infographic / sơ đồ |
+| 7 | Video B-roll có chữ |
+| 8 | Video có giọng đọc |
+| 9 | Chuỗi bình luận |
+
+Ô **0 — Làm theo lịch** là lối tắt lập kế hoạch/lịch content trong chat, không thay thế một định dạng và không thêm trang tính thứ tư. Với ô 2, bài bán hàng kèm ảnh sản phẩm thật và banner sản phẩm/ưu đãi kèm bài đăng là hai nhánh của cùng định dạng **Bài đăng kèm sản phẩm**.
 
 ### Khách thao tác
 
@@ -81,8 +99,8 @@ Mười cột thường dùng:
 | Cột | Tên | Ai ghi? | Mục đích |
 |---|---|---|---|
 | A | Tên bài | Hệ thống | Nhận biết bài |
-| B | Nội dung | AI; khách có thể sửa | Caption/bài hoàn chỉnh, xuống dòng dễ đọc |
-| C | Xem ảnh/video | Hệ thống | Link preview/Drive hoặc bundle thực |
+| B | Nội dung | AI; khách có thể sửa | Caption/bài hoàn chỉnh, xuống dòng dễ đọc; bắt buộc với mọi bộ bài visual mặc định |
+| C | Xem ảnh/video | Hệ thống | Link preview/Drive hoặc bộ file thực, đồng bộ với caption ở cột B |
 | D | Kênh / tài khoản | Khách chọn từ kết nối thật | Đích đăng; có lựa chọn Tôi tự đăng |
 | E | Ngày giờ dự kiến | Khách hoặc AI đề xuất | Lịch trong múi giờ Việt Nam |
 | F | Hành động | Khách | `Chưa chọn` / `Yêu cầu sửa` / `Duyệt nội dung` / `Đăng theo lịch` / `Tôi tự đăng` |
@@ -93,6 +111,10 @@ Mười cột thường dùng:
 
 ID bài, ID ý và version/hash là tối đa ba cột quản lý được bảo vệ/ẩn. Bản đầu không đưa lượt xem/like/lead thành nhiều cột cố định; xem số liệu trong chat theo yêu cầu và nguồn đọc được. Nếu sau pilot cần thêm, mở nhóm cột tùy chọn trong cùng tab, không tăng số tab.
 
+Mọi định dạng có ảnh/video mặc định là **bộ bài hoàn chỉnh để duyệt/đăng**, có caption hoặc bài đăng ở cột B và media tương ứng ở cột C: sản phẩm/banner, ảnh cá nhân/quote, insight, carousel/album, infographic/sơ đồ và video. Chỉ khi khách yêu cầu rõ **chỉ làm ảnh** mới bàn giao ảnh lẻ; ghi rõ phạm vi ở dòng/preview và không gọi ảnh lẻ đó là bài đăng hoàn chỉnh.
+
+Với **Bài đăng kèm sản phẩm**, đọc [T03 — Sản phẩm và dịch vụ](../templates/knowledge/03-san-pham-va-dich-vu.md) và dữ kiện chào bán đã xác nhận: đúng tên/biến thể, lợi ích có căn cứ, giá nếu nhắc giá, CTA và điều kiện/thời hạn ưu đãi còn hợp lệ tại ngày giờ cột E. Ảnh phải là sản phẩm thật đúng doanh nghiệp từ **Hình ảnh doanh nghiệp**, giữ ID nguồn gốc trong hồ sơ bài và giữ hình dáng, màu, bao bì, nhãn/nhận diện sản phẩm. Thiếu dữ kiện, sai ảnh hoặc ưu đãi hết hạn thì ghi phần cần bổ sung, không tự bịa để làm đủ bài.
+
 ### Trạng thái hệ thống ở cột H
 
 `Đang làm → Chờ duyệt → Đang sửa → Chờ duyệt → Đã duyệt → Chờ xác nhận đăng → Đã hẹn / Đang đăng → Đã đăng`.
@@ -101,14 +123,16 @@ Các trạng thái bổ sung: `Cần bổ sung`, `Cần đối chiếu`, `Lỗi 
 
 Người dùng chọn **Hành động**, hệ thống ghi **Tình trạng**. Không bắt khách tự chọn các trạng thái kỹ thuật như “Đang tạo ảnh” hoặc “Đang đăng”.
 
+Trước **Chờ duyệt** hoặc bàn giao một bài hoàn chỉnh, cổng QA nội bộ **READY** phải kiểm đủ caption/bài đăng có nội dung thực ở cột B, media bắt buộc theo định dạng đọc được ở cột C và sự thống nhất chữ–media khi có. Bài viết và chuỗi bình luận chỉ cần thành phẩm chữ theo yêu cầu, không buộc tạo thêm media. Caption thiếu/rỗng ở bộ bài visual chặn READY; sai ảnh sản phẩm hoặc ưu đãi hết hạn không đạt QA. Giữ **Cần bổ sung** hoặc **Đang sửa** với lý do ở cột J cho đến khi xử lý xong. Không thêm cột/tab trạng thái READY cho khách. Ảnh lẻ theo yêu cầu chỉ được QA như ảnh lẻ, không được dùng để thông qua READY của một bài đầy đủ.
+
 ### Cách hiểu từng hành động
 
 | Hành động | Hệ thống làm | Điều kiện |
 |---|---|---|
 | Yêu cầu sửa | Sửa cùng mã bài, tạo version mới, giữ nhận xét | Có góp ý đủ rõ; nếu thiếu thì hỏi đúng phần đó |
-| Duyệt nội dung | Ghi nhận đúng chữ/media của version đang xem | Có thành phẩm thật và hash khớp |
+| Duyệt nội dung | Ghi nhận đúng chữ/media của version đang xem | Có bộ thành phẩm thật, QA đạt, caption bắt buộc không thiếu/rỗng và hash khớp; ảnh lẻ chỉ ghi nhận trong phạm vi ảnh lẻ đã yêu cầu |
 | Đăng theo lịch | Chuẩn bị bản cuối gồm nội dung/media/đích/giờ, kiểm quyền duyệt, rồi đăng trong phạm vi đủ rõ | Tài khoản và thời gian hợp lệ; thiếu xác nhận bản cuối thì yêu cầu xác nhận cụ thể |
-| Tôi tự đăng | Bàn giao bộ file và caption | Không tự tạo lệnh đăng qua tài khoản |
+| Tôi tự đăng | Bàn giao bộ file và caption | Bộ bài đầy đủ qua READY; ngoại lệ ảnh lẻ ghi rõ phạm vi yêu cầu, không gọi là bài hoàn chỉnh; không tự tạo lệnh đăng qua tài khoản |
 
 Để tránh bấm nhầm, việc chọn `Đăng theo lịch` không được tự lấy nội dung/ảnh khác với bản đã duyệt. Nếu bản preview cuối chưa có đủ tài khoản hoặc giờ, phải bổ sung trước khi thực hiện. Một phê duyệt cuối rõ ràng cho đúng nội dung/media/tài khoản/giờ được dùng lại, không hỏi trùng.
 
@@ -137,10 +161,14 @@ Bản test đầu nên dùng **theo lệnh** để kiểm trải nghiệm, mappi
 - Sự kiện lặp không tạo nhiều job; sửa bài không ghi đè phản hồi của khách.
 - Chỉ một worker của gói lab xử lý Sheet lab.
 - `timezone`, `schema_version`, `package_id`, `spreadsheet_id` nằm trong binding kỹ thuật.
+- Agent, handler “hệ thống content”, `/contentlab`, ID bài/job, binding, queue, lịch và đường dẫn đều có phạm vi lab; câu tự nhiên và chữ số không bị agent/worker cũ nhận đồng thời.
 - Google chưa nối vẫn làm trong chat; nối sau có bước đối chiếu/import một lần.
 - Bài gốc, bài nháp và ảnh nguồn có nguồn/phiên bản, kể cả khi chi tiết được đưa ra khỏi bảng.
 - Cài lại hoặc sửa thiết lập không reset dữ liệu hay tự xóa tab.
 - Hệ thống cũ không được tự phát hiện rồi nhận Sheet lab vì tên gần giống.
+- Kiểm Unicode và khoảng trắng khi tạo/đọc/ghi/mở lại thư mục **Nội dung của tôi/Tài nguyên của tôi/Video cảnh quay**, **Nhạc nền**, **Giọng đọc**, **Hồ sơ cần hoàn thiện** và **Nội dung đã tạo/<ngày>/<loại> - <tiêu đề>/**; tên file **Bài viết.txt**, **Xem bài.html**, **Ảnh 01.png**, **Video.mp4**, **Phụ đề.srt** giữ nguyên dấu. Cột C trỏ đúng file thực trong workspace khách hoặc link đã kiểm quyền, không trỏ đường dẫn máy người hướng dẫn.
+- Kiểm tương tự với **Ảnh bổ sung** và **Logo và nhận diện** nếu cần tạo; **Hình ảnh doanh nghiệp** vẫn là nguồn ảnh chính.
+- Thử cài lại và sự kiện lặp với tên/ID gần giống vẫn chỉ dùng binding/kho/job lab. Giữ tên package, khóa dữ liệu và runtime; không di chuyển/đổi tên thư mục 9B đang hoạt động.
 
 ## 7. Ví dụ mẫu không dùng dữ liệu thật
 
@@ -148,13 +176,13 @@ Bản test đầu nên dùng **theo lệnh** để kiểm trải nghiệm, mappi
 
 | Ngày đề xuất | Ý tưởng | Góc triển khai / yêu cầu | Nguồn | Định dạng | Chọn làm | Ghi chú | Tiến độ |
 |---|---|---|---|---|---|---|---|
-| Ngày mẫu | Ba lỗi khi bắt đầu tư vấn | Hướng dẫn cách sửa, giọng gần gũi | Tài liệu phương pháp mẫu | Carousel | Làm bài | 6 trang, ít chữ | Đã nhận |
-| Ngày mẫu | Dịch vụ này phù hợp với ai? | Nêu tiêu chí lựa chọn | Hồ sơ dịch vụ mẫu | Bài + ảnh | Chưa chọn | | Chờ chọn |
+| Ngày mẫu | Ba lỗi khi bắt đầu tư vấn | Hướng dẫn cách sửa, giọng gần gũi | Tài liệu phương pháp mẫu | Carousel / album | Làm bài | 6 trang, ít chữ | Đã nhận |
+| Ngày mẫu | Sản phẩm này phù hợp với ai? | Nêu tiêu chí lựa chọn từ dữ kiện T03 | Hồ sơ sản phẩm mẫu | Bài đăng kèm sản phẩm | Chưa chọn | Dùng ảnh sản phẩm thật; không tự tạo giá/ưu đãi | Chờ chọn |
 
 ### Tab 02
 
 | Tên bài | Nội dung | Xem ảnh/video | Kênh / tài khoản | Ngày giờ dự kiến | Hành động | Góp ý | Tình trạng | Link bài đã đăng | Cập nhật / cần làm gì |
 |---|---|---|---|---|---|---|---|---|---|
-| Ba lỗi khi bắt đầu tư vấn | Nội dung mẫu, chưa phải bài thật | Chưa render | Tôi tự đăng | | Yêu cầu sửa | Mở đầu ngắn hơn | Chờ duyệt | | Dòng minh họa thiết kế |
+| Ba lỗi khi bắt đầu tư vấn | Caption mẫu, chưa phải bài thật | Chưa render | Tôi tự đăng | | Yêu cầu sửa | Mở đầu ngắn hơn | Cần bổ sung | | Dòng minh họa; chưa có media nên chưa đạt READY |
 
 Mẫu minh họa không được dùng như bằng chứng rằng gói đã sản xuất hoặc đăng bài thực.

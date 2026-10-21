@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "status": "design_contract_not_executable",
+  "package_id": "freeup-content-gon-lab",
+  "trigger": "hệ thống content",
+  "asset": "assets/menu/he-thong-content-ngang-v2.png",
+  "asset_dimensions": {
+    "width": 1672,
+    "height": 941
+  },
+  "menu_policy": {
+    "show_before_onboarding_complete": true,
+    "require_readable_image": true,
+    "text_fallback": true,
+    "opening_starts_production": false,
+    "bare_digit_requires_active_menu_context": true,
+    "readiness_checks": "selected_format_only",
+    "reuse_static_menu": true
+  },
+  "items": [
+    {
+      "number": 1,
+      "key": "text",
+      "label": "Bài viết",
+      "bundle": [
+        "post_text"
+      ]
+    },
+    {
+      "number": 2,
+      "key": "product_post",
+      "label": "Bài đăng kèm sản phẩm",
+      "branches": [
+        "sales_post_with_product_photo",
+        "product_banner_with_post"
+      ],
+      "bundle": [
+        "post_text",
+        "actual_product_media"
+      ],
+      "required_sources": [
+        "confirmed_offering_facts",
+        "correct_confirmed_product_screenshot_or_service_asset"
+      ],
+      "conditional_checks": [
+        "price_if_mentioned",
+        "offer_terms_and_validity_at_publish_time_if_promotional"
+      ],
+      "visual_fidelity": [
+        "shape",
+        "color",
+        "packaging",
+        "label",
+        "logo",
+        "variant"
+      ],
+      "visual_fidelity_policy": "Check only features applicable to actual offering; software/services use confirmed screenshots/activity assets and never invented physical packaging."
+    },
+    {
+      "number": 3,
+      "key": "personal_quote",
+      "label": "Ảnh cá nhân + quan điểm",
+      "bundle": [
+        "post_text",
+        "same_person_visual"
+      ]
+    },
+    {
+      "number": 4,
+      "key": "visual_insight",
+      "label": "Ảnh minh họa insight",
+      "bundle": [
+        "post_text",
+        "insight_visual"
+      ]
+    },
+    {
+      "number": 5,
+      "key": "carousel_album",
+      "label": "Carousel / album",
+      "bundle": [
+        "one_shared_post_text",
+        "ordered_images"
+      ]
+    },
+    {
+      "number": 6,
+      "key": "infographic_diagram",
+      "label": "Infographic / sơ đồ",
+      "bundle": [
+        "post_text",
+        "infographic_or_diagram"
+      ]
+    },
+    {
+      "number": 7,
+      "key": "broll_text",
+      "label": "Video B-roll có chữ",
+      "bundle": [
+        "post_text",
+        "rendered_video"
+      ],
+      "optional": [
+        "subtitles",
+        "music_if_available_and_selected"
+      ]
+    },
+    {
+      "number": 8,
+      "key": "voice_video",
+      "label": "Video có giọng đọc",
+      "bundle": [
+        "post_text",
+        "rendered_video_with_confirmed_voice"
+      ],
+      "optional": [
+        "subtitles"
+      ]
+    },
+    {
+      "number": 9,
+      "key": "comment_thread",
+      "label": "Chuỗi bình luận",
+      "bundle": [
+        "opening_post",
+        "ordered_comments"
+      ]
+    }
+  ],
+  "shortcut": {
+    "number": 0,
+    "key": "content_plan",
+    "label": "Làm theo lịch",
+    "is_content_format": false
+  },
+  "post_qa": {
+    "require_nonempty_caption_for_all_posts": true,
+    "visual_posts_require_actual_readable_media": true,
+    "require_matching_caption_media_version": true,
+    "require_product_fidelity_when_product_used": true,
+    "require_confirmed_claims": true,
+    "asset_only_requests": "separate_explicit_asset_task_not_a_complete_post",
+    "publish_requires_current_version_approval": true
+  }
+}

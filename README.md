@@ -1,39 +1,44 @@
-# FREEUP Content Gọn cho 9BizClaw
+# FreeUp Content Gọn cho 9BizClaw
 
-**Thiết kế cập nhật ngày 21/10/2026. Đã có mười mẫu bổ sung Tri thức; chưa có bộ cài hoặc skill thực thi.**
+**Bản duyệt cập nhật 22/10/2026.** Repo thử riêng cho quà tặng khách mua 9BizClaw. Đã có kế hoạch, mười mẫu Tri thức và menu ảnh v2; **chưa có bộ cài/skill lab thực thi hoặc tích hợp chat 9B**.
 
-Quà tặng thử riêng cho khách mua 9BizClaw. Khách nhận link GitHub, gửi một câu trong 9B; hệ thống cài tương lai sẽ chủ động kiểm hồ sơ và media rồi hiện menu ảnh để sản xuất thử.
+**Bắt đầu tại [Kế hoạch để duyệt và triển khai](docs/KE-HOACH-DUYET-TRIEN-KHAI.md)** — từ câu cài, kiểm hồ sơ và tài nguyên đến bài đầu tiên, ba trang tính và chọn model.
 
-## Hành trình mới
+![Menu hệ thống content](assets/menu/he-thong-content-ngang-v2.png)
 
-**Link GitHub → cài skill → đọc hồ sơ và Tri thức đã có → chỉ gửi mẫu liên quan đến phần thiếu → khách hoàn thiện và nộp vào Tri thức → nhắn Tôi đã hoàn tất → hệ thống đọc lại → kiểm ảnh và kho B-roll/nhạc → hiện menu ảnh → chọn kiểu content → sản xuất thử → sửa/duyệt → dùng hoặc đăng.**
+## Quyết định mới
 
-Không bắt làm đủ mười mẫu. Nội dung tương đương đã có được dùng lại dù tên file khác. Câu báo hoàn tất kích hoạt việc kiểm tra lại, không tự chứng minh đã có đủ dữ liệu.
+- Mục 2: **Bài đăng kèm sản phẩm**, dùng sản phẩm thật của khách; làm bài bán hàng hoặc banner kèm bài đăng.
+- Các định dạng ảnh/video đều giao **bài viết/caption + media** phù hợp; một carousel có một caption chung. Ảnh lẻ chỉ theo yêu cầu rõ ràng, tách khỏi bài đăng hoàn chỉnh.
+- Gọi **“hệ thống content”** trong chat 9B sẽ mở menu ảnh ngang có linh vật Mía. Đây là hành vi cần tích hợp; ảnh menu đã được tạo và kiểm.
+- Dùng lại **Tri thức** và **Hình ảnh doanh nghiệp**; chỉ gửi mẫu liên quan phần thiếu, không bắt điền đủ mười file.
+- Thư mục khách sử dụng có tên tiếng Việt: **Tài nguyên của tôi**, **Video cảnh quay**, **Nhạc nền**, **Giọng đọc**, **Hồ sơ cần hoàn thiện**, **Nội dung đã tạo**.
 
 ## Đúng ba trang tính
 
-| Tab | Công việc |
+| Trang | Công việc |
 |---|---|
-| 00. Nguồn tham khảo | Nguồn chuyên gia, kênh, website và tài liệu khách muốn nghiên cứu |
+| 00. Nguồn tham khảo | Nguồn chuyên gia, kênh, website và tài liệu muốn nghiên cứu |
 | 01. Ý tưởng | Ý mới, góc triển khai, nguồn, định dạng và chọn làm |
 | 02. Bài viết & lịch đăng | Bài, media, góp ý, duyệt, tài khoản, thời gian và kết quả đăng |
 
-Hồ sơ và mẫu đã điền nằm trong **Tri thức 9B**. Ảnh nằm trong **Hình ảnh doanh nghiệp**. Cấu hình content có nguồn nằm trong kho riêng. Không còn tab Thiết lập và không tạo thêm tab ẩn.
+Hồ sơ nằm trong Tri thức 9B; ảnh ở Hình ảnh doanh nghiệp. Không có tab Thiết lập hoặc tab ẩn. Chưa nối Google vẫn có thể làm mẫu trong chat/local khi phần thực thi được triển khai.
 
-## Tài liệu
+## Tài liệu và hợp đồng dữ liệu
 
-- [Hành trình khách hàng](docs/HANH-TRINH-KHACH-HANG.md).
+- [Kế hoạch duyệt](docs/KE-HOACH-DUYET-TRIEN-KHAI.md).
+- [Hành trình khách hàng và ví dụ chat](docs/HANH-TRINH-KHACH-HANG.md).
 - [Ba trang tính](docs/BA-TRANG-TINH.md).
 - [Kiểm hồ sơ và tiếp tục onboarding](docs/KIEM-HO-SO-VA-TIEP-TUC.md).
-- [Media và menu ảnh](docs/MEDIA-VA-MENU.md).
-- [Bộ mười mẫu độc lập](templates/knowledge/README.md).
-- [Ánh xạ dữ kiện vào mẫu](onboarding/knowledge-catalog.json).
+- [Tài nguyên, thư mục và menu](docs/MEDIA-VA-MENU.md).
+- [Kiểm caption/media trong hai repo](docs/DOI-CHIEU-BAI-VIET-VA-MEDIA.md).
+- [Model và chi phí](docs/MODEL-VA-CHI-PHI.md).
+- [Mười mẫu Tri thức](templates/knowledge/README.md) · [Tải bộ mười mẫu](downloads/10-mau-tri-thuc-9bizclaw.zip).
+- Hợp đồng thiết kế: [Tri thức](onboarding/knowledge-catalog.json), [menu](onboarding/menu-catalog.json), [đường dẫn khách](onboarding/customer-paths.json). Các JSON này chưa phải chương trình chạy.
 - [Thử riêng và nghiệm thu](docs/THU-RIENG-VA-NGHIEM-THU.md).
 
-## Tình trạng và phân phối
+## Phạm vi thử và phân phối
 
-Đã tách mười mẫu Markdown có câu hỏi và phần điền để hoàn thiện rồi đưa vào Tri thức. Mẫu 01 có bổ sung màu, logo, font, phong cách và nguồn xác nhận. Gói chưa có installer, menu ảnh thực, Google Sheet thực hoặc worker.
+Package dự kiến `freeup-content-gon-lab`, lệnh `/contentlab`, agent/workspace, kho `freeup-content-gon-lab-data`, Sheet, queue và lịch riêng. Chưa cài vào 9B hoặc thay bộ FreeUp đang vận hành. Chưa công bố câu cài chạy được trước khi installer qua nghiệm thu.
 
-Repository private trong giai đoạn duyệt; link hiện chỉ dùng được với tài khoản có quyền. Trước phát quà phải public bản phân phối sạch hoặc cấp quyền qua kho tài liệu phù hợp và kiểm tải bằng tài khoản khách.
-
-Repo, package dự kiến freeup-content-gon-lab, lệnh dự kiến /contentlab, agent thử và kho freeup-content-gon-lab-data riêng. Không dùng chung binding Sheet, worker, lịch hoặc job với bộ quà tặng đang vận hành.
+Repo đang **private** phục vụ duyệt. Trước phát quà cần bản phân phối sạch hoặc quyền truy cập thích hợp, kiểm tải bằng tài khoản khách. Không đưa hồ sơ riêng, ảnh riêng hoặc thông tin xác thực vào repo phân phối.

@@ -6,6 +6,8 @@ Tách từ bộ mẫu anh/chị cung cấp, giữ đủ 53 câu hỏi gốc; m�
 
 [Tải cả mười mẫu trong một file ZIP](../../downloads/10-mau-tri-thuc-9bizclaw.zip). Trong luồng khách hàng, hệ thống vẫn gửi link từng mẫu cần bổ sung để tránh bắt tải cả bộ.
 
+Mười file bên trong ZIP có tên tiếng Việt có dấu. Khi triển khai, skill lấy tên giao khách từ `customer_filename` trong catalog và đặt vào **Hồ sơ cần hoàn thiện**, ví dụ **03. Sản phẩm và dịch vụ.md**. Đường dẫn ASCII trong repository là khóa nội bộ để giữ link ổn định; khách không phải đổi tên file hoặc truy cập thư mục hệ thống.
+
 | Mã | Mẫu | Khi nào cần? |
 |---|---|---|
 | T01 | [Thông tin công ty và nhận diện](01-cong-ty-va-nhan-dien.md) | Thiếu thông tin doanh nghiệp, USP; hoặc thiếu nhận diện để thiết kế. |

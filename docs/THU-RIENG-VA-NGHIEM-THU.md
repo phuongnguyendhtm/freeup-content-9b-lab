@@ -1,6 +1,6 @@
 # Thử riêng và nghiệm thu trước khi phát quà
 
-**Bản thiết kế, chưa cài lên 9B · 21/10/2026.**
+**Bản thiết kế, chưa cài lên 9B · 22/10/2026. Menu ngang v2 đã tạo thành tệp thật; chưa tích hợp mở/gửi menu trong chat 9B.**
 
 ## 1. Những gì đã làm trong lượt chuẩn bị
 
@@ -9,7 +9,9 @@
 - Đặc tả một schema mới có đúng ba trang tính.
 - Đề xuất ranh giới gói/agent/dữ liệu/lệnh để thử độc lập.
 - Tách mười mẫu Tri thức, giữ đủ 53 câu hỏi gốc và bổ sung nhận diện vào mẫu 01.
-- Đặc tả kiểm thiếu, nhận câu hoàn tất, chuẩn bị media và hiện menu ảnh.
+- Đặc tả kiểm thiếu, nhận câu hoàn tất, chuẩn bị media và mở menu ngay khi khách nhắn “hệ thống content”, kể cả trước khi hoàn tất onboarding.
+- Tạo [menu ngang v2](../assets/menu/he-thong-content-ngang-v2.png), **1672 × 941**, dùng logo FreeUp và linh vật cáo Mía đã chọn, giữ chín định dạng riêng; ô 2 là **Bài đăng kèm sản phẩm** và ô 0 là lối tắt **Làm theo lịch**.
+- Đặc tả bộ bài visual mặc định gồm caption/bài đăng đi cùng media, kiểm sản phẩm thật và ưu đãi trước khi giao bản sẵn sàng duyệt/đăng.
 
 Chủ sản phẩm xem và góp ý hành trình trước. Repository chưa có installer, skill chạy được, Google Sheet thực hoặc worker. Trạng thái này được ghi ở README để không nhầm với bộ quà tặng đã hoàn tất.
 
@@ -28,6 +30,8 @@ Chủ sản phẩm xem và góp ý hành trình trước. Repository chưa có i
 
 Tạo một agent thử riêng là lựa chọn mặc định để không có hai bộ điều phối cùng nhận một câu tự nhiên. Nếu bản 9B không hỗ trợ agent/workspace riêng theo cách cần dùng, phải chọn phương án thử khác được host hỗ trợ trước khi cài; không tự thay cấu hình của agent đang vận hành.
 
+Trong agent/workspace lab, câu **“hệ thống content”** mở menu lab; không đăng ký chồng handler câu tự nhiên đó vào agent đang vận hành. Chữ số đơn lẻ chỉ được hiểu là chọn menu khi đúng hội thoại lab đang ở ngữ cảnh menu/chờ lựa chọn. Binding, ID bài/job, hàng đợi, file và log có phạm vi lab; không nhận nhầm sự kiện từ Sheet hoặc job của hệ thống cũ. Giữ tên package và khóa nội bộ, không đổi tên thư mục 9B đang hoạt động để làm thử nghiệm.
+
 ## 3. Dùng lại hồ sơ và ảnh mà vẫn thử độc lập
 
 - Đọc hồ sơ/tài liệu của đúng doanh nghiệp qua quyền 9B hiện có.
@@ -42,7 +46,7 @@ Tạo một agent thử riêng là lựa chọn mặc định để không có h
 1. Tạo schema và master sạch đúng ba tab; không chuyển đổi Sheet đang chạy.
 2. Xây một skill điều phối namespaced `/contentlab`, hồ sơ và media resolver của lab.
 3. Làm kiểm hồ sơ theo nội dung, gửi đúng link mẫu, lưu chờ và đọc lại sau câu Tôi đã hoàn tất.
-4. Làm kiểm media/thư mục thật và menu ảnh; sau đó sản xuất mẫu và lưu phong cách.
+4. Tích hợp menu v2 trong chat lab: mở ngay khi nhắn “hệ thống content” và tự hiện sau thiết lập đã kiểm; chỉ sau lựa chọn mới hỏi phần còn thiếu cho nhánh đó. Kiểm media/thư mục tiếng Việt, sản xuất bộ caption + media mẫu và lưu phong cách khi khách yêu cầu.
 5. Làm Sheet connector theo lệnh: chọn ý → nhận nháp → sửa → duyệt. Chưa bật lịch nền.
 6. Hoàn thiện installer riêng và kiểm cài mới/cài lại/nâng bản trên môi trường thử.
 7. Khi phần sản xuất ổn định, thử đăng một bài có chủ sở hữu duyệt; xác minh receipt/link.
@@ -63,7 +67,16 @@ Tạo một agent thử riêng là lựa chọn mặc định để không có h
 | File còn indexing | Giữ trạng thái chờ, không reset onboarding |
 | Media folder rỗng | Không báo đã có B-roll/nhạc |
 | Chỉ thiếu video | Bài chữ và ảnh vẫn dùng được nếu đủ dữ kiện |
-| Menu | Gửi ảnh thật hoặc fallback chữ rõ, không gọi bảng chữ là đã gửi ảnh |
+| Menu v2 | Gửi đúng [ảnh v2 thực](../assets/menu/he-thong-content-ngang-v2.png), logo FreeUp/Mía, đủ chín định dạng riêng, ô 2 “Bài đăng kèm sản phẩm”; ô 0 là lối tắt “Làm theo lịch”. Fallback chữ nói rõ giới hạn, không nhận là đã gửi ảnh |
+| Mở menu trước onboarding | Nhắn “hệ thống content” là hiện ngay menu; không buộc điền hồ sơ trước khi xem/chọn và không tự sản xuất chỉ vì mở menu |
+| Menu sau thiết lập | Sau khi kiểm xong thiết lập ban đầu, tự hiện cùng menu v2; chỉ hỏi phần thiếu liên quan định dạng đã chọn |
+| Chữ số trong/ngoài ngữ cảnh | Trong ngữ cảnh menu lab, chọn đúng số/tên; chữ số đơn lẻ ngoài ngữ cảnh không tự chọn định dạng hay tạo job |
+| Bài đăng kèm sản phẩm | Ô 2 đi vào bài bán hàng kèm ảnh sản phẩm thật hoặc banner sản phẩm/ưu đãi kèm caption; vẫn là cùng một định dạng, không gộp các ô khác |
+| Đúng ảnh sản phẩm | Dùng ảnh đúng doanh nghiệp/sản phẩm/biến thể từ Hình ảnh doanh nghiệp, giữ ID nguồn; sai ảnh hoặc làm đổi hình dáng, màu, bao bì, nhãn sản phẩm thật thì không đạt QA |
+| Dữ kiện bán hàng và ưu đãi | Đối chiếu T03: tên, lợi ích có căn cứ, giá nếu nhắc, CTA và điều kiện/thời hạn theo ngày đăng dự kiến; ưu đãi hết hạn hoặc dữ kiện chưa xác nhận thì không đạt QA, không bịa để lấp chỗ thiếu |
+| Bộ visual hoàn chỉnh | Ảnh cá nhân/quote, insight, carousel/album, infographic/sơ đồ, video và sản phẩm/banner đều có caption/bài đăng khớp media theo mặc định |
+| Caption thiếu hoặc rỗng | Chặn cổng READY, không chuyển thành “Chờ duyệt” hoặc “Đã bàn giao tự đăng” cho bài hoàn chỉnh chỉ có media; nêu đúng phần cần bổ sung |
+| Khách yêu cầu chỉ ảnh | Cho phép giao ảnh lẻ theo yêu cầu rõ ràng, ghi phạm vi ảnh lẻ; không nhận đó là bài đăng hoàn chỉnh hoặc dùng nó để vượt cổng READY của bài đầy đủ |
 | Chọn ý trong chat hoặc bảng | Cùng ID, cùng trạng thái, chỉ một job |
 | Sửa bài | Giữ mã bài và phản hồi; version mới được duyệt riêng |
 | Thiếu ảnh người thật | Không dùng ảnh người khác, giao phần chữ hoặc hỏi đúng ảnh thiếu |
@@ -72,14 +85,22 @@ Tạo một agent thử riêng là lựa chọn mặc định để không có h
 | Timeout khi đăng | Đối chiếu trước khi thử lại; không đăng lặp |
 | Dừng test | Chỉ dừng worker/lịch lab; hệ thống cũ tiếp tục độc lập |
 | Cài trên máy sạch | Không phụ thuộc ổ D/G, thư mục giảng viên hoặc cache Antigravity |
+| Thư mục Unicode | Tạo/đọc/ghi/mở lại đúng đường dẫn tiếng Việt có dấu và khoảng trắng, gồm “Nội dung của tôi”, “Tài nguyên của tôi”, “Video cảnh quay”, “Nhạc nền”, “Giọng đọc”, “Hồ sơ cần hoàn thiện” và “Nội dung đã tạo/<ngày>/<loại> - <tiêu đề>”; tên file “Bài viết.txt”, “Xem bài.html”, “Ảnh 01.png”, “Video.mp4”, “Phụ đề.srt” không lỗi mã hóa hoặc mất dấu |
+| Namespace lab | Lệnh/câu tự nhiên, ID, binding, Sheet, queue, job, lịch và thư mục lab không đọc nhầm để ghi vào bản cũ; thử sự kiện lặp và ID gần giống vẫn chỉ tạo một job đúng lab |
 
 Mục tiêu pilot: phần lớn khách tạo được bài mẫu mà không cần điều khiển máy từ xa; không lẫn dữ liệu thương hiệu, không mất dữ liệu cũ và không báo thành công khi thiếu file/receipt thực. Chốt ngưỡng số đo sau khi phạm vi bản đầu được duyệt.
+
+**READY** ở đây là cổng QA nội bộ cho bộ bài đầy đủ, không thêm trang tính hoặc bắt khách chọn trạng thái kỹ thuật. Phải kiểm caption có nội dung thực, khớp ảnh/video và đúng nguồn, kiểm file mở được và dữ kiện bán hàng còn hợp lệ. Cổng chỉ được thông qua khi toàn bộ phần bắt buộc của định dạng đã có; ảnh riêng theo yêu cầu chỉ có thể được kiểm như ảnh lẻ.
+
+Đường dẫn khách nhìn thấy được tạo và kiểm trên workspace của chính khách sau cài; không dùng đường dẫn ổ D: của người hướng dẫn hoặc biến `<workspace khách>` như một kết quả đã tạo. Kiểm thêm **Ảnh bổ sung** khi được dùng và **Logo và nhận diện** khi cần; Hình ảnh doanh nghiệp vẫn là nguồn ảnh chính. Kho hệ thống `freeup-content-gon-lab-data`, khóa dữ liệu và runtime có thể giữ tên nội bộ riêng.
 
 ## 6. Các điểm để chủ sản phẩm duyệt
 
 - Ba tab: Nguồn tham khảo, Ý tưởng, Bài viết & lịch đăng.
 - Hồ sơ nằm trong Tri thức; thiếu gì gửi mẫu liên quan, đọc lại sau câu Tôi đã hoàn tất.
-- Hiện menu ảnh sau kiểm hồ sơ/media; clip/nhạc/voice chỉ chặn nhánh cần chúng.
+- Hiện ngay menu v2 khi khách nhắn “hệ thống content”, cả trước khi xong onboarding; tự hiện cùng menu sau thiết lập đã kiểm. Mở menu không tạo bài; clip/nhạc/voice chỉ chặn nhánh cần chúng.
+- Giữ chín định dạng riêng; ô 2 là Bài đăng kèm sản phẩm, có nhánh bài bán hàng/banner thật kèm caption.
+- Bộ bài visual mặc định có caption + media khớp nhau; thiếu caption, sai sản phẩm hoặc ưu đãi hết hạn thì không đạt READY.
 - Một bài mẫu trước, rồi mới sản xuất hàng loạt.
 - Khách có thể làm một bài ngay hoặc nhận kế hoạch ngắn; không bắt dùng theo gói bảy ngày.
 - Tận dụng hồ sơ/ảnh cũ, hỏi phần thiếu.
