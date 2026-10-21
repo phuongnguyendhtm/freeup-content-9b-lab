@@ -1,0 +1,294 @@
+{
+  "schema_version": 1,
+  "package_id": "freeup-content-gon-lab",
+  "status": "design_contract_not_executable",
+  "source": {
+    "url": "https://docs.google.com/document/d/188la_94HAdH4ExhiyI3_dfeqKtsg7GJu/edit",
+    "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "original_questions": 53
+  },
+  "assessment_policy": {
+    "match": "semantic_field_coverage_not_filename_presence",
+    "require_read_back": true,
+    "accept_equivalent_documents": true,
+    "accept_confirmed_context": true,
+    "missing_values": [
+      "",
+      "Chưa có",
+      "Chưa cung cấp",
+      "[Điền câu trả lời thật]"
+    ],
+    "inference_is_confirmed": false,
+    "completion_message": "Tôi đã hoàn tất",
+    "on_completion": "requery_knowledge_and_media_read_actual_data_then_resume",
+    "require_all_ten_files": false,
+    "template_examples_are_facts": false,
+    "core_ready": "company identity + audience problem + confirmed USP + content goal + confirmed writing voice and layout preferences; selected offer facts if promotional",
+    "visual_ready": "confirmed palette/style and logo choice; actual same-person reference only for personal images",
+    "video_ready": "actual source clips or supported approved source; actual audio/config only if voice/music selected"
+  },
+  "templates": [
+    {
+      "id": "T01",
+      "number": 1,
+      "title": "Thông tin công ty và nhận diện",
+      "file": "templates/knowledge/01-cong-ty-va-nhan-dien.md",
+      "original_field_count": 6,
+      "original_fields": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6"
+      ],
+      "supplemental_fields": [
+        "1.7",
+        "1.8",
+        "1.9"
+      ],
+      "github_url": "https://github.com/phuongnguyendhtm/freeup-content-9b-lab/blob/main/templates/knowledge/01-cong-ty-va-nhan-dien.md",
+      "download_url": "https://raw.githubusercontent.com/phuongnguyendhtm/freeup-content-9b-lab/main/templates/knowledge/01-cong-ty-va-nhan-dien.md",
+      "coverage": [
+        "company.name",
+        "company.industry",
+        "company.usp",
+        "company.brand_story",
+        "company.evidence",
+        "brand.colors",
+        "brand.logo",
+        "brand.fonts",
+        "brand.visual_style"
+      ],
+      "when_needed": "Business identity or USP missing; brand identity missing for visual formats."
+    },
+    {
+      "id": "T02",
+      "number": 2,
+      "title": "Thông tin nhà sáng lập",
+      "file": "templates/knowledge/02-nha-sang-lap.md",
+      "original_field_count": 6,
+      "original_fields": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6"
+      ],
+      "supplemental_fields": [],
+      "github_url": "https://github.com/phuongnguyendhtm/freeup-content-9b-lab/blob/main/templates/knowledge/02-nha-sang-lap.md",
+      "download_url": "https://raw.githubusercontent.com/phuongnguyendhtm/freeup-content-9b-lab/main/templates/knowledge/02-nha-sang-lap.md",
+      "coverage": [
+        "founder.name",
+        "founder.background",
+        "founder.story",
+        "founder.expertise",
+        "founder.viewpoints"
+      ],
+      "when_needed": "Founder/personal-brand content requested and relevant founder facts missing."
+    },
+    {
+      "id": "T03",
+      "number": 3,
+      "title": "Sản phẩm và dịch vụ",
+      "file": "templates/knowledge/03-san-pham-va-dich-vu.md",
+      "original_field_count": 6,
+      "original_fields": [
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "3.5",
+        "3.6"
+      ],
+      "supplemental_fields": [],
+      "github_url": "https://github.com/phuongnguyendhtm/freeup-content-9b-lab/blob/main/templates/knowledge/03-san-pham-va-dich-vu.md",
+      "download_url": "https://raw.githubusercontent.com/phuongnguyendhtm/freeup-content-9b-lab/main/templates/knowledge/03-san-pham-va-dich-vu.md",
+      "coverage": [
+        "offers.name",
+        "offers.description",
+        "offers.benefits",
+        "offers.price_policy",
+        "offers.differentiator",
+        "offers.evidence"
+      ],
+      "when_needed": "Offer/promotional content requested and relevant offer facts missing; explicit no-offer accepted for other content."
+    },
+    {
+      "id": "T04",
+      "number": 4,
+      "title": "Chân dung khách hàng",
+      "file": "templates/knowledge/04-chan-dung-khach-hang.md",
+      "original_field_count": 5,
+      "original_fields": [
+        "4.1",
+        "4.2",
+        "4.3",
+        "4.4",
+        "4.5"
+      ],
+      "supplemental_fields": [],
+      "github_url": "https://github.com/phuongnguyendhtm/freeup-content-9b-lab/blob/main/templates/knowledge/04-chan-dung-khach-hang.md",
+      "download_url": "https://raw.githubusercontent.com/phuongnguyendhtm/freeup-content-9b-lab/main/templates/knowledge/04-chan-dung-khach-hang.md",
+      "coverage": [
+        "audience.identity",
+        "audience.problems",
+        "audience.motivations",
+        "audience.journey",
+        "audience.objections"
+      ],
+      "when_needed": "Audience/problem unclear for the requested content."
+    },
+    {
+      "id": "T05",
+      "number": 5,
+      "title": "Kịch bản bán hàng",
+      "file": "templates/knowledge/05-kich-ban-ban-hang.md",
+      "original_field_count": 5,
+      "original_fields": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5"
+      ],
+      "supplemental_fields": [],
+      "github_url": "https://github.com/phuongnguyendhtm/freeup-content-9b-lab/blob/main/templates/knowledge/05-kich-ban-ban-hang.md",
+      "download_url": "https://raw.githubusercontent.com/phuongnguyendhtm/freeup-content-9b-lab/main/templates/knowledge/05-kich-ban-ban-hang.md",
+      "coverage": [
+        "sales.process",
+        "sales.pitch",
+        "sales.objections",
+        "sales.price_rules",
+        "sales.escalation"
+      ],
+      "when_needed": "Sales-conversion content, objections or commercial boundaries missing."
+    },
+    {
+      "id": "T06",
+      "number": 6,
+      "title": "Kế hoạch marketing",
+      "file": "templates/knowledge/06-ke-hoach-marketing.md",
+      "original_field_count": 5,
+      "original_fields": [
+        "6.1",
+        "6.2",
+        "6.3",
+        "6.4",
+        "6.5"
+      ],
+      "supplemental_fields": [],
+      "github_url": "https://github.com/phuongnguyendhtm/freeup-content-9b-lab/blob/main/templates/knowledge/06-ke-hoach-marketing.md",
+      "download_url": "https://raw.githubusercontent.com/phuongnguyendhtm/freeup-content-9b-lab/main/templates/knowledge/06-ke-hoach-marketing.md",
+      "coverage": [
+        "marketing.goal",
+        "marketing.channels",
+        "marketing.formats",
+        "marketing.cta",
+        "marketing.campaigns"
+      ],
+      "when_needed": "Content goal/channel/CTA or campaign context missing."
+    },
+    {
+      "id": "T07",
+      "number": 7,
+      "title": "Chăm sóc khách hàng",
+      "file": "templates/knowledge/07-cham-soc-khach-hang.md",
+      "original_field_count": 5,
+      "original_fields": [
+        "7.1",
+        "7.2",
+        "7.3",
+        "7.4",
+        "7.5"
+      ],
+      "supplemental_fields": [],
+      "github_url": "https://github.com/phuongnguyendhtm/freeup-content-9b-lab/blob/main/templates/knowledge/07-cham-soc-khach-hang.md",
+      "download_url": "https://raw.githubusercontent.com/phuongnguyendhtm/freeup-content-9b-lab/main/templates/knowledge/07-cham-soc-khach-hang.md",
+      "coverage": [
+        "support.scenarios",
+        "support.returns",
+        "support.sla",
+        "support.escalation",
+        "support.faq"
+      ],
+      "when_needed": "FAQ or after-sales/support content requested and confirmed answers missing."
+    },
+    {
+      "id": "T08",
+      "number": 8,
+      "title": "Cách AI làm việc",
+      "file": "templates/knowledge/08-cach-ai-lam-viec.md",
+      "original_field_count": 5,
+      "original_fields": [
+        "8.1",
+        "8.2",
+        "8.3",
+        "8.4",
+        "8.5"
+      ],
+      "supplemental_fields": [],
+      "github_url": "https://github.com/phuongnguyendhtm/freeup-content-9b-lab/blob/main/templates/knowledge/08-cach-ai-lam-viec.md",
+      "download_url": "https://raw.githubusercontent.com/phuongnguyendhtm/freeup-content-9b-lab/main/templates/knowledge/08-cach-ai-lam-viec.md",
+      "coverage": [
+        "work.role",
+        "work.response_preferences",
+        "work.allowed_actions",
+        "work.restricted_actions",
+        "work.unknowns"
+      ],
+      "when_needed": "Workflow preferences or escalation boundaries need clarification; never overrides host permissions."
+    },
+    {
+      "id": "T09",
+      "number": 9,
+      "title": "Phong cách nội dung",
+      "file": "templates/knowledge/09-phong-cach-noi-dung.md",
+      "original_field_count": 5,
+      "original_fields": [
+        "9.1",
+        "9.2",
+        "9.3",
+        "9.4",
+        "9.5"
+      ],
+      "supplemental_fields": [],
+      "github_url": "https://github.com/phuongnguyendhtm/freeup-content-9b-lab/blob/main/templates/knowledge/09-phong-cach-noi-dung.md",
+      "download_url": "https://raw.githubusercontent.com/phuongnguyendhtm/freeup-content-9b-lab/main/templates/knowledge/09-phong-cach-noi-dung.md",
+      "coverage": [
+        "content.structure",
+        "content.length_format",
+        "content.cta",
+        "content.do_avoid",
+        "content.examples"
+      ],
+      "when_needed": "Writing structure/length/CTA/sample preferences missing; accept confirmed defaults as preferences."
+    },
+    {
+      "id": "T10",
+      "number": 10,
+      "title": "Giọng điệu và ngôn ngữ",
+      "file": "templates/knowledge/10-giong-dieu-va-ngon-ngu.md",
+      "original_field_count": 5,
+      "original_fields": [
+        "10.1",
+        "10.2",
+        "10.3",
+        "10.4",
+        "10.5"
+      ],
+      "supplemental_fields": [],
+      "github_url": "https://github.com/phuongnguyendhtm/freeup-content-9b-lab/blob/main/templates/knowledge/10-giong-dieu-va-ngon-ngu.md",
+      "download_url": "https://raw.githubusercontent.com/phuongnguyendhtm/freeup-content-9b-lab/main/templates/knowledge/10-giong-dieu-va-ngon-ngu.md",
+      "coverage": [
+        "voice.personality",
+        "voice.pronouns",
+        "voice.signature_phrases",
+        "voice.avoid_words",
+        "voice.good_bad_examples"
+      ],
+      "when_needed": "Writing tone/pronouns/word preferences missing; accept equivalent approved samples."
+    }
+  ]
+}

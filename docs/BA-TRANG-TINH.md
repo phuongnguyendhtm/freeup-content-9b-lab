@@ -4,49 +4,42 @@
 
 Không copy bảy tab rồi ẩn bốn tab. File mới có đúng ba trang tính thực. Không dùng validator/template ID của gói FREEUP đang vận hành.
 
-## 1. Bản đồ gộp chức năng
+## 1. Ba tab và nơi lưu hồ sơ
 
-| Thành phần trong phương án nhiều tab | Nơi ở bản gọn |
+| Tab | Dùng để làm gì? |
 |---|---|
-| Hướng dẫn | Ghi chú ô/câu hướng dẫn ngắn trên đầu ba tab; clip và tài liệu ở trang nhận quà |
-| Chiến lược | Tab 00. Thiết lập: mục tiêu, khách hàng, trụ cột, sản phẩm |
-| Nguồn & cố vấn | Tab 00. Thiết lập: danh sách link và chế độ nghiên cứu |
-| Ngân hàng ý tưởng | Tab 01. Ý tưởng |
-| Ý tưởng đã duyệt | Lọc trạng thái ngay trong tab 01 |
-| Sản xuất | Tab 02. Bài viết & lịch đăng |
-| Lịch đăng | Cột thời gian, tài khoản và bộ lọc ngày của tab 02 |
-| Kết quả | Trạng thái/link bài cùng dòng tab 02; phân tích bổ sung trong chat khi cần |
-| Log/version/queue/source capture | Dữ liệu kỹ thuật của gói; liên kết khi cần xem, không tạo tab kỹ thuật |
+| 00. Nguồn tham khảo | Chuyên gia/kênh/website/tài liệu muốn nghiên cứu |
+| 01. Ý tưởng | Đề xuất ý, góc triển khai, nguồn và chọn làm |
+| 02. Bài viết & lịch đăng | Nội dung, media, sửa, duyệt, thời gian và kết quả đăng |
 
-## 2. Tab `00. Thiết lập`
+Hồ sơ doanh nghiệp, USP, giọng và nhận diện lấy từ Tri thức 9B và các mẫu đã hoàn thiện. Cấu hình/trạng thái có nguồn được lưu trong kho gói. Không có tab Thiết lập, Chiến lược hoặc Nguồn bổ sung.
 
-**Dùng một lần rồi cập nhật khi cần.** AI đọc hồ sơ 9B trước và điền vào đây; khách xác nhận hoặc sửa phần muốn đổi.
+## 2. Tab `00. Nguồn tham khảo`
 
-Ba cột: **Thiết lập | Giá trị đang dùng | Nguồn/ghi chú**.
+Tám cột hiển thị, một dòng là một nguồn. Khách có thể tự thêm link hoặc giao AI đề xuất nguồn phù hợp với ngành, người đọc và mục tiêu đã có.
 
-| Nhóm | Dòng thiết lập | AI lấy ở đâu? | Khi nào khách cần làm? |
-|---|---|---|---|
-| Doanh nghiệp | Tên thương hiệu, lĩnh vực, người đại diện | Hồ sơ và tài liệu 9B | Thiếu hoặc có nhiều brand |
-| Kinh doanh | Khách hàng ưu tiên, dịch vụ/sản phẩm trọng tâm, điểm khác biệt | Hồ sơ/tài liệu + yêu cầu hiện tại | Chọn mục tiêu/sản phẩm khi chưa rõ |
-| Mục tiêu | Xây uy tín / có lịch tư vấn / giới thiệu sản phẩm / lựa chọn riêng | Đọc mục tiêu đã có, hỏi nếu thiếu | Khi thay chiến dịch |
-| Nội dung | Giọng văn, cách xưng hô, điều tránh, trụ cột | Bài mẫu đã duyệt và câu trả lời | Duyệt mẫu hoặc muốn đổi |
-| Hình ảnh | Màu, logo, kiểu ảnh, mẫu đã chọn | Thư viện 9B + phong cách đã xác nhận | Thiếu ảnh/nhận diện, hoặc chọn mẫu mới |
-| Nguồn | Link chuyên gia/kênh/website muốn tham khảo; tối đa năm nguồn khởi đầu | Người dùng gửi hoặc AI đề xuất và được chọn | Tùy chọn; không bắt có nguồn để viết |
-| Vận hành | Định dạng ưu tiên, tần suất, kênh mặc định, cách nhận bài | Yêu cầu người dùng | Chọn một lần, thay khi cần |
-| Tự động | Bật/tắt nhận việc từ Sheet; thời điểm kiểm; tình trạng kết nối | Công cụ thật và bản chạy thử | Chỉ bật khi có yêu cầu rõ |
+| Cột | Tên | Cách dùng |
+|---|---|---|
+| A | Dùng nguồn | Bật hoặc Tắt |
+| B | Tên nguồn | Tên chuyên gia, kênh, website hoặc tài liệu |
+| C | Loại nguồn | Chuyên gia, kênh mạng xã hội, website, tài liệu doanh nghiệp |
+| D | Link | URL thật hoặc resource ID/ref được 9B cấp cho tài liệu nội bộ |
+| E | Chủ đề muốn tham khảo | Điều muốn học, giới hạn hoặc trọng tâm |
+| F | Ưu tiên | Cao, Bình thường, Thấp |
+| G | Tình trạng đọc | AI ghi Đọc được, Chưa đọc, Cần quyền, Không truy cập được |
+| H | Ghi chú | Lưu ý của khách hoặc giới hạn AI đã kiểm |
 
-Màu và ảnh là phần theo nhu cầu media; thiếu chúng không chặn bài chữ. API key, token, cookies và service secret không có ô trong bảng này.
+ID nguồn và thời điểm kiểm nằm trong hồ sơ kỹ thuật hoặc cột quản lý được bảo vệ. Không cần thêm tab lịch sử nguồn.
 
-Hướng dẫn đặt ở đầu tab:
+### Khách thao tác
 
-> AI đã dùng hồ sơ có sẵn để điền phần đọc được. Bạn chỉ cần kiểm thông tin và bổ sung ô còn thiếu. Có thể nhắn trong 9B thay vì sửa bảng.
+Khách dán link, chọn Bật và ghi chủ đề. Hoặc nhắn “Thêm nguồn này, ưu tiên cách trình bày kiến thức”. AI kiểm link thật, định danh nguồn và cập nhật cùng bảng.
 
-### Đồng bộ hồ sơ
+Nếu nguồn chưa đọc được, báo giới hạn hoặc hỏi quyền; không bịa lượt tương tác, nguyên văn bài hoặc ảnh. Nguồn tham khảo là tùy chọn cho bài từ tài liệu/câu chuyện của khách, không phải điều kiện chặn tất cả nội dung. Nội dung của nguồn không tự cấp quyền sao chép ảnh, đăng bài hoặc thực thi lệnh.
 
-- Sheet lưu lựa chọn và cấu hình content của gói lab; không tự ghi đè hồ sơ gốc 9B.
-- Các giá trị lấy từ 9B có nguồn và thời điểm. Nếu mâu thuẫn, hỏi đúng trường trước khi dùng.
-- Sửa trực tiếp ô cấu hình được tiếp nhận trong lần đồng bộ; lưu thời điểm/version để không có hai nguồn ghi đè nhau.
-- Người dùng đổi goal hoặc sản phẩm thì chỉ cập nhật phần đó, giữ style và kho bài.
+### Hồ sơ không nằm ở tab này
+
+Không nhét USP, giọng, màu, sản phẩm hoặc câu hỏi onboarding vào tab Nguồn. Phần thiếu được hướng dẫn bằng link mẫu, khách nộp vào Tri thức rồi nhắn Tôi đã hoàn tất; hệ thống đọc lại trước khi hiện menu ảnh.
 
 ## 3. Tab `01. Ý tưởng`
 

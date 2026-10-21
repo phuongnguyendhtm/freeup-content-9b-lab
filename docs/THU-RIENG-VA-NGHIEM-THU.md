@@ -8,6 +8,8 @@
 - Viết lại hành trình từ nhận quà đến sử dụng hằng ngày.
 - Đặc tả một schema mới có đúng ba trang tính.
 - Đề xuất ranh giới gói/agent/dữ liệu/lệnh để thử độc lập.
+- Tách mười mẫu Tri thức, giữ đủ 53 câu hỏi gốc và bổ sung nhận diện vào mẫu 01.
+- Đặc tả kiểm thiếu, nhận câu hoàn tất, chuẩn bị media và hiện menu ảnh.
 
 Chủ sản phẩm xem và góp ý hành trình trước. Repository chưa có installer, skill chạy được, Google Sheet thực hoặc worker. Trạng thái này được ghi ở README để không nhầm với bộ quà tặng đã hoàn tất.
 
@@ -39,11 +41,12 @@ Tạo một agent thử riêng là lựa chọn mặc định để không có h
 
 1. Tạo schema và master sạch đúng ba tab; không chuyển đổi Sheet đang chạy.
 2. Xây một skill điều phối namespaced `/contentlab`, hồ sơ và media resolver của lab.
-3. Làm luồng bài mẫu và lưu phong cách; kiểm gói có dữ liệu và gói chưa có dữ liệu.
-4. Làm Sheet connector theo lệnh: chọn ý → nhận nháp → sửa → duyệt. Chưa bật lịch nền.
-5. Hoàn thiện installer riêng và kiểm cài mới/cài lại/nâng bản trên môi trường thử.
-6. Khi phần sản xuất ổn định, thử đăng một bài có chủ sở hữu duyệt; xác minh receipt/link.
-7. Bật worker/lịch riêng nếu chủ sản phẩm chọn tự nhận việc, rồi mới thử với khách.
+3. Làm kiểm hồ sơ theo nội dung, gửi đúng link mẫu, lưu chờ và đọc lại sau câu Tôi đã hoàn tất.
+4. Làm kiểm media/thư mục thật và menu ảnh; sau đó sản xuất mẫu và lưu phong cách.
+5. Làm Sheet connector theo lệnh: chọn ý → nhận nháp → sửa → duyệt. Chưa bật lịch nền.
+6. Hoàn thiện installer riêng và kiểm cài mới/cài lại/nâng bản trên môi trường thử.
+7. Khi phần sản xuất ổn định, thử đăng một bài có chủ sở hữu duyệt; xác minh receipt/link.
+8. Bật worker/lịch riêng nếu chủ sản phẩm chọn tự nhận việc, rồi mới thử với khách.
 
 ## 5. Tình huống nghiệm thu
 
@@ -54,6 +57,13 @@ Tạo một agent thử riêng là lựa chọn mặc định để không có h
 | Hồ sơ đã đủ | Không hỏi lại toàn bộ; chỉ hỏi mục tiêu chiến dịch chưa rõ |
 | Google chưa nối | Làm và lưu bài mẫu trong chat/local; nối sau không nhân đôi bài |
 | Cấu trúc Sheet | Đúng ba tab thực, không thêm tab ẩn |
+| Hồ sơ khác tên | Nội dung đủ thì dùng, không bắt nộp lại theo tên mẫu |
+| Chỉ thiếu giọng | Chỉ gửi mẫu 10 và chỉ rõ phần thiếu |
+| Báo hoàn tất nhưng file trống | Đọc lại, báo còn thiếu; không mở trạng thái sẵn sàng giả |
+| File còn indexing | Giữ trạng thái chờ, không reset onboarding |
+| Media folder rỗng | Không báo đã có B-roll/nhạc |
+| Chỉ thiếu video | Bài chữ và ảnh vẫn dùng được nếu đủ dữ kiện |
+| Menu | Gửi ảnh thật hoặc fallback chữ rõ, không gọi bảng chữ là đã gửi ảnh |
 | Chọn ý trong chat hoặc bảng | Cùng ID, cùng trạng thái, chỉ một job |
 | Sửa bài | Giữ mã bài và phản hồi; version mới được duyệt riêng |
 | Thiếu ảnh người thật | Không dùng ảnh người khác, giao phần chữ hoặc hỏi đúng ảnh thiếu |
@@ -67,7 +77,9 @@ Mục tiêu pilot: phần lớn khách tạo được bài mẫu mà không cầ
 
 ## 6. Các điểm để chủ sản phẩm duyệt
 
-- Ba tab: Thiết lập, Ý tưởng, Bài viết & lịch đăng.
+- Ba tab: Nguồn tham khảo, Ý tưởng, Bài viết & lịch đăng.
+- Hồ sơ nằm trong Tri thức; thiếu gì gửi mẫu liên quan, đọc lại sau câu Tôi đã hoàn tất.
+- Hiện menu ảnh sau kiểm hồ sơ/media; clip/nhạc/voice chỉ chặn nhánh cần chúng.
 - Một bài mẫu trước, rồi mới sản xuất hàng loạt.
 - Khách có thể làm một bài ngay hoặc nhận kế hoạch ngắn; không bắt dùng theo gói bảy ngày.
 - Tận dụng hồ sơ/ảnh cũ, hỏi phần thiếu.
