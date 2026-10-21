@@ -1,0 +1,2 @@
+b95ea6c66dbd627bfb864cf11da4898fb6daf69abc5cf45f1332a3505143d655  freeup-content-gon-lab-0.1.0.zip
+ee61df8d79afef351389bbe7f3bb5ef5d67d228678acdecf9f3dea6b5c231a81  release-manifest.json

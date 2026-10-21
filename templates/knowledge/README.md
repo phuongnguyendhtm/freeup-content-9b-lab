@@ -29,7 +29,7 @@ Không gửi link cho khách chỉ vì không có file mang đúng tên T01–T1
 
 ## Lưu ý phân phối
 
-Repository hiện private để chủ sản phẩm duyệt. Các link chỉ dùng được với tài khoản có quyền truy cập. Trước phát quà rộng, cần public bản phân phối sạch hoặc cấp quyền qua kho tài liệu phù hợp và kiểm tải bằng tài khoản khách. Không coi link private là link ai cũng mở được.
+Bộ mẫu sạch đi cùng gói cài và được trợ lý xuất thành tệp tiếng Việt theo phần khách còn thiếu. Tài liệu khách đã điền được nộp vào Tri thức 9B của chính khách; không đưa hồ sơ đã điền vào GitHub quà tặng. Với bản sao repository được đặt private, link chỉ dùng được khi tài khoản có quyền.
 
 Nguồn: [Bộ template gốc](https://docs.google.com/document/d/188la_94HAdH4ExhiyI3_dfeqKtsg7GJu/edit).
 

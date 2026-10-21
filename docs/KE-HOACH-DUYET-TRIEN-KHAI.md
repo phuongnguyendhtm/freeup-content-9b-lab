@@ -1,5 +1,7 @@
 # Kế hoạch quà tặng FreeUp Content cho 9BizClaw
 
+> Bản thiết kế được lưu để đối chiếu. **Bản chạy hiện tại:** [Báo cáo 0.1.0](BAN-THU-0.1.0.md) · [Hướng dẫn khách hàng](HUONG-DAN-KHACH-HANG.md). Các trạng thái “chưa xây/cài” trong bản thiết kế mô tả thời điểm duyệt ban đầu.
+
 **Bản duyệt ngày 22/10/2026.** Đã tạo repo thử riêng, mười mẫu Tri thức và ảnh menu v2. Tài liệu này chốt trải nghiệm và phạm vi cần xây; chưa có installer/skill lab chạy được hoặc tích hợp menu trong chat. Hệ thống 9B đang dùng chưa bị thay đổi.
 
 ## 1. Trải nghiệm khách hàng cần đạt

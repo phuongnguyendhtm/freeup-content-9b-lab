@@ -1,5 +1,7 @@
 # Thử riêng và nghiệm thu trước khi phát quà
 
+> Bản thiết kế được lưu để đối chiếu. **Bản chạy hiện tại:** [Báo cáo 0.1.0](BAN-THU-0.1.0.md) · [Hướng dẫn khách hàng](HUONG-DAN-KHACH-HANG.md). Các trạng thái “chưa xây/cài” trong bản thiết kế mô tả thời điểm duyệt ban đầu.
+
 **Bản thiết kế, chưa cài lên 9B · 22/10/2026. Menu ngang v2 đã tạo thành tệp thật; chưa tích hợp mở/gửi menu trong chat 9B.**
 
 ## 1. Những gì đã làm trong lượt chuẩn bị

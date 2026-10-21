@@ -1,5 +1,7 @@
 # Thiết kế đúng ba trang tính
 
+> Bản thiết kế được lưu để đối chiếu. **Bản chạy hiện tại:** [Báo cáo 0.1.0](BAN-THU-0.1.0.md) · [Hướng dẫn khách hàng](HUONG-DAN-KHACH-HANG.md). Các trạng thái “chưa xây/cài” trong bản thiết kế mô tả thời điểm duyệt ban đầu.
+
 **Bản đặc tả để duyệt · 22/10/2026 · Chưa tạo Google Sheet · Schema dự kiến `content-gon-lab-v1`. Menu ngang v2 đã có tệp thật, chưa tích hợp mở/gửi trong chat 9B.**
 
 Không copy bảy tab rồi ẩn bốn tab. File mới có đúng ba trang tính thực. Không dùng validator/template ID của gói FREEUP đang vận hành.

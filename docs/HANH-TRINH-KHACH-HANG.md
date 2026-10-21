@@ -1,5 +1,7 @@
 # Hành trình cài đặt và sử dụng Content Gọn
 
+> Bản thiết kế được lưu để đối chiếu. **Bản chạy hiện tại:** [Báo cáo 0.1.0](BAN-THU-0.1.0.md) · [Hướng dẫn khách hàng](HUONG-DAN-KHACH-HANG.md). Các trạng thái “chưa xây/cài” trong bản thiết kế mô tả thời điểm duyệt ban đầu.
+
 **Thiết kế cập nhật ngày 22/10/2026. Đã tạo và mở kiểm menu v2 thực, 1672 × 941, nhãn ô 2 đúng “Bài đăng kèm sản phẩm”. Các đoạn chat và tích hợp 9B dưới đây là trải nghiệm cần xây/kiểm.**
 
 Khách có thể nhắn **“hệ thống content”** ở bất kỳ thời điểm nào trong chat 9B để mở ngay ảnh menu ngang và chọn số/tên. Không dùng việc chưa hoàn tất thiết lập để chặn xem menu. Chỉ sau khi khách chọn định dạng mới hỏi phần còn thiếu cần cho công việc đó; mở menu không tự sản xuất nội dung.

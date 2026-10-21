@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "design_contract_not_executable",
+  "status": "runtime_catalog",
   "package_id": "freeup-content-gon-lab",
   "root": "Nội dung của tôi",
   "paths": {
@@ -13,7 +13,10 @@
     "knowledge_drafts": "Hồ sơ cần hoàn thiện",
     "outputs": "Nội dung đã tạo"
   },
-  "optional_paths": ["supplemental_images", "brand_assets"],
+  "optional_paths": [
+    "supplemental_images",
+    "brand_assets"
+  ],
   "delivery_files": {
     "post_text": "Bài viết.txt",
     "preview": "Xem bài.html",

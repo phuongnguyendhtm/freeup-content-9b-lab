@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "package_id": "freeup-content-gon-lab",
-  "status": "design_contract_not_executable",
+  "status": "runtime_catalog",
   "source": {
     "url": "https://docs.google.com/document/d/188la_94HAdH4ExhiyI3_dfeqKtsg7GJu/edit",
     "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",

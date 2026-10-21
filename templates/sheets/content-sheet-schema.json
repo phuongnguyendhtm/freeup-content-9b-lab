@@ -1,0 +1,10 @@
+{
+  "schema_version": "content-gon-lab-v1",
+  "package_id": "freeup-content-gon-lab",
+  "timezone": "Asia/Ho_Chi_Minh",
+  "tabs": [
+    {"title": "00. Nguồn tham khảo", "key": "sources", "headers": ["Dùng nguồn", "Tên nguồn", "Loại nguồn", "Link", "Chủ đề muốn tham khảo", "Ưu tiên", "Tình trạng đọc", "Ghi chú", "Mã nguồn"], "visible_columns":8, "widths":[110,220,170,260,320,120,150,260,180], "options":{"0":["Bật","Tắt"],"2":["Chuyên gia","Kênh mạng xã hội","Website","Tài liệu doanh nghiệp"],"5":["Cao","Bình thường","Thấp"]}},
+    {"title": "01. Ý tưởng", "key": "ideas", "headers": ["Ngày đề xuất", "Ý tưởng", "Góc triển khai / yêu cầu", "Nguồn", "Định dạng", "Chọn làm", "Ghi chú", "Tiến độ", "Mã ý"], "visible_columns":8, "widths":[130,300,340,220,230,140,260,160,180], "options":{"4":["Bài viết","Bài đăng kèm sản phẩm","Ảnh cá nhân + quan điểm","Ảnh minh họa insight","Carousel / album","Infographic / sơ đồ","Video B-roll có chữ","Video có giọng đọc","Chuỗi bình luận"],"5":["Chưa chọn","Làm bài","Bỏ qua"]}},
+    {"title": "02. Bài viết & lịch đăng", "key": "posts", "headers": ["Tên bài", "Nội dung", "Xem ảnh/video", "Kênh / tài khoản", "Ngày giờ dự kiến", "Hành động", "Góp ý", "Tình trạng", "Link bài đã đăng", "Cập nhật / cần làm gì", "Mã bài", "Mã ý", "Phiên bản"], "visible_columns":10, "widths":[280,500,260,210,190,180,300,180,260,300,180,180,120], "options":{"5":["Chưa chọn","Yêu cầu sửa","Duyệt nội dung","Đăng theo lịch","Tôi tự đăng"]}}
+  ]
+}

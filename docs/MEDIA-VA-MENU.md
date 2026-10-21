@@ -1,5 +1,7 @@
 # Ảnh, tài nguyên và menu hệ thống content
 
+> Bản thiết kế được lưu để đối chiếu. **Bản chạy hiện tại:** [Báo cáo 0.1.0](BAN-THU-0.1.0.md) · [Hướng dẫn khách hàng](HUONG-DAN-KHACH-HANG.md). Các trạng thái “chưa xây/cài” trong bản thiết kế mô tả thời điểm duyệt ban đầu.
+
 **Đặc tả cập nhật ngày 22/10/2026. Đã tạo và mở kiểm menu v2 thực, 1672 × 941, nhãn ô 2 đúng “Bài đăng kèm sản phẩm”. Tích hợp hiển thị trong chat 9B và việc tạo thư mục trên máy khách chưa được cài đặt/kiểm chứng.**
 
 ## Ảnh trong Hình ảnh doanh nghiệp

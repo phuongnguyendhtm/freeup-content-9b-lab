@@ -1,5 +1,7 @@
 # Kiểm hồ sơ và tiếp tục sau khi bổ sung
 
+> Bản thiết kế được lưu để đối chiếu. **Bản chạy hiện tại:** [Báo cáo 0.1.0](BAN-THU-0.1.0.md) · [Hướng dẫn khách hàng](HUONG-DAN-KHACH-HANG.md). Các trạng thái “chưa xây/cài” trong bản thiết kế mô tả thời điểm duyệt ban đầu.
+
 **Hợp đồng thiết kế để triển khai sau, chưa phải skill thực thi.**
 
 ## Kiểm nội dung trước khi yêu cầu tài liệu

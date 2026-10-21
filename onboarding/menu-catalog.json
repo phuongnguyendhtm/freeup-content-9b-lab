@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "design_contract_not_executable",
+  "status": "runtime_catalog",
   "package_id": "freeup-content-gon-lab",
   "trigger": "hệ thống content",
   "asset": "assets/menu/he-thong-content-ngang-v2.png",

@@ -1,0 +1,10 @@
+node_modules/
+dist/
+test-results/
+.test-*/
+freeup-content-gon-lab-data/
+Nội dung của tôi/
+*.log
+*.tmp
+.env*
+!.env.example

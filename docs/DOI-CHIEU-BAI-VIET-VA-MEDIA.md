@@ -1,6 +1,6 @@
 # Đối chiếu bài viết, caption và media
 
-**Kiểm tra chỉ đọc ngày 22/10/2026.** Đã đọc nguồn qua GitHub connector và các file đang cài trong `D:/9Bizclaw_v3/openclaw-state/workspace/skills/freeup-content-system`. Không chạy renderer, gửi bài, sửa runtime hay cấu hình.
+**Kiểm tra chỉ đọc ngày 22/10/2026.** Đã đọc nguồn qua GitHub connector và các file đang cài trong bản cài `skills/freeup-content-system` của 9B. Không chạy renderer, gửi bài, sửa runtime hay cấu hình.
 
 ## Kết luận áp dụng cho menu
 
@@ -30,7 +30,7 @@ Repo `phuongnguyendhtm/freeup-content-9b`, `main` tại thời điểm kiểm tr
 - [copywriting.md:47–49](https://github.com/phuongnguyendhtm/freeup-content-9b/blob/261d45f3a7737348aad1aa4985be7bf805277d5b/package/skills/freeup-content-system/references/copywriting.md#L47-L49): lưu caption riêng khỏi metadata; caption Insight đào sâu nguyên nhân; kiểm nguồn, ngôi kể, sản phẩm và CTA có thật. Master content dùng khi cần, không ép mọi caption theo bài dài.
 - [visual-insight.md:42–48](https://github.com/phuongnguyendhtm/freeup-content-9b/blob/261d45f3a7737348aad1aa4985be7bf805277d5b/package/skills/freeup-content-system/references/visual-insight.md#L42-L48): có mục Caption riêng, thường 150–350 từ hoặc theo brief; đào sâu insight, không kể vị trí các vật thể và không áp chốt bán cho mọi bài. Tiêu chí hình hiểu được khi chưa đọc caption không có nghĩa được bỏ caption.
 - [delivery.md:5](https://github.com/phuongnguyendhtm/freeup-content-9b/blob/261d45f3a7737348aad1aa4985be7bf805277d5b/package/skills/freeup-content-system/references/delivery.md#L5): thư mục bài chứa caption, nội dung nền, hồ sơ, nguồn và media đã xuất. Dòng 31 yêu cầu caption dễ sao chép kèm kết quả.
-- **Có kiểm tra bằng code:** [content.cjs:27–43](https://github.com/phuongnguyendhtm/freeup-content-9b/blob/261d45f3a7737348aad1aa4985be7bf805277d5b/package/skills/freeup-content-system/scripts/content.cjs#L27-L43) báo `Caption trống.` cho mọi format nếu file thiếu/rỗng; visual phải có media thật và QA đúng phiên bản. Bản [content.cjs local:29](</D:/9Bizclaw_v3/openclaw-state/workspace/skills/freeup-content-system/scripts/content.cjs:29>) có cùng kiểm tra caption. Caption có chữ chưa tự chứng minh chất lượng tốt: vẫn cần duyệt nội dung.
+- **Có kiểm tra bằng code:** [content.cjs:27–43](https://github.com/phuongnguyendhtm/freeup-content-9b/blob/261d45f3a7737348aad1aa4985be7bf805277d5b/package/skills/freeup-content-system/scripts/content.cjs#L27-L43) báo `Caption trống.` cho mọi format nếu file thiếu/rỗng; visual phải có media thật và QA đúng phiên bản. Bản `content.cjs` local, dòng 29 có cùng kiểm tra caption. Caption có chữ chưa tự chứng minh chất lượng tốt: vẫn cần duyệt nội dung.
 
 `caption` tùy chọn trong công cụ gửi ảnh là tùy chọn của thao tác vận chuyển; caption bài vẫn có thể được giao riêng dưới dạng văn bản/file. Nó không tạo ngoại lệ cho gói bài đăng. Nếu sau này khách chỉ yêu cầu asset thiết kế độc lập, cần định nghĩa nhánh riêng; helper hiện tại chưa có miễn caption cho nhánh đó.
 
