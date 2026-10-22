@@ -16,9 +16,16 @@
     ],
     "default_scope": "workspace",
     "ninebiz_entrypoint": "install-9b.cjs",
-    "ninebiz_chat_flow": ["prepare", "host_openclaw_typed_config", "finalize"],
+    "ninebiz_chat_flow": [
+      "prepare",
+      "host_openclaw_typed_config",
+      "finalize"
+    ],
     "workspace_selection": "current_registered_agent",
-    "agent_creates_technical_paths": true
+    "agent_creates_technical_paths": true,
+    "binary_downloader": "download-release.cjs",
+    "ninebiz_install_guide": "CAI-TRONG-9B.md",
+    "web_reader_for_binary_download": false
   },
   "skill": "contentlab",
   "skill_directory": "freeup-content-gon-lab",

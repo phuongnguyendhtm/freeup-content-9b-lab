@@ -8,7 +8,7 @@ Gửi link repo này cho agent và nói:
 
 > Cài quà tặng này cho tôi: https://github.com/phuongnguyendhtm/freeup-content-9b-lab/blob/main/CAI-TRONG-9B.md
 
-Agent bắt đầu từ [Cài trong 9B](CAI-TRONG-9B.md), dùng bộ tải Node kiểm SHA256 và giải nén đầy đủ; công cụ đọc web chỉ dùng cho văn bản. Nền tảng khác đọc [INSTALL.md](INSTALL.md). **Trong 9B không cần mở/chọn thư mục:** bộ cài tự dùng workspace của agent đang trò chuyện, chuẩn bị tệp, bật skill qua công cụ cấu hình 9B rồi kiểm lại và mở menu. Khách không phải cài Git, nhập npm hoặc sửa API key. Chủ dùng chat điều khiển có quyền cài; nếu host yêu cầu duyệt thao tác, chủ duyệt trong 9B. Claude web/Cowork cần bước bật skill của tài khoản theo nền tảng. Link không tự cấp quyền còn thiếu. Agent phải kiểm công cụ thực và thử thao tác chỉ đọc trước khi báo không cài được; không bắt buộc có công cụ riêng tên “cài skill”. Hướng dẫn mới đã ghim commit, runtime vẫn là 0.3.0; máy khách chưa có quyền thực thi/ghi tệp cần được kiểm tra riêng.
+Agent bắt đầu từ [Cài trong 9B](CAI-TRONG-9B.md), dùng bộ tải Node kiểm SHA256 và giải nén đầy đủ; công cụ đọc web chỉ dùng cho văn bản. Nền tảng khác đọc [INSTALL.md](INSTALL.md). **Trong 9B không cần mở/chọn thư mục:** bộ cài tự dùng workspace của agent đang trò chuyện, chuẩn bị tệp, bật skill qua công cụ cấu hình 9B rồi kiểm lại và mở menu. Khách không phải cài Git, nhập npm hoặc sửa API key. Chủ dùng chat điều khiển có quyền cài; nếu host yêu cầu duyệt thao tác, chủ duyệt trong 9B. Claude web/Cowork cần bước bật skill của tài khoản theo nền tảng. Link không tự cấp quyền còn thiếu. Agent phải kiểm công cụ thực và thử thao tác chỉ đọc trước khi báo không cài được; không bắt buộc có công cụ riêng tên “cài skill”. Bộ tải đã ghim commit và SHA256, dùng Node từ 22 trở lên; runtime vẫn là 0.3.0.
 
 [Tải bộ cài 0.3.0](https://github.com/phuongnguyendhtm/freeup-content-9b-lab/raw/refs/heads/main/downloads/freeup-content-gon-lab-0.3.0.zip) · [ZIP skill cho Claude](https://github.com/phuongnguyendhtm/freeup-content-9b-lab/raw/refs/heads/main/downloads/contentlab-claude-0.3.0.zip) · [SHA256](https://github.com/phuongnguyendhtm/freeup-content-9b-lab/raw/refs/heads/main/downloads/SHA256SUMS.txt)
 
@@ -45,7 +45,7 @@ Skill chứa [reference mẫu](package/skills/freeup-content-gon-lab/references/
 
 Đúng ba tab: **00. Nguồn tham khảo**, **01. Ý tưởng**, **02. Bài viết & lịch đăng**. Trang nguồn để khách thêm nguồn riêng; không điền sẵn dữ liệu của người tặng. Chưa nối Google vẫn dùng chat/local và file mẫu. Bản sao nằm trong Drive khách, không ghi vào file mẫu.
 
-[Hướng dẫn khách](docs/HUONG-DAN-KHACH-HANG.md) · [Cài/nâng cấp](docs/CAI-DAT-VA-CAP-NHAT.md) · [Phạm vi bản 0.3.0](docs/BAN-THU-0.3.0.md) · [Model và chi phí](docs/MODEL-VA-CHI-PHI.md)
+[Kiểm thử bộ tải mới](docs/KET-QUA-BO-TAI-9B.md) · [Hướng dẫn khách](docs/HUONG-DAN-KHACH-HANG.md) · [Cài/nâng cấp](docs/CAI-DAT-VA-CAP-NHAT.md) · [Phạm vi bản 0.3.0](docs/BAN-THU-0.3.0.md) · [Model và chi phí](docs/MODEL-VA-CHI-PHI.md)
 
 Bộ cài kiểm hash/inventory, cài lại không nhân đôi và giữ dữ liệu khi nâng cấp. Ảnh/video cần công cụ hoặc renderer thực, được kiểm riêng. Gói mặc định tạo/sửa/duyệt/bàn giao; không tự bật đăng hoặc worker nền.
 
