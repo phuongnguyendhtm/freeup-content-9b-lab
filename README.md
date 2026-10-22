@@ -6,7 +6,7 @@ Quà tặng làm content cá nhân hóa cho OpenClaw, 9BizClaw, Claude và Codex
 
 Gửi link repo này cho agent và nói:
 
-> Cài quà tặng này cho tôi: https://github.com/phuongnguyendhtm/freeup-content-9b-lab
+> Cài quà tặng này cho tôi: https://github.com/phuongnguyendhtm/freeup-content-9b-lab/blob/v0.3.0/INSTALL.md
 
 Agent đọc [INSTALL.md](INSTALL.md) và [AGENTS.md](AGENTS.md). **Trong 9B không cần mở/chọn thư mục:** bộ cài tự dùng workspace của agent đang trò chuyện, chuẩn bị tệp, bật skill qua công cụ cấu hình 9B rồi kiểm lại và mở menu. Khách không phải cài Git, nhập npm hoặc sửa API key. Chủ dùng chat điều khiển có quyền cài; nếu host yêu cầu duyệt thao tác, chủ duyệt trong 9B. Claude web/Cowork cần bước bật skill của tài khoản theo nền tảng. Link không tự cấp quyền còn thiếu.
 

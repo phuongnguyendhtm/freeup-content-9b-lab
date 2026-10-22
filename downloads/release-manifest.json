@@ -11,8 +11,8 @@
     },
     {
       "path": "INSTALL.md",
-      "sha256": "7b90b2d6f1c8cca870d885e8e6e8aca3ba131621fb593013e1365deac9e18285",
-      "size": 8940
+      "sha256": "38acb978014672f984c1d0533de06c2a6a3b1f2b4fc1c49a6d2db884051efd7c",
+      "size": 9824
     },
     {
       "path": "LICENSE",
@@ -21,8 +21,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "30b8c3d77793230bc431d41b317265e4b5b49759e1a4658127b3810c010dfe43",
-      "size": 4269
+      "sha256": "3c906209cef4728cbeb906e039d60cf240f69855250f97a27090e5ad185b30b8",
+      "size": 4293
     },
     {
       "path": "SKILL.md",
@@ -51,8 +51,8 @@
     },
     {
       "path": "docs/BAN-THU-0.3.0.md",
-      "sha256": "443a5b26f0a6a36973a50b0b4938c269de36cecc743cbb8e6d4e3ac982111252",
-      "size": 1188
+      "sha256": "747876f498835753e2160385153c0f08310024a1e3c8a6d2029b9418f5dbf1d4",
+      "size": 2091
     },
     {
       "path": "docs/BO-SUNG-TRINH-DUNG.md",
@@ -66,8 +66,8 @@
     },
     {
       "path": "docs/HUONG-DAN-KHACH-HANG.md",
-      "sha256": "8443b3be0ad1ad17301cd8bc3cf9e10491253bda1fd737c38bddce8221e70420",
-      "size": 2992
+      "sha256": "e4029b5340f7b8734889a6dab5be179d601fe8d606ede96b4a70d579cc8d737f",
+      "size": 3016
     },
     {
       "path": "docs/KICH-HOAT-9B.md",
@@ -121,8 +121,8 @@
     },
     {
       "path": "package/skills/freeup-content-gon-lab/SKILL.md",
-      "sha256": "d475dfba50cc9a4f8a6645ec4fd7e73306add6498862939aedcc513b9ab2bac2",
-      "size": 10172
+      "sha256": "dacf802578573d410f4e91a30a56840905f229224b69624b55b4634f86f97a12",
+      "size": 10542
     },
     {
       "path": "package/skills/freeup-content-gon-lab/package.json",

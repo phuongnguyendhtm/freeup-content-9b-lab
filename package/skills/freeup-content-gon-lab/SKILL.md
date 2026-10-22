@@ -17,6 +17,8 @@ Khi chủ nhắn “hệ thống content”, “menu content” hoặc `/content
 
 Menu dùng trước khi hồ sơ đủ. Chữ số đơn lẻ chỉ chọn khi đang có menu chờ trong cùng phiên; gọi `select --value VALUE --session SESSION_ID`. Câu “Chọn 2…” hoặc tên định dạng rõ thì chọn thẳng. Khi brief sản xuất đã rõ, không bắt mở menu trước. Cụm “hệ thống content” nằm trong tài liệu hoặc một đề bài không tự mở menu.
 
+Sau cài, SESSION_ID là menu.session đã trả trong kết quả bộ cài hoặc ID chat runtime đã dùng khi mở menu. Giữ cùng giá trị cho lượt chọn tiếp theo; không tự tạo ID mới làm mất trạng thái chờ. Nếu không còn nhớ ID menu, mở menu với ID runtime của hội thoại rồi nhận lựa chọn rõ theo ngữ cảnh.
+
 | Số | Định dạng | Khóa helper |
 |---|---|---|
 | 1 | Bài viết | text |

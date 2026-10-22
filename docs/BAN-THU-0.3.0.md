@@ -1,9 +1,11 @@
 # FreeUp Content Gọn 0.3.0
 
-Bản này bổ sung install-9b.cjs: cài, kiểm inventory, bật contentlab cho đúng agent bằng helper native có giới hạn phạm vi, đọc lại cấu hình, tạo menu và kiểm reference Sheet. Khách 9B không chọn thư mục hoặc chạy kích hoạt riêng; workspace lấy từ đăng ký agent hiện tại.
+Khách gửi một yêu cầu cài trong chat điều khiển 9B có quyền chủ. Agent dùng workspace đã đăng ký hiện tại, không yêu cầu khách mở thư mục kỹ thuật. Luồng cài: install-9b.cjs --prepare → lệnh config có kiểu qua công cụ openclaw của host → --finalize → đọc skill đã cài, kiểm hồ sơ và mở menu.
 
-Bộ cài không thay tools/policy/defaults/model/kênh/credential hoặc agent khác; native từ chối thì dừng. Claude Code/Codex giữ adapter dự án; Claude web/Cowork dùng account enable chính thức. Mọi host vẫn cần quyền cài thực.
+Prepare/finalize không ghi cấu hình host; finalize đối chiếu đúng danh sách skill, inventory và hash các phần cấu hình ngoài phạm vi. Không đổi tools/policy/defaults/model/kênh/credential hoặc agent khác. Full Access có thể xử lý trong một lượt; host yêu cầu duyệt thì chủ duyệt qua giao diện chính thức, agent không tự approve. Native từ chối thì dừng, không thử đường ghi khác.
 
-Hồ sơ chỉ được kết luận từ nguồn đã đọc và onboarding assess, không từ số lượng tài liệu. Menu dùng ngay trong lượt cài; native snapshot được kiểm ở lượt dùng tiếp theo cùng hội thoại. Sheet mẫu đã ghim, ảnh/video cần caption và media thật, publisher/lịch nền mặc định tắt.
+Kiểm thử tự động bằng Node đi kèm 9B: **142/142 đạt, không bỏ qua**. Bao gồm cài/nâng cấp, workspace/agent, danh sách kế thừa 167 skill, prepare/finalize, từ chối quyền, thay đổi đồng thời, menu, onboarding/đọc lại, template Sheet, sản xuất/QA/export và renderer PNG/FFmpeg thật. Gói ZIP cũng được cài thử qua bốn adapter OpenClaw, 9BizClaw, Claude Code, Codex; kiểm menu và hash XLSX/reference. Claude web/Cowork cần luồng enable tài khoản của nền tảng.
 
-Bằng chứng kiểm thử bản phát hành được cập nhật sau kiểm bộ cài và thử một câu trên agent 9B sạch. Giữ dữ liệu thử và hồ sơ doanh nghiệp ngoài gói phân phối.
+Gói khách hiện tại không chứa thông tin của nguồn tham khảo bên ngoài hoặc hồ sơ/ảnh/credential của người tặng. Mẫu Sheet ghim đúng ba trang. Các bài ảnh/video có caption và media thực; publisher/lịch nền mặc định tắt.
+
+Cài file và configured:true không thay bằng chứng chat: lượt cài đọc skill trực tiếp để dùng ngay; lượt chọn tiếp theo cùng hội thoại phải nạp contentlab trong snapshot. Hồ sơ chỉ được kết luận từ tài liệu đã đọc và onboarding assess có nguồn, không từ số lượng file. Dữ liệu kiểm thử doanh nghiệp được giữ ngoài gói phân phối.

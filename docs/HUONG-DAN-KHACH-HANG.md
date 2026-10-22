@@ -4,7 +4,7 @@
 
 Mở chat **trợ lý của bạn trong 9BizClaw** rồi gửi:
 
-> Cài quà tặng này cho tôi: https://github.com/phuongnguyendhtm/freeup-content-9b-lab
+> Cài quà tặng này cho tôi: https://github.com/phuongnguyendhtm/freeup-content-9b-lab/blob/v0.3.0/INSTALL.md
 
 Không cần tạo hoặc mở thư mục trên máy. Trợ lý tự tải, kiểm gói, cài và bật skill cho chính agent bạn đang dùng; không yêu cầu tự gõ lệnh hay sửa cấu hình. Trợ lý mở menu ngay khi xong. Với nền tảng không cho phép cài, trợ lý báo đúng bước bị chặn.
 
