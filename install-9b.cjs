@@ -267,7 +267,7 @@ async function run(options = {}, dependencies = {}) {
     } else {
       if (options.finalize) finalized();
       else if (!effectiveAllowed(read(context.config), context.agentId)) fail('CONFIGURATION_NOT_VERIFIED', 'Danh sách skill mục tiêu đã đổi; chưa xác nhận cấu hình.');
-      Object.assign(result, { ok: true, stage: 'complete', status: 'installed-and-configured', ...assets, ...(options.finalize ? { preparationReceiptPath: preparationPath, configWritesPerformed: false } : {}), next: 'Dùng /contentlab hoặc hệ thống content ở lượt tiếp theo trong cùng chat để kiểm snapshot skill và attachment thật. Agent phải đọc hồ sơ/Tri thức/ảnh qua native tools rồi chạy assess từ nguồn thực; cài gói và đếm file không hoàn tất onboarding.' });
+      Object.assign(result, { ok: true, stage: 'complete', status: 'installed-and-configured', ...assets, ...(options.finalize ? { preparationReceiptPath: preparationPath, configWritesPerformed: false } : {}), next: 'Ngay trong lượt này đọc SKILL đã cài, onboarding init → đọc Tri thức/ảnh thật → assess → setup. Hiển thị customerMessage, câu hỏi/mẫu đúng phần thiếu và cả ba đường dẫn B-roll/nhạc/giọng; sau đó gửi menu PNG. Không chỉ lưu file hoặc chờ khách hỏi lại. Giữ tiến độ nếu cập nhật. Lượt chọn tiếp theo cùng chat kiểm snapshot contentlab.' });
     }
     writeReport(context, reportPath, result); return result;
   } catch (error) {

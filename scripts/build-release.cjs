@@ -48,7 +48,7 @@ function buildRelease(options = {}) {
   const plan = sourcePlan(root);
   const selected = new Set();
   const addFile = name => { if (fs.existsSync(path.join(root, name))) selected.add(name); };
-  for (const file of ['install.cjs', 'install-9b.cjs', 'activate-9b.cjs', 'bootstrap.ps1', 'bootstrap.sh', 'package.json', 'gift-manifest.json', 'README.md', 'SKILL.md', 'INSTALL.md', 'AGENTS.md', 'LICENSE', 'LICENSE.md', 'downloads/10-mau-tri-thuc-9bizclaw.zip', 'assets/menu/he-thong-content-ngang-v2.png']) addFile(file);
+  for (const file of ['install.cjs', 'install-9b.cjs', 'activate-9b.cjs', 'bootstrap.ps1', 'bootstrap.sh', 'package.json', 'gift-manifest.json', 'README.md', 'SKILL.md', 'INSTALL.md', 'CAI-TRONG-9B.md', 'AGENTS.md', 'LICENSE', 'LICENSE.md', 'downloads/10-mau-tri-thuc-9bizclaw.zip', 'assets/menu/he-thong-content-ngang-v2.png']) addFile(file);
   for (const directory of ['package/skills/freeup-content-gon-lab', 'templates/knowledge', 'onboarding', 'templates/sheets', 'docs']) {
     const absolute = path.join(root, directory);
     if (!fs.existsSync(absolute)) continue;
@@ -58,7 +58,7 @@ function buildRelease(options = {}) {
       if (directory === 'onboarding' && (relative.includes('/') || !relative.endsWith('.json'))) continue;
       if (directory === 'templates/knowledge' && !relative.endsWith('.md')) continue;
       if (directory === 'templates/sheets' && !/\.(?:json|xlsx)$/.test(relative)) continue;
-      if (directory === 'docs' && !['HUONG-DAN-KHACH-HANG.md','CAI-DAT-VA-CAP-NHAT.md','BO-SUNG-TRINH-DUNG.md','KICH-HOAT-9B.md','MODEL-VA-CHI-PHI.md','BAN-THU-0.3.0.md'].includes(relative)) continue;
+      if (directory === 'docs' && !['HUONG-DAN-KHACH-HANG.md','CAI-DAT-VA-CAP-NHAT.md','BO-SUNG-TRINH-DUNG.md','KICH-HOAT-9B.md','MODEL-VA-CHI-PHI.md','BAN-THU-0.3.0.md','KET-QUA-BO-TAI-9B.md','THIET-LAP-0.3.1.md'].includes(relative)) continue;
       selected.add(name);
     }
   }
@@ -66,7 +66,10 @@ function buildRelease(options = {}) {
   const entries = [...selected].sort().map(name => {
     const file = path.join(root, name);
     if (fs.lstatSync(file).isSymbolicLink()) throw new Error('Không đóng gói liên kết file.');
-    return { path: name, data: fs.readFileSync(file) };
+    // The online guide pins a downloader which pins this ZIP. Keep the offline
+    // guide independent of archive hashes to avoid a circular release digest.
+    const offlineGuide = '# Cài từ gói đã giải nén\n\nBạn đã có gói đầy đủ: bỏ qua bước tải. Đọc [INSTALL.md](INSTALL.md), dùng install-9b.cjs --prepare → công cụ openclaw của host → --finalize cho workspace agent hiện tại. Sau đó đọc SKILL đã cài và làm init → đọc Tri thức/ảnh → assess → setup; hiển thị customerMessage với câu hỏi, mẫu còn thiếu và ba thư mục tài nguyên rồi gửi menu. Cập nhật giữ dữ liệu.\n\nChưa có gói đầy đủ hoặc cần bản mới: đọc [hướng dẫn trực tuyến hiện tại](https://github.com/phuongnguyendhtm/freeup-content-9b-lab/blob/main/CAI-TRONG-9B.md). Không dùng web reader để tải ZIP.\n';
+    return { path: name, data: name === 'CAI-TRONG-9B.md' ? Buffer.from(offlineGuide, 'utf8') : fs.readFileSync(file) };
   });
   const manifest = {
     schema_version: 1, package_id: PACKAGE_ID, version: plan.packageInfo.version,

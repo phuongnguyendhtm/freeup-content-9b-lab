@@ -7,10 +7,10 @@ const os = require('node:os');
 const crypto = require('node:crypto');
 const zlib = require('node:zlib');
 const RELEASE = Object.freeze({
-  packageId: 'freeup-content-gon-lab', version: '0.3.0',
-  url: 'https://github.com/phuongnguyendhtm/freeup-content-9b-lab/releases/download/v0.3.0/freeup-content-gon-lab-0.3.0.zip',
-  sha256: 'a4da860a5a5a0922cd78f51f490595959dbbe033a3b559eab7b20d33489aa4a4',
-  bytes: 1954330
+  packageId: 'freeup-content-gon-lab', version: '0.3.1',
+  url: 'https://github.com/phuongnguyendhtm/freeup-content-9b-lab/releases/download/v0.3.1/freeup-content-gon-lab-0.3.1.zip',
+  sha256: '9920bc949292f9c30b0ab24ae9cae78e8c55960b637dbb18fefa93f68235b6f6',
+  bytes: 1965248
 });
 const MAX_ARCHIVE = 32 * 1024 * 1024, MAX_FILE = 16 * 1024 * 1024, MAX_TOTAL = 64 * 1024 * 1024;
 const hash = value => crypto.createHash('sha256').update(value).digest('hex');

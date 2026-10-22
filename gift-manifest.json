@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "package_id": "freeup-content-gon-lab",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "display_name": "FreeUp Content Gọn",
   "repository": "https://github.com/phuongnguyendhtm/freeup-content-9b-lab",
   "install": {

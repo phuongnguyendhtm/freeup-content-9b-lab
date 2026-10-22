@@ -7,6 +7,7 @@ Chạy bằng Node của host, đường dẫn skill và workspace hiện tại;
 ```text
 contentlab.cjs onboarding init --workspace ABS --business-id ID --agent-id ID
 contentlab.cjs onboarding assess --workspace ABS --format product_post --input snapshot.json
+contentlab.cjs onboarding setup --workspace ABS
 contentlab.cjs onboarding templates --workspace ABS
 contentlab.cjs onboarding media --workspace ABS
 contentlab.cjs onboarding resume --workspace ABS --input snapshot-moi.json
@@ -14,6 +15,12 @@ contentlab.cjs onboarding status --workspace ABS
 ```
 
 Snapshot nằm trong workspace lab, không trong repo phân phối. Dữ kiện đến từ native business documents/profile hoặc hội thoại chủ đã xác nhận. Dùng kết quả search để tìm tài liệu, sau đó read nội dung; không khai `read:true` từ tên file/excerpt không đủ chứng minh.
+
+## Bàn giao thiết lập trong chat
+
+Sau cài/cập nhật, chạy init → đọc Tri thức và thư viện ảnh thật → assess → setup. Setup luôn kiểm thêm màu sắc, phong cách hình ảnh và lựa chọn logo so với yêu cầu bài chữ; không ép khách sản xuất video. Hiển thị `customerMessage` trong cùng lượt: câu hỏi cụ thể, link mẫu còn thiếu, nơi nộp Tri thức, đường dẫn B-roll/nhạc/giọng và câu “Tôi đã hoàn tất”. Đính kèm `templates` đã tạo, rồi gửi menu PNG. `customerMessagePath` là bản lưu để mở lại, không thay việc hiển thị nội dung trong chat. Không đổi `selectedFormat` chỉ để hỏi nhận diện. `selectedFormatReady` và trạng thái thiết lập chung được phân biệt trong kết quả.
+
+Nếu hồ sơ đủ thì báo phần đã xác nhận và vẫn gửi đường dẫn tài nguyên. Không hỏi lại thông tin đã được xác nhận; còn xung đột thì hỏi xác nhận đúng mục. Sau resume, chạy setup để cập nhật hướng dẫn; không dùng câu hoàn tất để thay readback. Mở menu những lần sau vẫn là thao tác nhanh, không hỏi lại toàn bộ thiết lập.
 
 ## Snapshot cho đánh giá
 

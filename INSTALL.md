@@ -21,9 +21,9 @@ Không tự đề nghị cài thủ công trước bước kiểm trên. Nếu t
 
 Trên 9B, thực hiện bộ tải trong CAI-TRONG-9B.md để tự nhận ZIP đã kiểm và sourcePath thực; sau đó đi thẳng phần 2. Không tải/giải nén lại bằng công cụ đọc web hoặc bắt khách cung cấp tệp. Phần dưới mô tả artifact và cách giải nén cho adapter khác/người vận hành.
 
-Tải **downloads/freeup-content-gon-lab-0.3.0.zip** cùng **downloads/SHA256SUMS.txt** từ chính repo công khai; kiểm SHA256 rồi giải nén vào thư mục tải tạm **ngoài workspace đích**. Có thể dùng asset cùng tên trong release v0.3.0. Dùng Node >=22 đã có của host hoặc Node đi kèm 9B. Không yêu cầu khách cài Git, nhập npm, token hoặc sửa JSON.
+Tải **downloads/freeup-content-gon-lab-0.3.1.zip** cùng **downloads/SHA256SUMS.txt** từ chính repo công khai; kiểm SHA256 rồi giải nén vào thư mục tải tạm **ngoài workspace đích**. Có thể dùng asset cùng tên trong release v0.3.1. Dùng Node >=22 đã có của host hoặc Node đi kèm 9B. Không yêu cầu khách cài Git, nhập npm, token hoặc sửa JSON.
 
-Trên Windows, adapter tự giải nén có thể dùng PowerShell Expand-Archive -LiteralPath ZIP -DestinationPath THU_MUC_TAM hoặc .NET ZipFile hỗ trợ tên UTF-8; không dùng tar của Windows cho gói có tên tiếng Việt. Bộ tải Node của 9B đã thực hiện việc này và giữ nguyên tên XLSX/ảnh/thư mục. Gói runtime vẫn ghim ở bản 0.3.0; file hướng dẫn cài trong ZIP cũ không chứa bản sửa bộ tải này. Agent theo hướng dẫn hiện tại để chọn cách tải, rồi đọc SKILL sản xuất đã cài.
+Trên Windows, adapter tự giải nén có thể dùng PowerShell Expand-Archive -LiteralPath ZIP -DestinationPath THU_MUC_TAM hoặc .NET ZipFile hỗ trợ tên UTF-8; không dùng tar của Windows cho gói có tên tiếng Việt. Bộ tải Node của 9B đã thực hiện việc này và giữ nguyên tên XLSX/ảnh/thư mục. Gói runtime vẫn ghim ở bản 0.3.1; file hướng dẫn cài trong ZIP cũ không chứa bản sửa bộ tải này. Agent theo hướng dẫn hiện tại để chọn cách tải, rồi đọc SKILL sản xuất đã cài.
 
 ## 2. 9BizClaw/OpenClaw: một lệnh cài và bật skill
 
@@ -76,7 +76,7 @@ Nếu thực sự có một bộ điều phối content khác **được nạp t
 
 Với hai host này, dùng thư mục dự án/working folder mà khách đã mở, không sửa config 9B. Đây là khác biệt với 9B dùng workspace agent tự nhận diện. Helper/version/menu/reference phải được kiểm trước báo xong.
 
-Claude web/Cowork dùng **downloads/contentlab-claude-0.3.0.zip** tự chứa skill và tài nguyên, qua luồng upload/enable skill của tài khoản. Chép tệp local không thay bước bật trên tài khoản; nếu host không có quyền enable phải báo đúng bước cần chủ thực hiện. Không hứa link tự vượt quyền nền tảng.
+Claude web/Cowork dùng **downloads/contentlab-claude-0.3.1.zip** tự chứa skill và tài nguyên, qua luồng upload/enable skill của tài khoản. Chép tệp local không thay bước bật trên tài khoản; nếu host không có quyền enable phải báo đúng bước cần chủ thực hiện. Không hứa link tự vượt quyền nền tảng.
 
 ## 5. Sheet và media
 

@@ -12,7 +12,7 @@ Claude Code/Codex dùng thư mục dự án đang mở. Claude web/Cowork có th
 
 ## 2. Chỉ bổ sung phần hồ sơ thiếu
 
-Trợ lý đọc nội dung Tri thức và ảnh doanh nghiệp hiện có rồi báo phần thiếu. Chỉ điền mẫu được gửi và nộp vào **Tri thức → Tài liệu doanh nghiệp** đúng doanh nghiệp, xong nhắn **Tôi đã hoàn tất**. Trợ lý đọc lại trước khi tiếp tục. Không phải hoàn thiện cả mười mẫu. Ảnh sản phẩm/chân dung/logo ở **Hình ảnh doanh nghiệp**; ảnh đã có không tải lại.
+Trợ lý đọc nội dung Tri thức và ảnh doanh nghiệp hiện có rồi hỏi đúng phần thiếu: USP, khách hàng, mục tiêu, giọng viết, màu sắc/phong cách và lựa chọn logo. Thông tin đã có không phải trả lời lại. Chỉ điền những mục được hỏi trong mẫu được gửi và nộp vào **Tri thức → Tài liệu doanh nghiệp** đúng doanh nghiệp, hoặc trả lời trực tiếp trong chat để xác nhận. Xong nhắn **Tôi đã hoàn tất**; trợ lý đọc lại trước khi tiếp tục. Không phải hoàn thiện cả mười mẫu. Ảnh sản phẩm/chân dung/logo ở **Hình ảnh doanh nghiệp**; ảnh đã có không tải lại.
 
 ## 3. Chọn số để làm thử
 
@@ -26,7 +26,11 @@ Mọi bài ảnh/video có caption phù hợp. Muốn chỉ thiết kế một �
 
 ## 4. Nộp tài nguyên và nhận bài
 
-Trợ lý gửi đường dẫn thật đến **Nội dung của tôi → Tài nguyên của tôi**, gồm **Video cảnh quay**, **Nhạc nền**, **Giọng đọc** khi cần. Đây là lúc bạn mở thư mục để thả tài nguyên; không phải thao tác cài kỹ thuật. Xong nhắn **Tôi đã hoàn tất**.
+Ngay sau cài, trợ lý gửi cả ba đường dẫn thật đến **Nội dung của tôi → Tài nguyên của tôi → Video cảnh quay**, **Nhạc nền**, **Giọng đọc**. Mở đường dẫn trên máy chạy 9B rồi kéo/thả file vào. Đây là thư mục trên máy, không phải link tải lên qua Internet. Dùng điện thoại/máy khác thì nói trợ lý để chọn nơi nhận file bạn truy cập được; link Drive cần có kết nối và quyền tải lên thực. Nhạc/giọng tùy nhu cầu; chưa có video vẫn có thể làm bài chữ/ảnh đủ đầu vào. Xong nhắn **Tôi đã hoàn tất**.
+
+Đã cài bản cũ mà chưa có hướng dẫn này? Gửi một câu trong cùng chat:
+
+> Cập nhật quà tặng và hoàn tất thiết lập cho tôi, kiểm hồ sơ còn thiếu và gửi đường dẫn thêm B-roll: https://github.com/phuongnguyendhtm/freeup-content-9b-lab/blob/main/CAI-TRONG-9B.md
 
 Bài ở **Nội dung của tôi → Nội dung đã tạo**. Mở **Xem bài.html** để xem chữ/hình/video; **Bài viết.txt** để sao chép. Góp ý ngay trong chat để sửa cùng bài.
 

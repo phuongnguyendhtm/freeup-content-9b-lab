@@ -2,7 +2,7 @@
 const test = require('node:test'), assert = require('node:assert/strict'), fs = require('node:fs'), path = require('node:path'), os = require('node:os');
 const { RELEASE, main, download, unzip, verifyManifest } = require('../download-release.cjs');
 const { zip } = require('../scripts/build-release.cjs');
-const archive = () => fs.readFileSync(path.join(__dirname, '../downloads/freeup-content-gon-lab-0.3.0.zip'));
+const archive = () => fs.readFileSync(path.join(__dirname, '../downloads/freeup-content-gon-lab-0.3.1.zip'));
 function fixture(t) { const parent=fs.realpathSync(os.tmpdir()),root=fs.mkdtempSync(path.join(parent,'freeup-download-test-'));t.after(()=>{assert.equal(path.dirname(root),parent);assert.ok(path.basename(root).startsWith('freeup-download-test-'));fs.rmSync(root,{recursive:true,force:true});});return root; }
 function reply(data,headers={}) { return new Response(data,{status:200,headers:{'content-type':'application/octet-stream',...headers}}); }
 test('help performs no network or writes and caller cannot select arbitrary URL/path',async()=>{
@@ -49,6 +49,6 @@ test('rejects symbolic links and central/local mismatches',()=>{
  assert.throws(()=>unzip(archive().subarray(0,-20)),{code:'ZIP_INVALID'});
 });
 test('pinned release manifest matches all files and detects modified payload',()=>{
- const files=unzip(archive());assert.equal(verifyManifest(files),'freeup-content-gon-lab-0.3.0');
+ const files=unzip(archive());assert.equal(verifyManifest(files),'freeup-content-gon-lab-0.3.1');
  const changed=files.map(x=>({...x}));changed.find(x=>x.name.endsWith('/install-9b.cjs')).data=Buffer.from('changed');assert.throws(()=>verifyManifest(changed),{code:'RELEASE_FILE_MISMATCH'});
 });

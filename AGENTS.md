@@ -10,6 +10,6 @@ Installation requests must come from the software owner in the host control chat
 
 The customer does not select a local folder in 9B. Use the current agent workspace from trusted runtime and verify it against the host roster; not exec cwd, extracted source, owner demo paths or a hardcoded lab agent. Claude Code/Codex use the current project folder and their documented skill roots.
 
-After successful install/configuration, read the installed SKILL.md immediately, show its real menu and perform onboarding init + native document read + assess. Counts/overview are not enough to say the profile is complete. The next user selection in the same chat loads the refreshed native skill snapshot; no new chat/agent is required.
+After successful install/configuration or update, read the installed SKILL.md immediately; perform onboarding init + native document/media read + assess + setup. Display setup.customerMessage in the same chat, attach only missing templates, and always show all verified B-roll/music/voice folder paths before the real menu. A text-ready profile is not a complete brand setup. Counts/overview are not enough. On update preserve data and continue setup in this request. The next user selection in the same chat loads the refreshed native skill snapshot; no new chat/agent is required.
 
 The canonical spreadsheet is inside references/sheet-template.md and sheet-template.json. Copy/import that exact Google/XLSX template, never invent a workbook. Keep customer data/credentials outside the repository. Claude web/Cowork requires its account enable flow.

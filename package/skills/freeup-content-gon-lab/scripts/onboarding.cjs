@@ -8,6 +8,27 @@ const crypto = require('node:crypto');
 const PACKAGE = 'freeup-content-gon-lab';
 const CORE = ['company.name', 'company.industry', 'company.usp', 'audience.identity', 'audience.problems', 'marketing.goal', 'voice.personality', 'voice.pronouns', 'content.length_format'];
 const VISUAL = ['brand.colors', 'brand.visual_style', 'brand.logo'];
+const PROMPTS = {
+  'company.name': 'Tên doanh nghiệp/thương hiệu của bạn là gì?',
+  'company.industry': 'Bạn đang kinh doanh trong lĩnh vực nào?',
+  'company.usp': 'Điểm khác biệt khiến khách chọn bạn thay vì nơi khác là gì?',
+  'audience.identity': 'Bạn muốn nội dung tiếp cận nhóm khách hàng nào?',
+  'audience.problems': 'Nhóm khách đó đang gặp khó khăn hoặc mong muốn điều gì?',
+  'marketing.goal': 'Bạn muốn nội dung giúp tăng nhận diện, tạo khách hỏi mua hay bán sản phẩm nào?',
+  'voice.personality': 'Bạn muốn giọng viết như thế nào? Có thể gửi một bài mẫu bạn thích.',
+  'voice.pronouns': 'Bài viết nên xưng hô với khách như thế nào?',
+  'content.length_format': 'Bạn thích bài ngắn hay dài, trình bày theo kiểu nào?',
+  'brand.colors': 'Thương hiệu dùng màu gì? Nếu chưa có, tôi có thể đề xuất để bạn chọn.',
+  'brand.visual_style': 'Bạn thích hình ảnh theo phong cách nào? Có thể gửi ảnh mẫu.',
+  'brand.logo': 'Bạn muốn dùng logo nào, tên thương hiệu dạng chữ hay không đặt logo?',
+  'offers.name': 'Bạn muốn giới thiệu sản phẩm/dịch vụ nào?',
+  'offers.description': 'Sản phẩm/dịch vụ đó có đặc điểm gì cần thể hiện chính xác?',
+  'offers.benefits': 'Lợi ích thực tế của sản phẩm/dịch vụ cho khách là gì?',
+  'offers.price_policy': 'Giá và điều kiện áp dụng đã được xác nhận là gì?',
+  'marketing.campaigns': 'Chương trình ưu đãi có điều kiện và thời hạn nào?',
+  'founder.name': 'Nhân vật xuất hiện trong bài tên gì?',
+  'founder.viewpoints': 'Quan điểm nào của nhân vật cần thể hiện trong bài?'
+};
 const KINDS = new Set(['knowledge', 'profile', 'confirmed_context', 'media_catalog', 'capability']);
 const SOURCE_TOOLS = {
   knowledge: new Set(['read_business_document', 'search_business_documents', 'read_local_document', 'connected_document_read']),
@@ -56,7 +77,7 @@ function parse(argv) {
       options[key] = args.shift();
     } else commands.push(arg);
   }
-  if (commands.length !== 1 || !['init', 'status', 'assess', 'resume', 'media', 'templates'].includes(commands[0])) fail('INVALID_COMMAND', 'Dùng init/status/assess/resume/media/templates.');
+  if (commands.length !== 1 || !['init', 'status', 'assess', 'resume', 'media', 'templates', 'setup'].includes(commands[0])) fail('INVALID_COMMAND', 'Dùng init/status/assess/resume/media/templates/setup.');
   return { command: commands[0], options };
 }
 function assets() {
@@ -175,6 +196,8 @@ function validateSnapshot(ctx, state, snapshot, resume) {
     }
   }
   state.lastReadAt = snapshot.readAt;
+  const mediaReads = Object.values(sources).filter(source => source.kind === 'media_catalog');
+  if (mediaReads.length) state.lastMediaReadAt = snapshot.readAt;
   state.lastSnapshotId = snapshot.snapshotId;
   state.snapshots.push(snapshot.snapshotId);
   // A bounded log is informational; lastReadAt also rejects replay of older snapshots.
@@ -225,8 +248,9 @@ function requiredFields(state, format) {
   if (state.needs.promotional) required.push('offers.name', 'offers.description', 'offers.benefits', 'marketing.campaigns');
   return [...new Set(required)];
 }
-function requirements(ctx, state, format) {
-  const missingFields = requiredFields(state, format).filter(key => state.fields[key]?.status !== 'accepted' || (['company.usp', 'voice.personality', 'voice.pronouns', 'content.length_format', ...VISUAL].includes(key) && !state.fields[key].confirmed)).map(key => {
+function requirements(ctx, state, format, setupMode = false) {
+  const keys = [...new Set([...requiredFields(state, format), ...(setupMode ? VISUAL : [])])];
+  const missingFields = keys.filter(key => state.fields[key]?.status !== 'accepted' || (['company.usp', 'voice.personality', 'voice.pronouns', 'content.length_format', ...VISUAL].includes(key) && !state.fields[key].confirmed)).map(key => {
     const template = ctx.catalog.templates.find(item => item.coverage.includes(key));
     return { field: key, reason: state.fields[key]?.status === 'accepted' ? 'confirmation_required' : state.fields[key]?.status || 'missing', templateId: template.id, templateTitle: template.title, templateUrl: template.github_url, downloadUrl: template.download_url, localTemplatePath: safe(ctx.workspace, path.join(ctx.paths.knowledge_drafts, template.customer_filename)) };
   });
@@ -239,12 +263,12 @@ function requirements(ctx, state, format) {
   if (state.needs.music && !local.music.ready) missingMedia.push({ kind: 'music', destination: ctx.paths.music, reason: 'Chỉ yêu cầu nhạc khi đã chọn sử dụng.' });
   return { missingFields, missingMedia, local, status: missingFields.length ? 'WAITING_KNOWLEDGE' : missingMedia.length ? 'WAITING_MEDIA' : 'READY_MENU' };
 }
-function report(ctx, state, format = state.selectedFormat) {
+function report(ctx, state, format = state.selectedFormat, setupMode = false) {
   if (!ctx.menu.items.some(item => item.key === format)) fail('FORMAT_INVALID', 'Format phải là menu key.');
-  const req = requirements(ctx, state, format);
+  const req = requirements(ctx, state, format, setupMode);
   const groups = [...new Set(req.missingFields.map(item => item.templateId))].map(templateId => {
     const fields = req.missingFields.filter(item => item.templateId === templateId), first = fields[0];
-    return { templateId, title: first.templateTitle, fields: fields.map(item => item.field), url: first.templateUrl, localPath: first.localTemplatePath };
+    return { templateId, title: first.templateTitle, fields: fields.map(item => item.field), prompts: fields.map(item => ({ field: item.field, reason: item.reason, question: PROMPTS[item.field] || 'Bạn vui lòng bổ sung ' + item.field + '.' })), url: first.templateUrl, localPath: first.localTemplatePath };
   });
   return { ok: true, packageId: PACKAGE, businessId: state.businessId, agentId: state.agentId, selectedFormat: format, status: req.status, ready: req.status === 'READY_MENU', menuAvailable: true, missingFields: req.missingFields, missingMedia: req.missingMedia, questions: groups, instruction: req.missingFields.length ? 'Hoàn thiện đúng các mục thiếu, tải vào Tri thức của đúng doanh nghiệp rồi nhắn Tôi đã hoàn tất. Agent phải đọc lại nội dung thật.' : req.missingMedia.length ? 'Bổ sung đúng tài nguyên đang thiếu rồi nhắn Tôi đã hoàn tất để kiểm lại.' : 'Đủ đầu vào cho định dạng đã chọn; chưa phải thành phẩm được duyệt.', paths: { workspace: ctx.workspace, state: ctx.stateFile, customerRoot: ctx.customerRoot, ...ctx.paths }, media: req.local, lastSnapshotId: state.lastSnapshotId || null, lastReadAt: state.lastReadAt || null, acceptedFields: Object.fromEntries(Object.entries(state.fields).filter(([, value]) => value.status === 'accepted').map(([key, value]) => [key, { value: value.value, confirmed: value.confirmed, sourceIds: value.sourceIds }])) };
 }
@@ -254,8 +278,8 @@ function persistProgress(ctx, state) {
   state.pendingMedia = result.missingMedia; state.updatedAt = new Date().toISOString(); save(ctx, state);
   return result;
 }
-function copyTemplates(ctx, state) {
-  const result = report(ctx, state), copied = [];
+function copyTemplates(ctx, state, setupMode = false) {
+  const result = report(ctx, state, state.selectedFormat, setupMode), copied = [];
   for (const question of result.questions) {
     const template = ctx.catalog.templates.find(item => item.id === question.templateId);
     const basename = path.basename(template.file);
@@ -272,6 +296,32 @@ function copyTemplates(ctx, state) {
   state.updatedAt = new Date().toISOString(); save(ctx, state);
   return { ...result, templates: copied };
 }
+function setup(ctx, state) {
+  ensureFolders(ctx);
+  const selected = report(ctx, state), result = copyTemplates(ctx, state, true);
+  const mediaDestinations = [
+    { kind: 'broll', label: 'Video cảnh quay (B-roll)', hint: 'Thêm clip quay sản phẩm, không gian, thao tác làm việc hoặc hoạt động của bạn; MP4/MOV/WebM.' },
+    { kind: 'music', label: 'Nhạc nền', hint: 'Thêm nhạc bạn được phép sử dụng nếu muốn ghép nhạc; có thể bỏ qua.' },
+    { kind: 'voice', label: 'Giọng đọc', hint: 'Thêm bản thu nếu muốn dùng giọng thật; có thể bổ sung khi chọn video có giọng.' }
+  ].map(item => ({ ...item, path: ctx.paths[item.kind], exists: fs.statSync(ctx.paths[item.kind]).isDirectory(), fileCount: result.media[item.kind].files.length, rejectedCount: result.media[item.kind].rejected.length, requiredForSelectedFormat: result.missingMedia.some(missing => missing.kind === item.kind), locationType: 'local_folder' }));
+  const nativeImageReview = { searched: !!state.lastMediaReadAt, readAt: state.lastMediaReadAt || null, verifiedMatches: state.nativeImages.filter(image => image.inspected && image.confirmedMatch && image.mediaStatus === 'ready').length };
+  const lines = ['Thiết lập content của bạn', '', state.lastReadAt ? 'Tôi đã đối chiếu hồ sơ từ các nguồn vừa đọc.' : 'Tôi chưa có kết quả đọc hồ sơ của bạn; các mục dưới đây là phần chưa xác minh, chưa phải kết luận bạn chưa cung cấp.', '', result.missingFields.length ? 'Các mục cần bổ sung hoặc xác nhận:' : 'Hồ sơ cơ bản và nhận diện đã đủ theo các nguồn đã xác nhận.'];
+  for (const group of result.questions) {
+    lines.push('', group.title + ':');
+    for (const prompt of group.prompts) lines.push('- ' + (['missing', 'inferred'].includes(prompt.reason) ? '' : 'Cần xác nhận/đối chiếu lại: ') + prompt.question);
+    lines.push('Mẫu cần điền: [' + group.title + '](' + group.url + ')', 'Bản trên máy: `' + group.localPath + '`');
+  }
+  if (result.missingFields.length) lines.push('', 'Chỉ điền những mục được hỏi trong mẫu, rồi nộp tài liệu vào Tri thức của doanh nghiệp trong 9B. Bạn cũng có thể trả lời trực tiếp trong chat để tôi xác nhận; không cần điền lại mục đã có.');
+  lines.push('', nativeImageReview.searched ? 'Đã tra thư viện Hình ảnh doanh nghiệp; có ' + nativeImageReview.verifiedMatches + ' ảnh đã xem và xác nhận phù hợp. Ảnh đã có được dùng lại; ảnh chưa kiểm không có nghĩa là chưa tải.' : 'Ảnh doanh nghiệp: chưa kiểm được thư viện. Tôi cần kiểm ảnh sẵn có trước khi yêu cầu bạn tải thêm.', 'Ảnh sản phẩm, chân dung và logo bổ sung vào Hình ảnh doanh nghiệp của 9B khi còn thiếu.', '', 'Thư mục để bạn thêm tài nguyên trên máy đang chạy 9B:');
+  for (const destination of mediaDestinations) lines.push('', '- ' + destination.label + ': `' + destination.path + '`', '  ' + destination.hint + ' Hiện có ' + destination.fileCount + ' file qua kiểm tra chữ ký' + (destination.rejectedCount ? ', ' + destination.rejectedCount + ' file cần kiểm tra lại' : '') + '.');
+  lines.push('', 'Mở thư mục theo đường dẫn trên rồi kéo/thả file vào. Đây là thư mục trên máy chạy 9B, không phải đường dẫn tải qua Internet. Nếu dùng điện thoại hoặc 9B chạy trên máy khác, nói tôi biết để chọn nơi nhận file bạn truy cập được; chỉ gửi link Drive sau khi kiểm được kết nối và quyền tải lên.', '', 'Khi bổ sung xong, nhắn: “Tôi đã hoàn tất”. Tôi sẽ đọc lại Tri thức và kiểm tra lại các thư mục trước khi đi tiếp.');
+  lines.push('', selected.ready ? 'Bạn có thể làm thử định dạng đã chọn ngay; thiếu video không cản làm bài chữ/ảnh đã đủ đầu vào.' : 'Bạn có thể xem menu ngay; tôi sẽ hỏi đúng phần còn thiếu của định dạng bạn chọn trước khi sản xuất.');
+  const customerMessage = lines.join('\n');
+  const customerMessagePath = safe(ctx.workspace, path.join(ctx.paths.knowledge_drafts, 'Bắt đầu làm content.md'));
+  fs.writeFileSync(customerMessagePath, customerMessage + '\n', { encoding: 'utf8', mode: 0o600 });
+  state.setupPreparedAt = new Date().toISOString(); save(ctx, state);
+  return { ...result, action: 'show_setup', setupScope: 'core_profile_and_brand_plus_selected_format', selectedFormatReady: selected.ready, selectedFormatStatus: selected.status, profileReadbackRequired: !state.lastReadAt, mediaDestinations, nativeImageReview, customerMessage, customerMessagePath, deliveryRequired: 'Hiển thị customerMessage trong chat; đính kèm đúng templates và menu. File trên máy không thay lời hướng dẫn cho khách.' };
+}
 function main(argv = process.argv.slice(2)) {
   const { command, options } = parse(argv), ctx = context(options);
   if (command === 'status') { const state = loadState(ctx, options, command); return report(ctx, state, options.format || state.selectedFormat); }
@@ -285,6 +335,7 @@ function main(argv = process.argv.slice(2)) {
 function run(ctx, options, command) {
   const state = loadState(ctx, options, command);
   if (command === 'init') { ensureFolders(ctx); return persistProgress(ctx, state); }
+  if (command === 'setup') return setup(ctx, state);
   if (command === 'templates') return copyTemplates(ctx, state);
   if (command === 'resume' && !options.input) return { ...report(ctx, state), ready: false, status: 'READBACK_REQUIRED', code: 'READBACK_REQUIRED', instruction: 'Câu hoàn tất không xác nhận đủ dữ liệu. Truy vấn/đọc lại Tri thức và ảnh rồi cung cấp snapshot mới; quét lại media local.' };
   if (command === 'assess' || options.input) {

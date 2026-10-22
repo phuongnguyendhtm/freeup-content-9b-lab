@@ -52,6 +52,12 @@ test('fresh session: menu, selection 2, missing template, readback resume, and p
   const templates = f.call('onboarding', 'templates');
   assert.deepEqual(templates.templates.map(item => item.templateId), ['T03']);
   assert.ok(templates.templates[0].path.includes('Hồ sơ cần hoàn thiện'));
+  const handoff = f.call('onboarding', 'setup');
+  assert.deepEqual(handoff.missingFields.map(field => field.field), ['offers.benefits']);
+  assert.equal(handoff.nativeImageReview.searched, true);
+  assert.equal(handoff.mediaDestinations.length, 3);
+  assert.equal(handoff.questions[0].prompts[0].field, 'offers.benefits');
+  assert.ok(handoff.customerMessage.includes(handoff.paths.broll));
   // The user uploads the filled document to Tri thức. Only an actual new tool readback is supplied next.
   fs.appendFileSync(templates.templates[0].path, '\nLợi ích đã điền: Dùng để đối chiếu cùng một mẫu.\n');
   assert.equal(f.call('onboarding', 'resume').status, 'READBACK_REQUIRED');
@@ -61,6 +67,7 @@ test('fresh session: menu, selection 2, missing template, readback resume, and p
   result = f.call('onboarding', 'resume', '--input', f.input('Tri thức đọc lại.json', reread));
   assert.equal(result.ready, true);
   assert.equal(result.missingFields.length, 0);
+  assert.equal(f.call('onboarding', 'setup').questions.length, 0);
   const productOnly = { businessId: f.businessId, format: 'product_post', title: 'Giới thiệu Mẫu xanh', taskKind: 'post', idempotencyKey: 'forward-product-only', sources: [{ id: 'product-facts', businessId: f.businessId, confirmed: true }, { id: 'photo', businessId: f.businessId, confirmed: true }], product: { name: 'Mẫu xanh', confirmed: true, sourceId: 'product-facts' }, media: [{ path: f.imageFile, businessId: f.businessId, role: 'product', sourceId: 'photo', originalAssetId: 'native-synthetic-blue' }] };
   const job = f.call('production', 'create', '--input', f.input('Bài chưa có chữ.json', productOnly));
   const reviewed = f.call('production', 'qa', '--id', job.id, '--input', f.input('Kết quả kiểm.json', { reviewer: 'synthetic-test', checks: { factual: true, brand: true, productFidelity: true, captionMediaMatch: true } }));

@@ -1,18 +1,23 @@
 {
   "schema_version": 1,
   "package_id": "freeup-content-gon-lab",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "checksum": "sha256",
   "files": [
     {
       "path": "AGENTS.md",
-      "sha256": "c2c5c6d644021c1f3ab1096871cdf3317b0d51475787547b3474255488fd731b",
-      "size": 1797
+      "sha256": "ae8efcbdc2ac1104070a41cff6b13f4c1e441b226abc3ac5cb267dc380d3115d",
+      "size": 3170
+    },
+    {
+      "path": "CAI-TRONG-9B.md",
+      "sha256": "4b341ff3e15f398f011547044c9db23497c86dd6e969a5afbc07152297c707bf",
+      "size": 718
     },
     {
       "path": "INSTALL.md",
-      "sha256": "38acb978014672f984c1d0533de06c2a6a3b1f2b4fc1c49a6d2db884051efd7c",
-      "size": 9824
+      "sha256": "b29aa20f143635d9c9682ea2ca072934e485da5bbbe68c78726e1ef1c9a6a3dc",
+      "size": 13500
     },
     {
       "path": "LICENSE",
@@ -21,13 +26,13 @@
     },
     {
       "path": "README.md",
-      "sha256": "3c906209cef4728cbeb906e039d60cf240f69855250f97a27090e5ad185b30b8",
-      "size": 4293
+      "sha256": "069192ceff42ebcdafea6c94464207f09bb0f92550987b71d6dd545d8dd1d74b",
+      "size": 5134
     },
     {
       "path": "SKILL.md",
-      "sha256": "2072067ee622e58daf5af3d1978a2f9fd11ca9c9409d30b0b30e1a94e55b34a6",
-      "size": 1357
+      "sha256": "892d5d44bab6cf8930f88057105a4f19c4a2b5dd5ca704b792446e6cdd7b1165",
+      "size": 2575
     },
     {
       "path": "activate-9b.cjs",
@@ -66,8 +71,13 @@
     },
     {
       "path": "docs/HUONG-DAN-KHACH-HANG.md",
-      "sha256": "e4029b5340f7b8734889a6dab5be179d601fe8d606ede96b4a70d579cc8d737f",
-      "size": 3016
+      "sha256": "245ec2e62900852ae82cbeb7a0f0a2a44f3b9b58195469c13f689281a9fb622d",
+      "size": 3909
+    },
+    {
+      "path": "docs/KET-QUA-BO-TAI-9B.md",
+      "sha256": "d7d564907b6f4a427054b016976c67c1a85982fdfa6917112c3abce16585d362",
+      "size": 3222
     },
     {
       "path": "docs/KICH-HOAT-9B.md",
@@ -80,19 +90,24 @@
       "size": 6038
     },
     {
+      "path": "docs/THIET-LAP-0.3.1.md",
+      "sha256": "4eeb7f794d720a38f191c91acefb453716ca8c6f663b8c8972287e7e4ce791d4",
+      "size": 3839
+    },
+    {
       "path": "downloads/10-mau-tri-thuc-9bizclaw.zip",
       "sha256": "e2bc7f39f727507449cacfef3e32796bf7b831df0ad2f9ac820f0807f956a91f",
       "size": 13441
     },
     {
       "path": "gift-manifest.json",
-      "sha256": "2dc127210bf6948d465bc2d7ff655688a5d57b06e22e900a11b70368b4660406",
-      "size": 1088
+      "sha256": "5a01cb4e373554950d7e08e4603b88df8690d97b986080292db54453b41ab3a4",
+      "size": 1293
     },
     {
       "path": "install-9b.cjs",
-      "sha256": "230915fba910fb348cdba30c97afb803771d647dd2b719b7beb6d3ec809282cf",
-      "size": 33530
+      "sha256": "41f171b485b2a06f46c77ca104027d8f9465334b5d8f63b78b195f511eaceca0",
+      "size": 33658
     },
     {
       "path": "install.cjs",
@@ -116,17 +131,17 @@
     },
     {
       "path": "package.json",
-      "sha256": "261f72cb439893f2a197989ba26a9f7d2b967e597bbea7fb3342c33e5053ff6e",
+      "sha256": "22c0794ca1c4daf3d50beba2e0479fa16b860a7453a6b435d1e9c16ef2db3a67",
       "size": 418
     },
     {
       "path": "package/skills/freeup-content-gon-lab/SKILL.md",
-      "sha256": "dacf802578573d410f4e91a30a56840905f229224b69624b55b4634f86f97a12",
-      "size": 10542
+      "sha256": "358d1f992bb69acad00823ded7792b305ec05d941f1958e7dac9a204c6c1b5dd",
+      "size": 11766
     },
     {
       "path": "package/skills/freeup-content-gon-lab/package.json",
-      "sha256": "a18834b6bc14ee480036315753a8c4fbfc90d52729c41bb4ef5226a5240fd614",
+      "sha256": "8463c28077dfcb396eaff879bfae321b8401c55defb94481ea4946ee1696413f",
       "size": 272
     },
     {
@@ -141,8 +156,8 @@
     },
     {
       "path": "package/skills/freeup-content-gon-lab/references/onboarding.md",
-      "sha256": "6d3a2ae60fdc2cb9773cd3b247df1a74f08647cdf61912f7191d0e72586584f2",
-      "size": 4037
+      "sha256": "b334174dbc83873d1fa6843a0f6293bd9598659faca71f411fcf4264b9067b79",
+      "size": 5342
     },
     {
       "path": "package/skills/freeup-content-gon-lab/references/production.md",
@@ -171,8 +186,8 @@
     },
     {
       "path": "package/skills/freeup-content-gon-lab/scripts/onboarding.cjs",
-      "sha256": "4997d993d7a66b0e6443a544f669c119a76d142ec8197b6f9209ea28cfaaab88",
-      "size": 27421
+      "sha256": "1b5f778ac6be8972a6e7ae63be87365c1419be92626c300f2aad98951b5095b1",
+      "size": 34853
     },
     {
       "path": "package/skills/freeup-content-gon-lab/scripts/production-lib/files.cjs",

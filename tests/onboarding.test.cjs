@@ -51,6 +51,67 @@ test('complete confirmed semantic evidence works regardless of filenames and sur
   assert.equal(f.cli('templates').templates.length, 0);
 });
 
+test('empty setup delivers real questions, only relevant forms and all existing upload folders', t => {
+  const f = fixture(t); f.init();
+  const result = f.cli('setup');
+  assert.equal(result.action, 'show_setup');
+  assert.equal(result.profileReadbackRequired, true);
+  assert.deepEqual(result.missingFields.map(item => item.field), [...CORE, ...VISUAL]);
+  assert.deepEqual(result.templates.map(item => item.templateId).sort(), ['T01', 'T04', 'T06', 'T09', 'T10']);
+  assert.equal(result.questions.flatMap(group => group.prompts).length, 12);
+  assert.equal(result.questions.flatMap(group => group.prompts).every(prompt => prompt.question.length > 15), true);
+  assert.deepEqual(result.mediaDestinations.map(item => item.kind), ['broll', 'music', 'voice']);
+  for (const item of result.mediaDestinations) {
+    assert.ok(path.isAbsolute(item.path));
+    assert.ok(fs.statSync(item.path).isDirectory());
+    assert.ok(result.customerMessage.includes(item.path));
+    assert.equal(item.locationType, 'local_folder');
+  }
+  assert.equal(result.nativeImageReview.searched, false);
+  assert.equal(fs.readFileSync(result.customerMessagePath, 'utf8').trim(), result.customerMessage);
+  assert.equal(f.cli('resume').status, 'READBACK_REQUIRED');
+});
+
+test('text-ready setup still asks missing brand questions without disabling text or forcing media', t => {
+  const f = fixture(t); const initial = f.init(); f.assess(f.snapshot());
+  const result = f.cli('setup');
+  assert.equal(result.selectedFormatReady, true);
+  assert.equal(result.ready, false);
+  assert.deepEqual(result.missingFields.map(item => item.field), VISUAL);
+  assert.deepEqual(result.templates.map(item => item.templateId), ['T01']);
+  assert.equal(result.missingMedia.length, 0);
+  assert.equal(f.cli('status').selectedFormat, 'text');
+  assert.equal(f.cli('status').ready, true);
+  const edited = result.templates[0].path; fs.writeFileSync(edited, 'Nội dung khách đang điền');
+  const again = f.cli('setup');
+  assert.equal(again.templates[0].created, false);
+  assert.equal(fs.readFileSync(edited, 'utf8'), 'Nội dung khách đang điền');
+  assert.equal(again.paths.state, initial.paths.state);
+});
+
+test('complete setup skips known questions but still hands off all media paths and rescans files', t => {
+  const f = fixture(t); const initial = f.init(); f.assess(f.snapshot([...CORE, ...VISUAL]));
+  let result = f.cli('setup');
+  assert.equal(result.ready, true); assert.equal(result.questions.length, 0); assert.equal(result.templates.length, 0);
+  assert.equal(result.mediaDestinations.length, 3);
+  const bytes = Buffer.alloc(32); bytes.writeUInt32BE(24); bytes.write('ftypisom', 4, 'ascii');
+  fs.writeFileSync(path.join(initial.paths.broll, 'Cảnh quay của khách.mp4'), bytes);
+  result = f.cli('setup');
+  assert.equal(result.mediaDestinations.find(item => item.kind === 'broll').fileCount, 1);
+  assert.equal(result.media.broll.files[0].decodeVerified, false);
+  assert.equal(result.nativeImageReview.searched, false);
+});
+
+test('media search with no matching images is distinct from never searching and survives reload', t => {
+  const f = fixture(t); f.init(); const snapshot = f.snapshot([...CORE, ...VISUAL]);
+  snapshot.sources.push({ id: 'empty-catalog', businessId: snapshot.businessId, kind: 'media_catalog', tool: 'company_media_search', read: true, readAt: snapshot.readAt, content: JSON.stringify({ items: [] }) });
+  snapshot.media = { nativeImages: [] }; f.assess(snapshot);
+  const result = f.cli('setup');
+  assert.equal(result.nativeImageReview.searched, true);
+  assert.equal(result.nativeImageReview.readAt, snapshot.readAt);
+  assert.equal(result.nativeImageReview.verifiedMatches, 0);
+});
+
 test('wrong business snapshot/source and rebinding do not change persisted state', t => {
   const f = fixture(t), initial = f.init(), before = fs.readFileSync(initial.paths.state, 'utf8');
   const wrong = f.snapshot(); wrong.businessId = 'cong-ty-khac';
