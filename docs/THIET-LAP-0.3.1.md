@@ -29,3 +29,9 @@ Agent tự cập nhật đúng agent hiện tại, giữ dữ liệu và tiếp 
 Các tình huống hồi quy gồm hồ sơ trống, đủ bài chữ nhưng thiếu nhận diện, đủ hồ sơ nhưng chưa có clip, thư viện ảnh chưa kiểm so với đã tìm nhưng chưa xác nhận ảnh phù hợp; kiểm lại file sau khi thêm và không ghi đè mẫu đang điền. Có kiểm qua router ở tiến trình Node độc lập, với mẫu còn thiếu rồi đọc lại để tiếp tục. Kết quả thử bằng fixture không chứng minh giao diện trên máy khách đã nhận bản cập nhật; sau phát hành cần cập nhật qua câu trên.
 
 Kết quả trước phát hành: **155/155 kiểm thử đạt, không bỏ qua**, trên Node 22.22.3. Gói được cài/kiểm qua bốn adapter; 44 liên kết Markdown trong gói được đối chiếu. Thử giao diện chat 9B trên máy khách không nằm trong kết quả tự động này.
+
+### Thử cập nhật bằng agent 9B thật
+
+Đã gửi đúng một câu cập nhật cho agent thử nghiệm đang chạy 0.3.0 trong cùng hội thoại. Native transcript ghi nhận bản 0.3.1 trả ba câu hỏi nhận diện còn thiếu (màu, phong cách hình ảnh, lựa chọn logo), một mẫu T01, cả ba đường dẫn thư mục tài nguyên thực, lời nhắc “Tôi đã hoàn tất” và attachment menu tồn tại. Hồ sơ bài chữ đủ nên không hỏi lại toàn bộ. Business/agent giữ nguyên; các trường cũ còn nguyên, file khách đang điền và cấu hình ngoài phạm vi cập nhật không đổi.
+
+Bộ thu kết quả CLI của lượt thử hết thời gian chờ trước khi backend trả lời cuối; câu trả lời hoàn chỉnh được đối chiếu trực tiếp trong native transcript sau đó. Vì vậy đây là xác minh hành vi backend và tệp, chưa phải xác minh giao diện bằng ảnh chụp trên máy khách. Gói 0.3.1 đã phát hành giữ nguyên byte/hash; mục kết quả này được bổ sung sau phát hành trên nhánh main.
