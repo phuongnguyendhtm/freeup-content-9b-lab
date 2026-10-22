@@ -40,6 +40,9 @@ function fixture(t) {
   write(source, 'templates/knowledge/03-san-pham-va-dich-vu.md', '# Sản phẩm và dịch vụ\n');
   write(source, 'templates/knowledge/Mẫu tiếng Việt.md', '# Dữ liệu thử\n');
   write(source, 'templates/sheets/content-sheet-schema.json', '{"tabs":3}');
+  write(source, 'templates/sheets/Content Gọn - 3 trang tính.xlsx', 'synthetic xlsx fixture');
+  write(source, `package/skills/${PACKAGE_ID}/references/sheet-template.md`, '# Fixed template fixture');
+  write(source, `package/skills/${PACKAGE_ID}/references/sheet-template.json`, JSON.stringify({xlsxAsset:'sheets/Content Gọn - 3 trang tính.xlsx',xlsxSha256:digest(Buffer.from('synthetic xlsx fixture')),schemaAsset:'sheets/content-sheet-schema.json',schemaSha256:digest(Buffer.from('{"tabs":3}'))}));
   for (const name of ['menu-catalog', 'knowledge-catalog', 'customer-paths']) write(source, `onboarding/${name}.json`, JSON.stringify({ schema_version: 1, package_id: PACKAGE_ID }));
   write(source, 'assets/menu/he-thong-content-ngang-v2.png', png());
   write(source, 'gift-manifest.json', JSON.stringify({ schema_version: 1, package_id: PACKAGE_ID, version: '0.1.0' }));

@@ -1,13 +1,18 @@
 {
   "schema_version": 1,
   "package_id": "freeup-content-gon-lab",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "checksum": "sha256",
   "files": [
     {
+      "path": "AGENTS.md",
+      "sha256": "2cfff86afaca30146108d94ab202a4d53b2d14a3a039f5f752c81ddd148803be",
+      "size": 926
+    },
+    {
       "path": "INSTALL.md",
-      "sha256": "07d5c4ae026ce5317bdd501a424125fcd3b504ab3eba5296832256a55c3df506",
-      "size": 5848
+      "sha256": "fc679d95af0f93bb3b05d37e254389349929173f4d32c159f1b6aa684e04533c",
+      "size": 5028
     },
     {
       "path": "LICENSE",
@@ -16,13 +21,13 @@
     },
     {
       "path": "README.md",
-      "sha256": "d3e016ae0b46f076ff411783fc56303907740bafb1b15603947ef971e207c61b",
-      "size": 6451
+      "sha256": "4486dce16623d173d07ad95c4a4101fb55a9f11425341a729e7bfdc57119c97e",
+      "size": 3700
     },
     {
       "path": "SKILL.md",
-      "sha256": "cdd87072a5cd2b8221bcdbcf577e798a880cdff6e95a6456eef31bff4fe591ea",
-      "size": 1126
+      "sha256": "a404467dd8f4eb3a764edb6a27feb719c49863b6cd4ed37ce7efcabc418b98ad",
+      "size": 901
     },
     {
       "path": "activate-9b.cjs",
@@ -36,23 +41,18 @@
     },
     {
       "path": "bootstrap.ps1",
-      "sha256": "0030d88479904234074b20526e56e35525f4be8e10b2f0e94f3af88887150c27",
-      "size": 1825
+      "sha256": "ad195f266ffacb28f06fc2c56ab33112988d028d1b90b2e3dc54ea18486634bd",
+      "size": 1811
     },
     {
       "path": "bootstrap.sh",
-      "sha256": "4012d2958bb0e31c5cc1e46c02ba5db694b282da6b82e7f80e2e2f3575174fcf",
-      "size": 1135
+      "sha256": "ab977956477aa08fd14ffd2f6e72ac65133cad87a33bfe336113150b4f0217df",
+      "size": 1151
     },
     {
-      "path": "docs/BA-TRANG-TINH.md",
-      "sha256": "ebd7831ea8616cff3b6ca33f0fa832390d50a10379aae634773237b0d8ea4960",
-      "size": 18003
-    },
-    {
-      "path": "docs/BAN-THU-0.1.0.md",
-      "sha256": "b6399236faea411355ec5645a50f6405472da1dfe341dbc6200bd37b4f61ece8",
-      "size": 7386
+      "path": "docs/BAN-THU-0.2.0.md",
+      "sha256": "32ebdc4466170c9dfe35e361aecc42d47450efc0fe6045a43a08d25336703c0d",
+      "size": 1723
     },
     {
       "path": "docs/BO-SUNG-TRINH-DUNG.md",
@@ -61,28 +61,13 @@
     },
     {
       "path": "docs/CAI-DAT-VA-CAP-NHAT.md",
-      "sha256": "c54cde7cd7a6ccf23e06ebc4e3fc53b05ec0f4bb3318d0ddb865a05b6d9ad602",
-      "size": 8849
-    },
-    {
-      "path": "docs/DOI-CHIEU-BAI-VIET-VA-MEDIA.md",
-      "sha256": "2dcb61ae5c435ee2d0ecce1cb069a34014c7108d5642bbb7c1767ae4065830c7",
-      "size": 8267
-    },
-    {
-      "path": "docs/HANH-TRINH-KHACH-HANG.md",
-      "sha256": "bef8273adc9e0e6fad8c360fd5c18ff65a21903afcdec259fdc87520893af015",
-      "size": 14802
+      "sha256": "bbca624c979810e96d14f9bb9449b5620142602450004e6da8d8b8ee11b47d5d",
+      "size": 902
     },
     {
       "path": "docs/HUONG-DAN-KHACH-HANG.md",
-      "sha256": "2e8edc4f4a066a8230284f63d5c09168563a0cc43ee380d27ef216dc5ed4553d",
-      "size": 3345
-    },
-    {
-      "path": "docs/KE-HOACH-DUYET-TRIEN-KHAI.md",
-      "sha256": "f28375ff36433f9b6a2df3fea878068647ef4e92caacfd9fb2583cce5b58963d",
-      "size": 18715
+      "sha256": "b9d92ad3a70fe20a62e53dd72da5f23b3fd117809fd429795219e7e2a33207cd",
+      "size": 3490
     },
     {
       "path": "docs/KICH-HOAT-9B.md",
@@ -90,24 +75,9 @@
       "size": 4232
     },
     {
-      "path": "docs/KIEM-HO-SO-VA-TIEP-TUC.md",
-      "sha256": "f1be98062137a986b23e972c3c64e15f010d6e164c6fcf5717e9765f573b1abd",
-      "size": 6159
-    },
-    {
-      "path": "docs/MEDIA-VA-MENU.md",
-      "sha256": "64685e6a99ba129ed9d8e6c7580327ec4fbf13cbe4748f44661b5414469e2200",
-      "size": 12045
-    },
-    {
       "path": "docs/MODEL-VA-CHI-PHI.md",
       "sha256": "653da8fdef02579c4185d65e1c655a5caf35b7b139fa85d0bc7451f3243c367a",
       "size": 6038
-    },
-    {
-      "path": "docs/THU-RIENG-VA-NGHIEM-THU.md",
-      "sha256": "1f84ff5803a7d8042665d19183c775ff69af456e18389ad52b5684a594bdadbd",
-      "size": 13514
     },
     {
       "path": "downloads/10-mau-tri-thuc-9bizclaw.zip",
@@ -116,13 +86,13 @@
     },
     {
       "path": "gift-manifest.json",
-      "sha256": "8ca72238b0558ca902338c9502e466e99d1184940d9ed58131e2315715a10721",
-      "size": 692
+      "sha256": "c5c703c02ea8dacd7666b7bb722bcbfb6a8f5761446166b778a7254817099f4c",
+      "size": 932
     },
     {
       "path": "install.cjs",
-      "sha256": "6cc1d78d7a558a5d5819e4d7c7aeb3d72e3e4bb648a435a0d557365d0748993e",
-      "size": 28413
+      "sha256": "69156afa4811b41530b59095b0f9c431c645da891450dc6c7dc251befd418b4c",
+      "size": 31204
     },
     {
       "path": "onboarding/customer-paths.json",
@@ -141,23 +111,28 @@
     },
     {
       "path": "package.json",
-      "sha256": "183e300bafc1153b811c0bef2881dde58fda7ea26c16306349d8da5c4231b2a3",
-      "size": 410
+      "sha256": "0cf254abc72be518e8edd2a9b172cc64f6cfcdf869d342c1128b3beb8c675cc2",
+      "size": 418
     },
     {
       "path": "package/skills/freeup-content-gon-lab/SKILL.md",
-      "sha256": "fb6b93e62f2c6faab0800f9f8853a880272dda2451257c95392cef6f9d012f17",
-      "size": 9518
+      "sha256": "eb80bc5f00e1979d78b2abe46e2204642903aa24c16f7a3f02745c29a6d40886",
+      "size": 9940
     },
     {
       "path": "package/skills/freeup-content-gon-lab/package.json",
-      "sha256": "649a63401b279de339926c8ee18fa94cd3ce14421c276774ed6fec36e1f9a7bd",
-      "size": 236
+      "sha256": "2aa91b42e9e5e4fcfbff26cd50bd3bf7a6b7b4414ecfdb07b424b7e66b9a873d",
+      "size": 272
     },
     {
       "path": "package/skills/freeup-content-gon-lab/references/9b-native-tools.md",
       "sha256": "1bbed6beaaec7caad5f7fbb5df0a9c6cf0b36e2518e03c0b9664a6d263f8e43c",
       "size": 11702
+    },
+    {
+      "path": "package/skills/freeup-content-gon-lab/references/host-adapters.md",
+      "sha256": "51a776b669e2f304514b0cb5d8935f58d19f39b2e3f7e9317360c5c2fbb2c781",
+      "size": 2916
     },
     {
       "path": "package/skills/freeup-content-gon-lab/references/onboarding.md",
@@ -170,9 +145,19 @@
       "size": 12365
     },
     {
+      "path": "package/skills/freeup-content-gon-lab/references/sheet-template.json",
+      "sha256": "398a638c3ae001e16baaf8ea6e09fb55f17fc7df7cc8c963ef796317e37479fc",
+      "size": 619
+    },
+    {
+      "path": "package/skills/freeup-content-gon-lab/references/sheet-template.md",
+      "sha256": "8ee89768186b79b4d9337b15feaea54e2d1b2feeddfc8f510557c683afc51a4e",
+      "size": 2547
+    },
+    {
       "path": "package/skills/freeup-content-gon-lab/references/sheets.md",
-      "sha256": "0b705c1eba4861bf04e92dd895ec5722d9ebb8179335348852633673d43ada5c",
-      "size": 4020
+      "sha256": "4c6d7e7d4393179a1c17cbf2c9356164386f0374a7e17c16205e8cb13eefced2",
+      "size": 1869
     },
     {
       "path": "package/skills/freeup-content-gon-lab/scripts/contentlab.cjs",
@@ -181,8 +166,8 @@
     },
     {
       "path": "package/skills/freeup-content-gon-lab/scripts/onboarding.cjs",
-      "sha256": "432f19cde8083baac2fd156a9c941e26a87a0d1fd8518229c4d8821fcba1395f",
-      "size": 27343
+      "sha256": "4997d993d7a66b0e6443a544f669c119a76d142ec8197b6f9209ea28cfaaab88",
+      "size": 27421
     },
     {
       "path": "package/skills/freeup-content-gon-lab/scripts/production-lib/files.cjs",
@@ -206,8 +191,8 @@
     },
     {
       "path": "package/skills/freeup-content-gon-lab/scripts/sheet.cjs",
-      "sha256": "27fa00459b0f4b40e87ff874a7323c668dd85e48640fc807a96ac49c1e25a081",
-      "size": 9532
+      "sha256": "430e4a5e0d791efc6123699ef91b92ea55ebcbd231e2551bd9d74bdf6d013aac",
+      "size": 10892
     },
     {
       "path": "templates/knowledge/01-cong-ty-va-nhan-dien.md",

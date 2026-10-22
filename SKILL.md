@@ -1,10 +1,8 @@
 ---
 name: install-contentlab-gift
-description: "Cài quà tặng FreeUp Content Gọn từ repo này vào 9BizClaw khi chủ yêu cầu nhận/cài bộ quà tặng; đọc INSTALL.md để cài đúng agent, kích hoạt contentlab rồi kiểm hồ sơ và mở menu."
+description: "Nhận hoặc cài quà tặng FreeUp Content Gọn từ GitHub cho OpenClaw, 9BizClaw, Claude Code hoặc Codex; nhận diện host, cài đầy đủ skill contentlab và mở menu. Claude web/Cowork dùng ZIP skill và bước bật native của tài khoản."
 ---
 
-# Cài quà tặng Content Gọn
+# Nhận quà FreeUp Content Gọn
 
-Đọc [INSTALL.md](INSTALL.md) và thực hiện trọn luồng bằng công cụ 9B đang có. Entrypoint cài tệp là `install.cjs`; helper kích hoạt là `activate-9b.cjs`. Sau cài, skill thực thi nằm tại `package/skills/freeup-content-gon-lab/SKILL.md`, tên native **contentlab**. Không chỉ copy SKILL gốc này rồi nhận là bộ sản xuất đã được cài.
-
-Tận dụng Node/kết nối/hồ sơ/ảnh của host. Chỉ dùng namespace và dữ liệu lab; cài trên agent thử riêng nếu đã có bộ FreeUp đang hoạt động. Không thay default agent, kết nối, policy hoặc lịch cũ. Kiểm receipt, enable đúng skill cho đúng agent và đọc lại từ phiên mới trước khi báo hoàn tất. Hướng dẫn phần còn thiếu và mở menu ảnh thực.
+Đọc [INSTALL.md](INSTALL.md) và thực hiện trên host của phiên hiện tại khi chủ gửi link để nhận quà. Dùng bộ cài với --host rõ ràng; không hỏi khách chọn đường dẫn kỹ thuật. Root SKILL này chỉ hướng dẫn cài, không phải skill sản xuất. Bộ đầy đủ nằm trong package/skills/freeup-content-gon-lab. Sau cài kiểm receipt, nạp đúng skill, mở menu và kiểm phần hồ sơ còn thiếu. Mẫu Sheet bắt buộc có reference trong skill; không dựng bảng tùy ý.

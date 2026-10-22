@@ -203,6 +203,16 @@ function sourcePlan(source) {
   const sheets = path.join(source, 'templates', 'sheets');
   if (fs.existsSync(sheets)) for (const file of listFiles(sheets)) if (/\.(?:json|xlsx)$/.test(file)) add(path.join(sheets, file), `assets/sheets/${file}`);
   if (!mapping.has('assets/sheets/content-sheet-schema.json')) fail('Thiếu templates/sheets/content-sheet-schema.json.');
+  const [major, minor] = packageInfo.version.split('.').map(Number);
+  if (major > 0 || minor >= 2) {
+    const reference = mapping.get('references/sheet-template.json');
+    if (!reference || !mapping.has('references/sheet-template.md')) fail('Thiếu reference Sheet mẫu bắt buộc.');
+    const contract = readJson(reference.source);
+    for (const [name, expected] of [[contract.xlsxAsset, contract.xlsxSha256], [contract.schemaAsset, contract.schemaSha256]]) {
+      const item = mapping.get(`assets/${name}`);
+      if (!item || item.sha256 !== expected) fail('Sheet mẫu thiếu hoặc sai hash so với reference; không tạo bảng thay thế.');
+    }
+  }
   const menuFile = path.join(source, 'assets', 'menu', MENU);
   add(menuFile, `assets/menu/${MENU}`);
   const menuBytes = fs.readFileSync(menuFile);
@@ -253,12 +263,31 @@ function discoverWorkspace(env = process.env) {
   for (const file of configs) {
     try {
       const config = readJson(file);
-      const agents = Array.isArray(config.agents?.list) ? config.agents.list : [];
+      const agents = Array.isArray(config.agents?.list) ? config.agents.list : Object.entries(config.agents?.entries || {}).map(([id, entry]) => ({ id, ...entry }));
       for (const agent of agents) if (['content-gon-test', PACKAGE_ID].includes(agent.id)) add(agent.workspace || agent.workspaceDir);
     } catch { /* Config contents, including credentials, are never logged. */ }
   }
   if (candidates.size !== 1) fail('Chưa xác định duy nhất workspace agent lab. Tạo/chọn agent lab trong 9B rồi truyền --workspace với đường dẫn tuyệt đối.');
   return [...candidates][0];
+}
+
+function detectHost(options = {}) {
+  const env = options.env || process.env;
+  const requested = options.host || env.FREEUP_CONTENT_HOST || 'auto';
+  if (!['auto', 'openclaw', '9bizclaw', 'claude', 'codex'].includes(requested)) fail('--host phải là auto, openclaw, 9bizclaw, claude hoặc codex.');
+  if (requested !== 'auto') return requested;
+  // Process/host evidence takes precedence over unrelated installed applications.
+  if (env.NINEBIZ_INSTALL_ROOT || env.NINEBIZ_CLI_ROOT || env.NINEBIZ_NODE) return '9bizclaw';
+  if (env.CLAUDECODE || env.CLAUDE_CODE_ENTRYPOINT) return 'claude';
+  if (env.CODEX_THREAD_ID || env.CODEX_INTERNAL_ORIGINATOR_OVERRIDE) return 'codex';
+  if (env.OPENCLAW_CONFIG_PATH || env.OPENCLAW_STATE_DIR || env.OPENCLAW_AGENT_ID) return 'openclaw';
+  const workspace = options.workspace;
+  if (workspace && path.isAbsolute(workspace)) {
+    const matches = [['.claude', 'claude'], ['.agents', 'codex']].filter(([dir]) => fs.existsSync(path.join(workspace, dir)));
+    if (matches.length === 1) return matches[0][1];
+    if (matches.length > 1) fail('Workspace có nhiều host; agent phải truyền --host theo phiên hiện tại.');
+  }
+  fail('Chưa nhận diện được host. Agent truyền --host theo nền tảng hiện tại; không hỏi khách chọn đường dẫn kỹ thuật.');
 }
 
 function rendererStatus(target, source) {
@@ -275,18 +304,20 @@ function rendererStatus(target, source) {
 }
 
 function install(options = {}) {
-  if (Number(process.versions.node.split('.')[0]) < 22) fail('Cần Node.js 22 trở lên. Dùng bootstrap để tìm Node đi kèm 9B.');
+  if (Number(process.versions.node.split('.')[0]) < 22) fail('Cần Node.js 22 trở lên. Agent dùng Node của host hoặc bootstrap để tìm runtime đã có.');
   const sourceInput = options.source || __dirname;
   if (!path.isAbsolute(sourceInput)) fail('--source phải là đường dẫn tuyệt đối.');
   const source = fs.realpathSync(sourceInput);
-  const workspaceInput = options.workspace || discoverWorkspace(options.env || process.env);
+  const host = (options.host || (options.env || process.env).FREEUP_CONTENT_HOST) ? detectHost(options) : 'openclaw';
+  const workspaceInput = options.workspace || (['claude', 'codex'].includes(host) ? process.cwd() : discoverWorkspace(options.env || process.env));
   if (!path.isAbsolute(workspaceInput)) fail('--workspace phải là đường dẫn tuyệt đối.');
   if (!fs.existsSync(workspaceInput) || !fs.statSync(workspaceInput).isDirectory()) fail('Workspace chưa tồn tại. Hãy tạo/chọn workspace agent lab trong 9B trước.');
   if (fs.lstatSync(workspaceInput).isSymbolicLink()) fail('Không cài qua liên kết workspace.');
   const workspace = fs.realpathSync(workspaceInput);
   if (workspace === path.parse(workspace).root || workspace === source || inside(source, workspace) || inside(workspace, source)) fail('Workspace phải là thư mục riêng, không phải gốc ổ đĩa hoặc cây mã nguồn bộ cài.');
-  const target = checked(workspace, path.join(workspace, 'skills', PACKAGE_ID));
-  const installRoot = checked(workspace, path.join(workspace, DATA_DIR, 'install'));
+  const portable = ['claude', 'codex'].includes(host);
+  const target = checked(workspace, path.join(workspace, ...(host === 'claude' ? ['.claude', 'skills', 'contentlab'] : host === 'codex' ? ['.agents', 'skills', 'contentlab'] : ['skills', PACKAGE_ID])));
+  const installRoot = checked(workspace, path.join(workspace, DATA_DIR, 'install', ...(portable ? [host] : [])));
   const receiptFile = checked(workspace, path.join(installRoot, 'receipt.json'));
   let previousReceipt = null;
   if (fs.existsSync(receiptFile)) { previousReceipt = readJson(receiptFile); validateReceipt(previousReceipt, workspace, target); }
@@ -296,7 +327,7 @@ function install(options = {}) {
   const report = {
     schema_version: RECEIPT_SCHEMA, package_id: PACKAGE_ID,
     version: plan?.packageInfo.version || previousReceipt?.version || null,
-    workspace, target, receipt: receiptFile,
+    workspace, target, host, receipt: receiptFile,
     operation: options.uninstallLab ? 'uninstall-lab' : 'install',
     dry_run: dryRun,
     activation: 'not_verified',
@@ -381,7 +412,7 @@ function install(options = {}) {
       install_mode: inPlace ? 'in-place-files' : 'directory-swap',
       staged_source: inPlace ? stage : null,
       capabilities: rendererStatus(target, source),
-      next: 'Chọn agent lab trong 9B; kiểm skills.status/lệnh contentlab của đúng agent rồi nhắn “hệ thống content”. Receipt file chưa xác nhận kích hoạt chat hoặc tạo media.'
+      next: portable ? `Mở dự án trong ${host}; kiểm host đã phát hiện skill contentlab rồi nhắn “hệ thống content”. Receipt chỉ xác nhận file, chưa xác nhận kích hoạt chat hoặc tài khoản.` : 'Chọn đúng agent; kiểm skills.status/lệnh contentlab của agent rồi nhắn “hệ thống content”. Receipt file chưa xác nhận kích hoạt chat hoặc tạo media.'
     };
     atomicJson(workspace, receiptFile, receipt);
     const readback = readJson(receiptFile);
@@ -426,7 +457,7 @@ function parseArgs(argv) {
     if (argument === '--dry-run') result.dryRun = true;
     else if (argument === '--uninstall-lab') result.uninstallLab = true;
     else if (argument === '--help' || argument === '-h') result.help = true;
-    else if (argument === '--workspace' || argument === '--source') {
+    else if (argument === '--workspace' || argument === '--source' || argument === '--host') {
       if (!argv[i + 1] || argv[i + 1].startsWith('--')) fail(`Thiếu giá trị ${argument}.`);
       result[argument.slice(2)] = argv[++i];
     } else fail(`Tham số không hỗ trợ: ${argument}`);
@@ -436,8 +467,8 @@ function parseArgs(argv) {
 if (require.main === module) {
   try {
     const options = parseArgs(process.argv.slice(2));
-    if (options.help) console.log('node install.cjs --workspace <absolute-lab-workspace> [--dry-run] [--uninstall-lab]\nKhông cần Git/npm/API key. Cài file riêng; kích hoạt đúng agent cần được 9B xác minh.');
+    if (options.help) console.log('node install.cjs --host <auto|openclaw|9bizclaw|claude|codex> --workspace <absolute-workspace> [--dry-run] [--uninstall-lab]\nKhông cần Git/npm/API key. Agent nhận diện host và kiểm kích hoạt riêng sau khi cài file.');
     else console.log(JSON.stringify(install(options), null, 2));
   } catch (error) { console.error(`Content Gọn lab: ${error.message}`); process.exitCode = 1; }
 }
-module.exports = { install, parseArgs, discoverWorkspace, sourcePlan, listFiles, inventory, PACKAGE_ID, OWNER_FILE };
+module.exports = { install, parseArgs, discoverWorkspace, detectHost, sourcePlan, listFiles, inventory, PACKAGE_ID, OWNER_FILE };

@@ -15,7 +15,8 @@ function temp(t) {
   const workspace = path.join(root, 'Khách có dấu', 'Workspace lab'); fs.mkdirSync(workspace, { recursive: true });
   return { root, workspace };
 }
-function metadata() { return { spreadsheetId: 'independent-sheet', businessId: 'independent-business', sheets: sheet.schema().tabs.map((tab, index) => ({ properties: { title: tab.title, sheetId: index, hidden: false } })), headers: Object.fromEntries(sheet.schema().tabs.map(tab => [tab.key, tab.headers])) }; }
+function origin(id){const r=sheet.template();return {templateId:r.templateId,revision:r.revision,xlsxSha256:r.xlsxSha256,method:'xlsx_import',resultSpreadsheetId:id,verified:true};}
+function metadata() { return { templateOrigin:origin('independent-sheet'), spreadsheetId: 'independent-sheet', businessId: 'independent-business', sheets: sheet.schema().tabs.map((tab, index) => ({ properties: { title: tab.title, sheetId: index, hidden: false } })), headers: Object.fromEntries(sheet.schema().tabs.map(tab => [tab.key, tab.headers])) }; }
 function call(helper, workspace, command, input) {
   const file = path.join(workspace, 'input.json');
   if (input) fs.writeFileSync(file, JSON.stringify(input));

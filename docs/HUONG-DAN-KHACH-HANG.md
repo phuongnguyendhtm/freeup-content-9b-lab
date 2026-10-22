@@ -2,9 +2,9 @@
 
 ## Cài đặt
 
-Mở chat của 9BizClaw và dán câu sau:
+Mở chat agent OpenClaw, 9BizClaw, Claude hoặc Codex mà bạn sử dụng và dán câu sau:
 
-> Cài quà tặng FreeUp Content Gọn từ https://github.com/phuongnguyendhtm/freeup-content-9b-lab. Đọc INSTALL.md và thực hiện trọn quy trình cài, kích hoạt skill contentlab đúng agent; dùng bản thử riêng nếu tôi đã có bộ content khác. Sau đó kiểm hồ sơ và ảnh sẵn có, chỉ hướng dẫn bổ sung phần thiếu rồi mở menu hệ thống content để tôi làm thử.
+> Cài FreeUp Content Gọn từ https://github.com/phuongnguyendhtm/freeup-content-9b-lab. Đọc INSTALL.md, nhận diện nền tảng hiện tại rồi cài skill contentlab đúng chỗ, mở menu và kiểm phần hồ sơ còn thiếu. Dùng đúng Sheet mẫu trong reference của skill.
 
 Chờ thông báo từ trợ lý. Nếu hệ thống báo cần lượt mới, nhắn **Tiếp tục**. Bạn không cần tự cài Git, chép thư mục hoặc nhập API key để bắt đầu.
 
@@ -33,6 +33,8 @@ Trợ lý gửi đường dẫn thật trên máy bạn tới **Nội dung của
 Bài hoàn chỉnh nằm trong **Nội dung của tôi → Nội dung đã tạo**. Mở **Xem bài.html** để xem cả chữ và hình/video; **Bài viết.txt** để sao chép. Ảnh và video có file riêng. Chỉ cần góp ý ngay trong chat để sửa cùng bài.
 
 ## Dùng ba trang tính khi cần
+
+Agent chỉ copy/import mẫu được cung cấp; không tự thiết kế bảng. Trên Claude web/Cowork, nếu nền tảng yêu cầu, bật ZIP skill trong Customize/Skills của tài khoản trước khi dùng.
 
 1. **00. Nguồn tham khảo:** thêm link/chủ đề muốn tham khảo.
 2. **01. Ý tưởng:** chọn **Làm bài** cho ý muốn sản xuất.

@@ -125,15 +125,9 @@ Sau cài phải tạo/kiểm thư mục thật rồi gửi đường dẫn tuy�
 
 Không có tab Thiết lập hoặc tab ẩn. Hồ sơ nằm trong Tri thức; ảnh nằm trong thư viện 9B; cấu hình kỹ thuật và trạng thái nằm trong kho hệ thống riêng. Mã ý/bài thống nhất giữa chat và Sheet để không tạo hai job cho cùng lựa chọn. Chi tiết trường và trạng thái: [Ba trang tính](BA-TRANG-TINH.md).
 
-## 7. Dùng lại hai hệ thống như thế nào
+## 7. Tích hợp với dữ liệu doanh nghiệp
 
-| Nguồn | Dùng lại | Điều chỉnh cho quà tặng |
-|---|---|---|
-| 100X Social Content Agent | Ý tưởng có nguồn, nội dung nền, tách caption/media, quy trình render và duyệt | Chuyển workflow/công cụ sang host 9B; kiểm artifact thay vì chỉ tin workflow báo xong |
-| FreeUp Content 9B hiện tại | Kiểm dữ kiện, viết đúng giọng, nhánh insight, native media, kiểm caption và duyệt theo phiên bản | Gói riêng, menu mới, sản phẩm thật, onboarding theo phần thiếu, ba tab, giao thư mục tiếng Việt |
-| 9BizClaw | Hồ sơ, Tri thức, Hình ảnh doanh nghiệp, kết nối và công cụ sẵn có | Kiểm capability thực rồi gọi đúng schema; không giả định có video/audio, callback hoặc tự chuyển model |
-
-Kết quả kiểm nguồn: các workflow ảnh/carousel/infographic tham khảo đều có caption. Bản FreeUp đang cài có code chặn caption thiếu/rỗng. Lab phải giữ mức kiểm này, bổ sung kiểm ảnh sản phẩm và tính hợp lệ ưu đãi. [Bằng chứng và giới hạn từng repo](DOI-CHIEU-BAI-VIET-VA-MEDIA.md).
+Dùng hồ sơ, Tri thức, ảnh, kết nối và công cụ của chính khách. Kiểm capability thực trước khi sử dụng; giữ ID nguồn và không lấy dữ liệu người tặng làm mặc định. Bài ảnh/video có caption, QA và duyệt theo phiên bản.
 
 ## 8. Cách xây và thử riêng
 
@@ -175,4 +169,4 @@ Tiết kiệm bằng menu tĩnh dùng lại, tái sử dụng ảnh sản phẩm
 
 ## 11. Trạng thái bàn giao bản duyệt
 
-Đã có **repo thử riêng, bản kế hoạch, mười mẫu Tri thức, đặc tả ba tab, menu v2 có Mía và đối chiếu nguồn**. Chưa cài bộ lab lên 9B, chưa tạo Sheet thực và chưa bật job/đăng nền. Khi chốt trải nghiệm này, triển khai theo các chặng A–F ở trên và nghiệm thu trên môi trường lab.
+Đã có **repo thử riêng, bản kế hoạch, mười mẫu Tri thức, đặc tả ba tab, menu v2 có Mía và quy chuẩn chữ/media**. Chưa cài bộ lab lên 9B, chưa tạo Sheet thực và chưa bật job/đăng nền. Khi chốt trải nghiệm này, triển khai theo các chặng A–F ở trên và nghiệm thu trên môi trường lab.

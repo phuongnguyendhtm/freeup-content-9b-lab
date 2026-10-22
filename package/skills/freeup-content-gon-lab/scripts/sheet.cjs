@@ -9,6 +9,21 @@ function schema(){
   const p=path.resolve(__dirname,'../assets/sheets/content-sheet-schema.json');
   return JSON.parse(fs.readFileSync(fs.existsSync(p)?p:path.resolve(__dirname,'../../../../templates/sheets/content-sheet-schema.json'),'utf8'));
 }
+function template(){
+  const ref=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../references/sheet-template.json'),'utf8'));
+  const resolveAsset=name=>{const installed=path.resolve(__dirname,'../assets',name);return fs.existsSync(installed)?installed:path.resolve(__dirname,'../../../../templates',name);};
+  const xlsxPath=resolveAsset(ref.xlsxAsset),schemaPath=resolveAsset(ref.schemaAsset);
+  for(const [file,expected] of [[xlsxPath,ref.xlsxSha256],[schemaPath,ref.schemaSha256]]){
+    if(!fs.existsSync(file)||crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex')!==expected)throw Error('Mẫu Sheet thiếu hoặc sai SHA256; tải lại gói chính thức, không tự tạo bảng thay thế.');
+  }
+  return {...ref,xlsxPath,schemaPath,verified:true};
+}
+function verifyOrigin(m){
+  const ref=template(),o=m.templateOrigin;
+  if(!o||o.verified!==true||o.templateId!==ref.templateId||o.revision!==ref.revision||o.xlsxSha256!==ref.xlsxSha256||!ref.allowedMethods.includes(o.method)||o.resultSpreadsheetId!==m.spreadsheetId)throw Error('Cần templateOrigin đã kiểm từ bản copy/import đúng mẫu Sheet chính thức.');
+  if(m.spreadsheetId===ref.spreadsheetId||(o.method==='drive_copy'&&o.sourceSpreadsheetId!==ref.spreadsheetId))throw Error('Không dùng/sửa Sheet mẫu; phải copy đúng nguồn thành bảng riêng của khách.');
+  return o;
+}
 function ctx(o){
   const w=o.workspace||process.env.FREEUP_CONTENT_WORKSPACE;
   if(typeof w!=='string'||!path.isAbsolute(w))throw Error('Cần --workspace tuyệt đối.');
@@ -29,7 +44,7 @@ function verifyMetadata(m){
   return props;
 }
 function setupPlan(m){
-  const props=verifyMetadata(m),s=schema(),requests=[];
+  const props=verifyMetadata(m),origin=verifyOrigin(m),s=schema(),requests=[];
   s.tabs.forEach((t,i)=>{
     const id=props[i].sheetId;
     requests.push({updateCells:{range:{sheetId:id,startRowIndex:0,endRowIndex:1,startColumnIndex:0,endColumnIndex:t.headers.length},rows:[{values:t.headers.map(v=>({userEnteredValue:{stringValue:v}}))}],fields:'userEnteredValue'}});
@@ -41,13 +56,15 @@ function setupPlan(m){
 }
 function bind(c,m){
   verifyMetadata(m);
+  const origin=verifyOrigin(m);
   for(const t of schema().tabs)if(!Array.isArray(m.headers?.[t.key])||JSON.stringify(m.headers[t.key])!==JSON.stringify(t.headers))throw Error('Phải đọc đủ header của ba tab trước khi bind.');
   if(c.state.binding&&(c.state.binding.spreadsheetId!==m.spreadsheetId||c.state.binding.businessId!==m.businessId))throw Error('Workspace đã nối bảng/doanh nghiệp khác; không tự ghi đè binding.');
-  c.state.binding={spreadsheetId:m.spreadsheetId,businessId:m.businessId,timezone:'Asia/Ho_Chi_Minh',schema_version:schema().schema_version,sheets:properties(m),boundAt:new Date().toISOString()};save(c);
+  c.state.binding={spreadsheetId:m.spreadsheetId,businessId:m.businessId,templateOrigin:origin,timezone:'Asia/Ho_Chi_Minh',schema_version:schema().schema_version,sheets:properties(m),boundAt:new Date().toISOString()};save(c);
   return {ok:true,binding:c.state.binding};
 }
 function checkSnapshot(c,m){
   const b=c.state.binding;if(!b)throw Error('Chưa nối Sheet lab.');
+  verifyOrigin(b);
   if(m.spreadsheetId!==b.spreadsheetId||m.businessId!==b.businessId)throw Error('Snapshot sai bảng hoặc doanh nghiệp.');
   if(!m.readAt||!Number.isFinite(Date.parse(m.readAt)))throw Error('Thiếu thời điểm đọc bảng.');
   if(Date.parse(m.readAt)>Date.now()+60000)throw Error('Thời điểm đọc nằm trong tương lai; đọc lại bảng.');
@@ -111,7 +128,8 @@ function ack(c,m){
 }
 function main(argv=process.argv.slice(2)){
   const o=args(argv),cmd=o._[0]||'schema';
-  if(cmd==='schema')return {ok:true,schema:schema(),createBody:{properties:{title:'FreeUp Content Gọn',locale:'vi_VN',timeZone:'Asia/Ho_Chi_Minh'},sheets:schema().tabs.map((t,i)=>({properties:{sheetId:100+i,title:t.title,gridProperties:{rowCount:1000,columnCount:t.headers.length,frozenRowCount:1}}}))}};
+  if(cmd==='schema')return {ok:true,schema:schema(),templateRequired:true,allowBlankWorkbookCreation:false};
+  if(cmd==='template')return {ok:true,template:template()};
   const c=ctx(o);
   if(cmd==='status')return {ok:true,binding:c.state.binding,pending:Object.values(c.state.events).filter(e=>e.status!=='done')};
   const m=input(c,o);
@@ -122,4 +140,4 @@ function main(argv=process.argv.slice(2)){
   throw Error('Lệnh Sheet chưa được hỗ trợ.');
 }
 if(require.main===module){try{console.log(JSON.stringify(main(),null,2));}catch(e){console.error(JSON.stringify({ok:false,error:e.message}));process.exitCode=1;}}
-module.exports={main,schema};
+module.exports={main,schema,template};

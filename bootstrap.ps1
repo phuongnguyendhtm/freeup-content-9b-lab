@@ -27,6 +27,6 @@ foreach ($candidate in ($candidates | Select-Object -Unique)) {
     if ($LASTEXITCODE -eq 0 -and $version -match '^([0-9]+)\.' -and [int]$Matches[1] -ge 22) { $selectedNode = $candidate; break }
   } catch { continue }
 }
-if (-not $selectedNode) { throw 'Node.js 22+ not found. Set NINEBIZ_NODE to the Node executable bundled with your 9B installation, then run this script again.' }
+if (-not $selectedNode) { throw 'Node.js 22+ not found. The agent should locate Node from the current host, or the Node runtime bundled with 9B.' }
 & $selectedNode (Join-Path $PSScriptRoot 'install.cjs') @installerArguments
 exit $LASTEXITCODE

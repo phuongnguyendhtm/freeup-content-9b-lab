@@ -1,10 +1,21 @@
 {
   "schema_version": 1,
   "package_id": "freeup-content-gon-lab",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "display_name": "FreeUp Content Gọn — Bản thử riêng",
   "repository": "https://github.com/phuongnguyendhtm/freeup-content-9b-lab",
-  "install": {"entrypoint": "install.cjs", "runtime": "node>=22", "workspace_required": true},
+  "install": {
+    "entrypoint": "install.cjs",
+    "runtime": "node>=22",
+    "workspace_required": true,
+    "hosts": [
+      "openclaw",
+      "9bizclaw",
+      "claude",
+      "codex"
+    ],
+    "default_scope": "workspace"
+  },
   "skill": "contentlab",
   "skill_directory": "freeup-content-gon-lab",
   "command": "/contentlab",
@@ -13,5 +24,6 @@
   "customer_directory": "Nội dung của tôi",
   "sheet_schema": "content-gon-lab-v1",
   "automatic_publishing_enabled": false,
-  "host_policy_changes_required": false
+  "host_policy_changes_required": false,
+  "sheet_template_reference": "package/skills/freeup-content-gon-lab/references/sheet-template.json"
 }

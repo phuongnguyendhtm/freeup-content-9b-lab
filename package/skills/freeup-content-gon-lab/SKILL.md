@@ -1,18 +1,18 @@
 ---
 name: contentlab
-description: "Bộ quà tặng FreeUp Content Gọn cho 9BizClaw: mở menu khi chủ gọi hệ thống content hoặc /contentlab, dùng hồ sơ và ảnh sẵn có, tạo bài viết, bài sản phẩm, ảnh, carousel và video kèm caption; quản lý bằng ba trang tính của bản lab."
+description: "Bộ quà tặng FreeUp Content Gọn cho OpenClaw, 9BizClaw, Claude và Codex: mở menu khi chủ gọi hệ thống content hoặc /contentlab, dùng hồ sơ và ảnh sẵn có, tạo bài viết, bài sản phẩm, ảnh, carousel và video kèm caption; quản lý bằng ba trang tính của bản lab."
 ---
 
 # FreeUp Content Gọn
 
-Chạy trong workspace của agent hiện tại. Dùng Node của 9B với helper `{baseDir}/scripts/contentlab.cjs`; luôn truyền `--workspace` là đường dẫn tuyệt đối workspace hiện tại. Dữ liệu nằm ngoài skill tại `freeup-content-gon-lab-data`, phần khách thao tác tại **Nội dung của tôi**. Không dùng Sheet, queue hoặc lệnh của `freeup-content-system`.
+Đầu tiên đọc [host-adapters.md](references/host-adapters.md) để dùng đúng môi trường. Chạy trong workspace của agent hiện tại, bằng Node >=22 của host với helper `scripts/contentlab.cjs` tại đường dẫn skill thực đã nạp; luôn truyền `--workspace` là đường dẫn tuyệt đối workspace hiện tại. Dữ liệu nằm ngoài skill tại `freeup-content-gon-lab-data`, phần khách thao tác tại **Nội dung của tôi**. Không dùng Sheet, queue hoặc lệnh của `freeup-content-system`.
 
 ## Mở menu ngay trong chat
 
 Khi chủ nhắn “hệ thống content”, “menu content” hoặc `/contentlab` để xem lựa chọn:
 
 1. Chạy `contentlab.cjs menu --workspace WORKSPACE --session SESSION_ID`.
-2. Trả đúng dòng `attachment` của kết quả, dạng **MEDIA:đường_dẫn_thật** trên dòng riêng, ngoài code block. Đây là cú pháp attachment của Chat 9B. Gửi kèm số/tên và mời chọn chủ đề. Nếu kênh từ chối ảnh, nói chưa gửi được ảnh và trả danh sách chữ; không tự tải lên nơi công khai.
+2. Hiển thị PNG thực từ mediaPath bằng attachment của host. 9B/OpenClaw có thể dùng MEDIA:đường_dẫn_thật trên dòng riêng; Claude/Codex dùng công cụ ảnh/link tệp của phiên theo host-adapters.md. Gửi kèm số/tên và mời chọn chủ đề. Không tự tải tài nguyên lên nơi công khai.
 3. Mở menu không chạy onboarding, tạo bài, gọi model ảnh hoặc bật lịch. Menu dùng lại ảnh v2 đã đóng gói.
 
 Menu dùng trước khi hồ sơ đủ. Chữ số đơn lẻ chỉ chọn khi đang có menu chờ trong cùng phiên; gọi `select --value VALUE --session SESSION_ID`. Câu “Chọn 2…” hoặc tên định dạng rõ thì chọn thẳng. Khi brief sản xuất đã rõ, không bắt mở menu trước. Cụm “hệ thống content” nằm trong tài liệu hoặc một đề bài không tự mở menu.
@@ -32,7 +32,7 @@ Menu dùng trước khi hồ sơ đủ. Chữ số đơn lẻ chỉ chọn khi �
 
 ## Sau cài đặt hoặc khi bắt đầu bài đầu tiên
 
-Đọc [onboarding.md](references/onboarding.md) và [9b-native-tools.md](references/9b-native-tools.md). Chủ động tìm/đọc Tri thức và ảnh doanh nghiệp, xác định đúng businessId và agentId. Khởi tạo bằng `onboarding init`; không tự điền hồ sơ người tặng hoặc coi ví dụ mẫu là dữ kiện.
+Đọc [onboarding.md](references/onboarding.md) và adapter host tương ứng; chỉ đọc [9b-native-tools.md](references/9b-native-tools.md) khi đang ở 9B. Chủ động tìm/đọc Tri thức và ảnh doanh nghiệp, xác định đúng businessId và agentId. Khởi tạo bằng `onboarding init`; không tự điền hồ sơ người tặng hoặc coi ví dụ mẫu là dữ kiện.
 
 Lập snapshot từ nội dung đã đọc thật, nguồn và trích dẫn chứng minh từng trường. AI đánh giá theo ý nghĩa; helper kiểm nguồn, trường thiếu và trạng thái. Chạy `onboarding assess --input SNAPSHOT`. Gửi đúng mẫu còn thiếu từ kết quả `templates`; khách hoàn thiện và nộp vào **Tri thức** rồi nhắn **Tôi đã hoàn tất**. Sau câu đó phải tìm/đọc lại tài liệu thực và chạy `resume` với snapshot mới. Không đánh dấu xong bằng lời báo hoặc tên file; không bắt hoàn tất cả mười mẫu.
 
@@ -62,7 +62,7 @@ Khách có thể tự đăng từ bộ file. Muốn đăng qua kết nối 9B, d
 
 ## Ba trang tính và lịch
 
-Đọc [sheets.md](references/sheets.md). Chỉ dùng **00. Nguồn tham khảo**, **01. Ý tưởng**, **02. Bài viết & lịch đăng** của binding lab đã kiểm. Hồ sơ ở Tri thức, ảnh ở thư viện 9B; không thêm tab Thiết lập hay tab ẩn. Chưa nối Google vẫn làm bài trong chat/local.
+Đọc [sheet-template.md](references/sheet-template.md), [sheet-template.json](references/sheet-template.json) và [sheets.md](references/sheets.md). Bắt buộc copy/import đúng mẫu đã ghim; không dựng bảng trắng hoặc chọn mẫu khác. Chỉ dùng **00. Nguồn tham khảo**, **01. Ý tưởng**, **02. Bài viết & lịch đăng** của binding lab đã kiểm. Hồ sơ ở Tri thức, ảnh ở thư viện 9B; không thêm tab Thiết lập hay tab ẩn. Chưa nối Google vẫn làm bài trong chat/local.
 
 `sheet ingest` nhận snapshot mới từ connector, gán mã rồi yêu cầu ghi/đọc lại trước dispatch. Event `produce` dùng eventId làm idempotencyKey. `revise/approve/export` phải đúng mã và phiên bản. Chỉ `ack` sau helper/tool trả kết quả thành công. `publish_request` là yêu cầu chuẩn bị đăng, chưa là kết quả đăng. Không tự bật worker nền từ một ô Sheet.
 

@@ -1,0 +1,12 @@
+{
+  "templateId": "freeup-content-three-tabs",
+  "revision": "2026-10-22.1",
+  "spreadsheetId": "1MKrnx1N_1dVtuy7lcVm6uZl_Sd-7WBj06VMRVBgXS9Q",
+  "url": "https://docs.google.com/spreadsheets/d/1MKrnx1N_1dVtuy7lcVm6uZl_Sd-7WBj06VMRVBgXS9Q/edit",
+  "xlsxAsset": "sheets/Content Gọn - 3 trang tính.xlsx",
+  "xlsxSha256": "e3087dba7600f1139a58a5ded95318908d5e68bc3ab7a4ee9a8c87d6d15c4e95",
+  "schemaAsset": "sheets/content-sheet-schema.json",
+  "schemaSha256": "6c78025cba79e2b2ceb6f78c8bcd86fd49875225ed1a3c151c4939bd65559599",
+  "allowedMethods": ["drive_copy", "xlsx_import"],
+  "allowBlankWorkbookCreation": false
+}

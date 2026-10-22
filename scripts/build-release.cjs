@@ -48,7 +48,7 @@ function buildRelease(options = {}) {
   const plan = sourcePlan(root);
   const selected = new Set();
   const addFile = name => { if (fs.existsSync(path.join(root, name))) selected.add(name); };
-  for (const file of ['install.cjs', 'activate-9b.cjs', 'bootstrap.ps1', 'bootstrap.sh', 'package.json', 'gift-manifest.json', 'README.md', 'SKILL.md', 'INSTALL.md', 'LICENSE', 'LICENSE.md', 'downloads/10-mau-tri-thuc-9bizclaw.zip', 'assets/menu/he-thong-content-ngang-v2.png']) addFile(file);
+  for (const file of ['install.cjs', 'activate-9b.cjs', 'bootstrap.ps1', 'bootstrap.sh', 'package.json', 'gift-manifest.json', 'README.md', 'SKILL.md', 'INSTALL.md', 'AGENTS.md', 'LICENSE', 'LICENSE.md', 'downloads/10-mau-tri-thuc-9bizclaw.zip', 'assets/menu/he-thong-content-ngang-v2.png']) addFile(file);
   for (const directory of ['package/skills/freeup-content-gon-lab', 'templates/knowledge', 'onboarding', 'templates/sheets', 'docs']) {
     const absolute = path.join(root, directory);
     if (!fs.existsSync(absolute)) continue;
@@ -58,7 +58,7 @@ function buildRelease(options = {}) {
       if (directory === 'onboarding' && (relative.includes('/') || !relative.endsWith('.json'))) continue;
       if (directory === 'templates/knowledge' && !relative.endsWith('.md')) continue;
       if (directory === 'templates/sheets' && !/\.(?:json|xlsx)$/.test(relative)) continue;
-      if (directory === 'docs' && !relative.endsWith('.md')) continue;
+      if (directory === 'docs' && !['HUONG-DAN-KHACH-HANG.md','CAI-DAT-VA-CAP-NHAT.md','BO-SUNG-TRINH-DUNG.md','KICH-HOAT-9B.md','MODEL-VA-CHI-PHI.md','BAN-THU-0.2.0.md'].includes(relative)) continue;
       selected.add(name);
     }
   }
@@ -80,13 +80,15 @@ function buildRelease(options = {}) {
   const archiveFile = path.join(output, `${basename}.zip`);
   const manifestFile = path.join(output, 'release-manifest.json');
   const sumsFile = path.join(output, 'SHA256SUMS.txt');
+  const claudeFile = path.join(output, `contentlab-claude-${plan.packageInfo.version}.zip`);
+  const claudeArchive = zip(plan.files.map(file => ({ path: `contentlab/${file.path}`, data: fs.readFileSync(file.source) }))); 
   function write(file, content) {
     const temporary = `${file}.tmp-${crypto.randomUUID()}`;
     fs.writeFileSync(temporary, content, { flag: 'wx' }); fs.renameSync(temporary, file);
   }
-  write(archiveFile, archive); write(manifestFile, manifestData);
-  write(sumsFile, `${hash(archive)}  ${path.basename(archiveFile)}\n${hash(manifestData)}  release-manifest.json\n`);
-  return { package_id: PACKAGE_ID, version: plan.packageInfo.version, archive: archiveFile, sha256: hash(archive), file_count: entries.length, release_manifest: manifestFile, checksums: sumsFile, published: false };
+  write(archiveFile, archive); write(manifestFile, manifestData); write(claudeFile, claudeArchive);
+  write(sumsFile, `${hash(archive)}  ${path.basename(archiveFile)}\n${hash(manifestData)}  release-manifest.json\n${hash(claudeArchive)}  ${path.basename(claudeFile)}\n`);
+  return { package_id: PACKAGE_ID, version: plan.packageInfo.version, archive: archiveFile, sha256: hash(archive), file_count: entries.length, release_manifest: manifestFile, checksums: sumsFile, claude_archive: claudeFile, published: false };
 }
 if (require.main === module) {
   try { const args = process.argv.slice(2); if (args.length && (args.length !== 2 || args[0] !== '--out')) throw new Error('Dùng: node scripts/build-release.cjs [--out <thư mục>].'); console.log(JSON.stringify(buildRelease({ output: args[1] }), null, 2)); }

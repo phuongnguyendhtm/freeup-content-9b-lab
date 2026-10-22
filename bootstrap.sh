@@ -21,7 +21,7 @@ for install_root in "${NINEBIZ_INSTALL_ROOT:-}" "${NINEBIZ_CLI_ROOT:-}" "${HOME:
   done
 done
 if [ -z "$NODE_BIN" ]; then
-  printf '%s\n' 'Node.js 22+ not found. Set NINEBIZ_NODE to the Node executable bundled with 9B and retry.' >&2
+  printf '%s\n' 'Node.js 22+ not found. The agent should locate Node from the current host or the runtime bundled with 9B.' >&2
   exit 1
 fi
 exec "$NODE_BIN" "$SCRIPT_DIR/install.cjs" "$@"

@@ -10,10 +10,10 @@ const CORE = ['company.name', 'company.industry', 'company.usp', 'audience.ident
 const VISUAL = ['brand.colors', 'brand.visual_style', 'brand.logo'];
 const KINDS = new Set(['knowledge', 'profile', 'confirmed_context', 'media_catalog', 'capability']);
 const SOURCE_TOOLS = {
-  knowledge: new Set(['read_business_document', 'search_business_documents']),
+  knowledge: new Set(['read_business_document', 'search_business_documents', 'read_local_document', 'connected_document_read']),
   profile: new Set(['trusted_business_profile']),
   confirmed_context: new Set(['confirmed_user_message']),
-  media_catalog: new Set(['company_media_search']),
+  media_catalog: new Set(['company_media_search', 'trusted_local_media_catalog']),
   capability: new Set(['trusted_host_capabilities'])
 };
 function fail(code, message) { const error = new Error(message); error.code = code; throw error; }
@@ -163,7 +163,7 @@ function validateSnapshot(ctx, state, snapshot, resume) {
       state.nativeImages = snapshot.media.nativeImages.map(image => {
         if (!object(image) || image.businessId !== state.businessId) fail('BRAND_MISMATCH', 'Ảnh native sai doanh nghiệp.');
         const source = sources[image.sourceId];
-        if (!id(image.id) || !source || source.kind !== 'media_catalog' || !source.content.includes(image.id)) fail('INVALID_MEDIA', 'Ảnh cần ID có trong kết quả company_media_search đã đọc.');
+        if (!id(image.id) || !source || source.kind !== 'media_catalog' || !source.content.includes(image.id)) fail('INVALID_MEDIA', 'Ảnh cần ID có trong kết quả thư viện ảnh đã đọc.');
         if (resume && previousReadAt && Date.parse(source.readAt) <= Date.parse(previousReadAt)) fail('STALE_READBACK', 'Kết quả thư viện ảnh cần đọc lại sau lần chờ trước.');
         let raw; try { raw = JSON.parse(source.content); } catch { fail('INVALID_MEDIA', 'Nguồn ảnh cần JSON kết quả tool nguyên vẹn.'); }
         const candidates = Array.isArray(raw) ? raw : object(raw) ? raw.items || raw.assets || raw.results : null;

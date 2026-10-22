@@ -4,7 +4,8 @@ const menu=require('../package/skills/freeup-content-gon-lab/scripts/contentlab.
 const sheet=require('../package/skills/freeup-content-gon-lab/scripts/sheet.cjs');
 function temp(t){const p=fs.mkdtempSync(path.join(os.tmpdir(),'content-gon-menu-'));t.after(()=>fs.rmSync(p,{recursive:true,force:true}));return p;}
 function call(m,w,cmd,data){const f=path.join(w,'snapshot.json');if(data)fs.writeFileSync(f,JSON.stringify(data));return m.main([cmd,'--workspace',w,...(data?['--input',f]:[])]);}
-function metadata(){return {spreadsheetId:'test-sheet',businessId:'demo-business',sheets:sheet.schema().tabs.map((t,i)=>({properties:{title:t.title,sheetId:i,hidden:false}})),headers:Object.fromEntries(sheet.schema().tabs.map(t=>[t.key,t.headers]))};}
+function origin(id){const r=sheet.template();return {templateId:r.templateId,revision:r.revision,xlsxSha256:r.xlsxSha256,method:'xlsx_import',resultSpreadsheetId:id,verified:true};}
+function metadata(){return {templateOrigin:origin('test-sheet'),spreadsheetId:'test-sheet',businessId:'demo-business',sheets:sheet.schema().tabs.map((t,i)=>({properties:{title:t.title,sheetId:i,hidden:false}})),headers:Object.fromEntries(sheet.schema().tabs.map(t=>[t.key,t.headers]))};}
 test('menu can open without onboarding and does not create a production job',t=>{
  const w=temp(t);assert.throws(()=>menu.main(['select','--workspace',w,'--value','2']),/menu/);
  const r=menu.main(['menu','--workspace',w,'--session','chat-a']);assert.equal(r.items[1].label,'Bài đăng kèm sản phẩm');assert.equal(r.startsProduction,false);assert.ok(fs.statSync(r.mediaPath).size>1000);
@@ -14,7 +15,7 @@ test('menu can open without onboarding and does not create a production job',t=>
 });
 test('sheet binding refuses wrong workbook layout and accidental rebinding',t=>{
  const w=temp(t),m=metadata();call(sheet,w,'bind',m);
- assert.throws(()=>call(sheet,w,'bind',{...m,spreadsheetId:'other'}),/binding/);
+ assert.throws(()=>call(sheet,w,'bind',{...m,spreadsheetId:'other',templateOrigin:origin('other')}),/binding/);
  assert.throws(()=>call(sheet,temp(t),'bind',{...m,sheets:[...m.sheets,{properties:{title:'Thiết lập',sheetId:9}}]}),/ba tab/);
  assert.throws(()=>call(sheet,temp(t),'bind',{...m,headers:{ideas:['bad']}}),/Header/);
 });
