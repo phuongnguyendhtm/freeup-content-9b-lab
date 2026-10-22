@@ -48,7 +48,7 @@ function buildRelease(options = {}) {
   const plan = sourcePlan(root);
   const selected = new Set();
   const addFile = name => { if (fs.existsSync(path.join(root, name))) selected.add(name); };
-  for (const file of ['install.cjs', 'activate-9b.cjs', 'bootstrap.ps1', 'bootstrap.sh', 'package.json', 'gift-manifest.json', 'README.md', 'SKILL.md', 'INSTALL.md', 'AGENTS.md', 'LICENSE', 'LICENSE.md', 'downloads/10-mau-tri-thuc-9bizclaw.zip', 'assets/menu/he-thong-content-ngang-v2.png']) addFile(file);
+  for (const file of ['install.cjs', 'install-9b.cjs', 'activate-9b.cjs', 'bootstrap.ps1', 'bootstrap.sh', 'package.json', 'gift-manifest.json', 'README.md', 'SKILL.md', 'INSTALL.md', 'AGENTS.md', 'LICENSE', 'LICENSE.md', 'downloads/10-mau-tri-thuc-9bizclaw.zip', 'assets/menu/he-thong-content-ngang-v2.png']) addFile(file);
   for (const directory of ['package/skills/freeup-content-gon-lab', 'templates/knowledge', 'onboarding', 'templates/sheets', 'docs']) {
     const absolute = path.join(root, directory);
     if (!fs.existsSync(absolute)) continue;
@@ -58,7 +58,7 @@ function buildRelease(options = {}) {
       if (directory === 'onboarding' && (relative.includes('/') || !relative.endsWith('.json'))) continue;
       if (directory === 'templates/knowledge' && !relative.endsWith('.md')) continue;
       if (directory === 'templates/sheets' && !/\.(?:json|xlsx)$/.test(relative)) continue;
-      if (directory === 'docs' && !['HUONG-DAN-KHACH-HANG.md','CAI-DAT-VA-CAP-NHAT.md','BO-SUNG-TRINH-DUNG.md','KICH-HOAT-9B.md','MODEL-VA-CHI-PHI.md','BAN-THU-0.2.0.md'].includes(relative)) continue;
+      if (directory === 'docs' && !['HUONG-DAN-KHACH-HANG.md','CAI-DAT-VA-CAP-NHAT.md','BO-SUNG-TRINH-DUNG.md','KICH-HOAT-9B.md','MODEL-VA-CHI-PHI.md','BAN-THU-0.3.0.md'].includes(relative)) continue;
       selected.add(name);
     }
   }

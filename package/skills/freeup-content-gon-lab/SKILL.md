@@ -32,9 +32,9 @@ Menu dùng trước khi hồ sơ đủ. Chữ số đơn lẻ chỉ chọn khi �
 
 ## Sau cài đặt hoặc khi bắt đầu bài đầu tiên
 
-Đọc [onboarding.md](references/onboarding.md) và adapter host tương ứng; chỉ đọc [9b-native-tools.md](references/9b-native-tools.md) khi đang ở 9B. Chủ động tìm/đọc Tri thức và ảnh doanh nghiệp, xác định đúng businessId và agentId. Khởi tạo bằng `onboarding init`; không tự điền hồ sơ người tặng hoặc coi ví dụ mẫu là dữ kiện.
+Đọc [onboarding.md](references/onboarding.md) và adapter host tương ứng; chỉ đọc [9b-native-tools.md](references/9b-native-tools.md) khi đang ở 9B. Chủ động tìm và đọc **nội dung thật** của Tri thức và ảnh doanh nghiệp (overview/số lượng chưa đủ), xác định đúng businessId và agentId. Khởi tạo bằng `onboarding init`; không tự điền hồ sơ người tặng hoặc coi ví dụ mẫu là dữ kiện.
 
-Lập snapshot từ nội dung đã đọc thật, nguồn và trích dẫn chứng minh từng trường. AI đánh giá theo ý nghĩa; helper kiểm nguồn, trường thiếu và trạng thái. Chạy `onboarding assess --input SNAPSHOT`. Gửi đúng mẫu còn thiếu từ kết quả `templates`; khách hoàn thiện và nộp vào **Tri thức** rồi nhắn **Tôi đã hoàn tất**. Sau câu đó phải tìm/đọc lại tài liệu thực và chạy `resume` với snapshot mới. Không đánh dấu xong bằng lời báo hoặc tên file; không bắt hoàn tất cả mười mẫu.
+Lập snapshot từ nội dung đã đọc thật, nguồn và trích dẫn chứng minh từng trường. AI đánh giá theo ý nghĩa; helper kiểm nguồn, trường thiếu và trạng thái. Chạy `onboarding assess --input SNAPSHOT`. Không kết luận hồ sơ đủ khi chưa có assessment thực có nguồn; nếu chưa đọc được tài liệu thì báo chưa kiểm đúng phần đó. Gửi đúng mẫu còn thiếu từ kết quả `templates`; khách hoàn thiện và nộp vào **Tri thức** rồi nhắn **Tôi đã hoàn tất**. Sau câu đó phải tìm/đọc lại tài liệu thực và chạy `resume` với snapshot mới. Không đánh dấu xong bằng lời báo hoặc tên file; không bắt hoàn tất cả mười mẫu.
 
 Dùng ảnh từ **Hình ảnh doanh nghiệp**, giữ ID gốc, đúng người/sản phẩm. Chỉ hướng dẫn tải loại ảnh đang thiếu. B-roll/nhạc/giọng đưa vào thư mục tiếng Việt do helper tạo, gửi đường dẫn thật của khách. Quét lại sau khi họ báo xong. Video thiếu clip không khóa bài chữ/ảnh.
 

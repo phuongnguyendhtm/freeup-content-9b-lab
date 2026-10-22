@@ -73,10 +73,10 @@ function runNative(options, args, mode) {
     let child;
     try { child = spawn(options.node, [options.entrypoint, ...args], { cwd: path.dirname(options.entrypoint), env: { ...process.env, OPENCLAW_CONFIG_PATH: options.config, OPENCLAW_STATE_DIR: path.dirname(options.config) }, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'], shell: false }); }
     catch { fail('NATIVE_START_FAILED', 'Không chạy được native CLI đã chỉ định.'); }
-    let stdout = '', stderr = '', quietTimer, finished = false, timedOut = false, completionDetected = false;
+    let stdout = '', stderr = '', quietTimer, finished = false, timedOut = false, completionDetected = false, terminatedAfterCompletion = false;
     const finish = (code, signal) => {
       if (finished) return; finished = true; clearTimeout(timeout); clearTimeout(quietTimer);
-      resolve({ code, signal, timedOut, completionDetected, stdout });
+      resolve({ code, signal, timedOut, completionDetected, terminatedAfterCompletion, stdout });
     };
     const timeout = setTimeout(() => { timedOut = true; child.kill(); }, 20000);
     const quiet = () => {
@@ -84,7 +84,7 @@ function runNative(options, args, mode) {
       let complete = false;
       if (mode === 'get') { try { complete = Array.isArray(JSON.parse(stdout.trim())); } catch {} }
       else complete = /\bUpdated\b|\bconfig (?:updated|written)\b|Đã cập nhật/iu.test(stdout + '\n' + stderr);
-      if (complete) { completionDetected = true; quietTimer = setTimeout(() => child.kill(), 500); }
+      if (complete) { completionDetected = true; quietTimer = setTimeout(() => { terminatedAfterCompletion = true; child.kill(); }, 500); }
     };
     const collect = (chunk, which) => {
       if (which === 'stdout') stdout += chunk.toString('utf8'); else stderr += chunk.toString('utf8');
@@ -97,6 +97,7 @@ function runNative(options, args, mode) {
   });
 }
 async function main(argv = process.argv.slice(2)) {
+  if (argv.length === 1 && ['--help', '-h'].includes(argv[0])) return { ok: true, usage: 'node activate-9b.cjs --workspace ABS --agent ID --config ABS_JSON --openclaw-entrypoint ABS_ENTRY --node ABS_NODE (--check|--apply)', purpose: 'Chỉ bật contentlab trong danh sách skill của đúng agent đã đăng ký; không đổi policy, tools, defaults hoặc agent khác.', customerEntrypoint: 'node install-9b.cjs --workspace ABS_CURRENT_WORKSPACE', chatVerification: 'Sau configured:true, lượt chat tiếp theo kiểm host đã nạp contentlab.' };
   const raw = parse(argv);
   const options = { ...raw, workspace: regular(raw.workspace, true, 'Workspace'), config: regular(raw.config, false, 'Config'), entrypoint: regular(raw['openclaw-entrypoint'], false, 'OpenClaw entrypoint'), node: regular(raw.node, false, 'Node') };
   owner(options);
@@ -107,6 +108,7 @@ async function main(argv = process.argv.slice(2)) {
   const get = await runNative(options, ['config', 'get', targetPath, '--json'], 'get');
   if (otherHash(read(options.config), options.agent) !== hash) fail('OTHER_CONFIG_CHANGED', 'Cấu hình khác đã đổi trong lúc kiểm; không xác nhận kích hoạt.');
   if (before.explicit) {
+    if (get.code !== 0 && !get.terminatedAfterCompletion && !get.timedOut) fail('NATIVE_GET_FAILED', 'Native CLI từ chối đọc danh sách skill của agent; không chuyển sang đường đọc/ghi khác.');
     let list; try { list = JSON.parse(get.stdout.trim()); } catch { fail('NATIVE_GET_FAILED', 'Native CLI chưa đọc được danh sách skill của agent.'); }
     if (JSON.stringify(list) !== JSON.stringify(before.current)) fail('NATIVE_GET_FAILED', 'Danh sách native không khớp file cấu hình đã chỉ định.');
   } else if (get.code !== 1 && get.code !== 0) fail('NATIVE_GET_FAILED', 'Không xác nhận được path skill của agent bằng native CLI.');
@@ -116,6 +118,7 @@ async function main(argv = process.argv.slice(2)) {
   const set = await runNative(options, ['config', 'set', targetPath, JSON.stringify(before.next), '--strict-json', ...expected], 'set');
   const afterConfig = read(options.config), after = state(afterConfig, options);
   if (otherHash(afterConfig, options.agent) !== hash) fail('OTHER_CONFIG_CHANGED', 'Ngoài danh sách skill mục tiêu còn có cấu hình khác đổi; không tự ghi đè/rollback, cần kiểm thay đổi native.');
+  if (set.code !== 0 && !set.terminatedAfterCompletion && !set.timedOut) fail('ACTIVATION_NOT_CONFIRMED', 'Native CLI từ chối hoặc không hoàn tất kích hoạt; không thử đường ghi cấu hình khác.');
   if (!after.explicit || JSON.stringify(after.current) !== JSON.stringify(before.next)) fail('ACTIVATION_NOT_CONFIRMED', 'Native CLI chưa ghi đúng danh sách skill; không sửa file cấu hình thay thế.');
   return { ...base, configured: true, changed: true, status: 'activation-configured', mode: 'apply', otherSettingsUnchanged: true, nativeTimedOutAfterWrite: set.timedOut, nativeCompletionDetected: set.completionDetected, instruction: 'Đã đọc lại cấu hình cho phép contentlab riêng agent này. Gửi hệ thống content trong lượt chat mới để kiểm skill và attachment; chưa coi là chat đã xác minh.' };
 }

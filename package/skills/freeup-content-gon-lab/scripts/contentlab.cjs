@@ -6,6 +6,7 @@ const cp = require('node:child_process');
 const crypto = require('node:crypto');
 const F = require('./production-lib/files.cjs');
 const base = path.resolve(__dirname, '..');
+const VERSION = JSON.parse(fs.readFileSync(path.join(base, 'package.json'), 'utf8')).version;
 function args(argv) {
   const out={_:[]};
   for(let i=0;i<argv.length;i++) {
@@ -66,7 +67,7 @@ function doctor(opt){
   const checks={node:Number(process.versions.node.split('.')[0])>=22,menu:fs.existsSync(asset('menu/he-thong-content-ngang-v2.png')),knowledgeCatalog:fs.existsSync(asset('onboarding/knowledge-catalog.json'))};
   let puppeteer=false;try {require.resolve(String(opt['browser-module']||rc.browserModule||'puppeteer'));puppeteer=true;}catch{}
   const ffmpeg=cp.spawnSync(opt.ffmpeg||rc.ffmpeg||process.env.FREEUP_FFMPEG_PATH||process.env.FREEUP_FFMPEG||'ffmpeg',['-version'],{encoding:'utf8',windowsHide:true,timeout:10000});
-  return {ok:Object.values(checks).every(Boolean),version:'0.1.0',checks,render:{localPng:puppeteer,ffmpeg:ffmpeg.status===0,nativeImages:'host_tool_required'},nativeConnections:'not_probed',publishing:'manual_or_host_approved_only',workspace:opt.workspace?workspace(opt):null};
+  return {ok:Object.values(checks).every(Boolean),version:VERSION,checks,render:{localPng:puppeteer,ffmpeg:ffmpeg.status===0,nativeImages:'host_tool_required'},nativeConnections:'not_probed',publishing:'manual_or_host_approved_only',workspace:opt.workspace?workspace(opt):null};
 }
 function main(argv=process.argv.slice(2)){
   const opt=args(argv),cmd=opt._[0]||'help';
@@ -89,7 +90,7 @@ function main(argv=process.argv.slice(2)){
     return {ok:true,agentId,businessId:'local-9b-'+crypto.createHash('sha256').update(ws+'\0'+agentId).digest('hex').slice(0,24),scopeType:'local_workspace_binding',isNativeBusinessId:false,note:'Chỉ dùng khi host không cấp business ID; quyền đọc dữ liệu vẫn do native tools quyết định.'};
   }
   if(cmd==='doctor')return doctor(opt);
-  if(cmd==='help')return {commands:['menu','select --value 2','doctor','onboarding','production','render','sheet'],workspace:'--workspace ABS',version:'0.1.0'};
+  if(cmd==='help')return {commands:['menu','select --value 2','doctor','onboarding','production','render','sheet'],workspace:'--workspace ABS',version:VERSION};
   throw Error('Lệnh chưa được hỗ trợ: '+cmd);
 }
 if(require.main===module){try{console.log(JSON.stringify(main(),null,2));}catch(e){console.error(JSON.stringify({ok:false,error:e.message}));process.exitCode=1;}}

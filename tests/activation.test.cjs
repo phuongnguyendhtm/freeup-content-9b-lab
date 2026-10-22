@@ -26,8 +26,9 @@ const id=JSON.parse(m[1]), agent=cfg.agents.entries[id];
 if(a[0]!=='config'||!agent)process.exit(1);
 if(a[1]==='get'){
   if(!Object.hasOwn(agent,'skills')){process.stderr.write('Config path not found');process.exit(1);}
-  process.stdout.write(JSON.stringify(agent.skills));process.exit(0);
+  process.stdout.write(JSON.stringify(agent.skills));process.exit(cfg.testing?.rejectGetAfterOutput?1:0);
 }
+
 if(a[1]!=='set'||cfg.testing?.noSet)process.exit(1);
 if(a.includes('--expect-current-absent')&&Object.hasOwn(agent,'skills'))process.exit(1);
 const expected=a.indexOf('--expect-current-json');
@@ -37,10 +38,17 @@ if(cfg.testing?.changeOthers)cfg.credentials.token='CHANGED';
 if(cfg.testing?.touchMetadata)cfg.meta={...cfg.meta,lastTouchedAt:'2026-10-22T12:00:00.000Z',lastTouchedVersion:'host-native-test'};
 if(cfg.testing?.changeOtherMetadata)cfg.meta={...cfg.meta,custom:'CHANGED'};
 fs.writeFileSync(file,JSON.stringify(cfg,null,2));console.log('Updated agent skills');
+if(cfg.testing?.rejectAfterWrite)process.exit(1);
 if(cfg.testing?.hangAfterWrite)setInterval(()=>{},1000);`);
   const args = ['--workspace', workspace, '--agent', 'content-gon-test', '--config', configFile, '--openclaw-entrypoint', entry, '--node', process.execPath];
   return { root, workspace, skill, configFile, entry, args, read: () => JSON.parse(fs.readFileSync(configFile, 'utf8')) };
 }
+test('activation help explains scoped use without requiring or reading configuration', async () => {
+  const result = await main(['--help']);
+  assert.equal(result.ok, true); assert.ok(result.usage.includes('--check|--apply'));
+  assert.equal(result.configured, undefined);
+});
+
 test('check reports inherited restriction without changing any config byte', async t => {
   const f = fixture(t), before = fs.readFileSync(f.configFile, 'utf8');
   const result = await main([...f.args, '--check']);
@@ -78,6 +86,15 @@ test('CLI that rejects mutation does not trigger direct config rewriting', async
   const f = fixture(t, cfg => { cfg.testing = { noSet: true }; }); const before = fs.readFileSync(f.configFile, 'utf8');
   await assert.rejects(main([...f.args, '--apply']), { code: 'ACTIVATION_NOT_CONFIRMED' });
   assert.equal(fs.readFileSync(f.configFile, 'utf8'), before);
+});
+
+test('explicit native failure stays a failure even if output or concurrent state resembles success', async t => {
+  const deniedRead=fixture(t,cfg=>{cfg.agents.entries['content-gon-test'].skills=['old'];cfg.testing={rejectGetAfterOutput:true};});
+  await assert.rejects(main([...deniedRead.args,'--apply']),{code:'NATIVE_GET_FAILED'});
+  assert.deepEqual(deniedRead.read().agents.entries['content-gon-test'].skills,['old']);
+  const deniedWrite=fixture(t,cfg=>{cfg.testing={rejectAfterWrite:true};});
+  await assert.rejects(main([...deniedWrite.args,'--apply']),{code:'ACTIVATION_NOT_CONFIRMED'});
+  assert.ok(deniedWrite.read().agents.entries['content-gon-test'].skills.includes('contentlab'));
 });
 test('native CLI lingering after completion is stopped and fresh readback determines success', async t => {
   const f = fixture(t, cfg => { cfg.testing = { hangAfterWrite: true }; });
