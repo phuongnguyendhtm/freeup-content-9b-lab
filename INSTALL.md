@@ -19,9 +19,11 @@ Không tự đề nghị cài thủ công trước bước kiểm trên. Nếu t
 
 ## 1. Lấy gói
 
+Trên 9B, thực hiện bộ tải trong CAI-TRONG-9B.md để tự nhận ZIP đã kiểm và sourcePath thực; sau đó đi thẳng phần 2. Không tải/giải nén lại bằng công cụ đọc web hoặc bắt khách cung cấp tệp. Phần dưới mô tả artifact và cách giải nén cho adapter khác/người vận hành.
+
 Tải **downloads/freeup-content-gon-lab-0.3.0.zip** cùng **downloads/SHA256SUMS.txt** từ chính repo công khai; kiểm SHA256 rồi giải nén vào thư mục tải tạm **ngoài workspace đích**. Có thể dùng asset cùng tên trong release v0.3.0. Dùng Node >=22 đã có của host hoặc Node đi kèm 9B. Không yêu cầu khách cài Git, nhập npm, token hoặc sửa JSON.
 
-Đọc lại INSTALL.md trong gói đã kiểm hash trước khi chạy; bản web cache có thể cũ. Trên Windows dùng PowerShell Expand-Archive -LiteralPath ZIP -DestinationPath THU_MUC_TAM hoặc .NET ZipFile hỗ trợ tên UTF-8; không dùng tar của Windows cho gói có tên tiếng Việt. Giữ nguyên tên XLSX/ảnh/thư mục Unicode, kiểm file mẫu tồn tại sau giải nén. Dùng link hướng dẫn có commit đã ghim để tránh cache cũ; gói runtime vẫn ghim ở bản 0.3.0.
+Trên Windows, adapter tự giải nén có thể dùng PowerShell Expand-Archive -LiteralPath ZIP -DestinationPath THU_MUC_TAM hoặc .NET ZipFile hỗ trợ tên UTF-8; không dùng tar của Windows cho gói có tên tiếng Việt. Bộ tải Node của 9B đã thực hiện việc này và giữ nguyên tên XLSX/ảnh/thư mục. Gói runtime vẫn ghim ở bản 0.3.0; file hướng dẫn cài trong ZIP cũ không chứa bản sửa bộ tải này. Agent theo hướng dẫn hiện tại để chọn cách tải, rồi đọc SKILL sản xuất đã cài.
 
 ## 2. 9BizClaw/OpenClaw: một lệnh cài và bật skill
 
