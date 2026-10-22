@@ -14,8 +14,8 @@ Chạy đoạn JavaScript dưới đây bằng Node đã tìm được trong hos
 (async () => {
   const fs = require('node:fs'), os = require('node:os'), path = require('node:path');
   const { createHash } = require('node:crypto'), { spawnSync } = require('node:child_process');
-  const url = 'https://raw.githubusercontent.com/phuongnguyendhtm/freeup-content-9b-lab/2ce36a041ae239a343b7b7552aa5ea52cd05396d/download-release.cjs';
-  const expected = '510d6be7872527c6fadba9080775d6c9a16c57e895fcd3f1d1e2e14a8a166ca7';
+  const url = 'https://raw.githubusercontent.com/phuongnguyendhtm/freeup-content-9b-lab/602ff40c681f26935d800e1a1fab71ccef9c6020/download-release.cjs';
+  const expected = '78ec9cd413b92a0e6f8a6046f888156199fc93f6dd66489bdcb5138eb524466a';
   const response = await fetch(url, { redirect: 'error', signal: AbortSignal.timeout(30000) });
   if (!response.ok) throw new Error('Cannot download verified bootstrap');
   const data = Buffer.from(await response.arrayBuffer());
@@ -32,7 +32,7 @@ Chạy đoạn JavaScript dưới đây bằng Node đã tìm được trong hos
 });
 ```
 
-Đọc JSON thật: cần `archiveVerified:true`, `releaseManifestVerified:true`, `downloadedBytes:1954330` và SHA256 `a4da860a5a5a0922cd78f51f490595959dbbe033a3b559eab7b20d33489aa4a4`. Dùng **sourcePath/orchestratorPath thực được trả về**. `ok:true` ở đây chỉ là đã tải/giải nén, chưa phải cài hoặc bật skill. Không tự viết ZIP extractor hoặc thử tải ZIP bằng công cụ đọc web khi bộ tải đã báo lỗi.
+Đọc JSON thật: cần `archiveVerified:true`, `releaseManifestVerified:true`, `downloadedBytes:1965248` và SHA256 `9920bc949292f9c30b0ab24ae9cae78e8c55960b637dbb18fefa93f68235b6f6`. Dùng **sourcePath/orchestratorPath thực được trả về**. `ok:true` ở đây chỉ là đã tải/giải nén, chưa phải cài hoặc bật skill. Không tự viết ZIP extractor hoặc thử tải ZIP bằng công cụ đọc web khi bộ tải đã báo lỗi.
 
 ## 2. Cài và kích hoạt trong cùng yêu cầu
 
@@ -44,6 +44,10 @@ Chạy đoạn JavaScript dưới đây bằng Node đã tìm được trong hos
 
 Đọc SKILL.md và references/host-adapters.md **tại installation.target đã cài**; tiếp tục trong lượt cài hiện tại. Tìm/đọc Tri thức thật, chạy onboarding init rồi assess từ nguồn có trích đoạn. Kiểm thư viện ảnh bằng company_media_search nếu tool native có trong phiên; chỉ xác nhận ảnh đúng người/sản phẩm sau khi thực sự xem, không bắt tải lại toàn bộ ảnh đã có. Nếu chưa có tool ảnh thì ghi chưa kiểm, không bịa kết quả.
 
-Trả PNG menu thực bằng attachment của 9B và mời chọn 0–9/chủ đề trong cùng chat. Giữ menu.session khi select; lượt tiếp theo native snapshot phải có contentlab. Hồ sơ thiếu thì gửi đúng mẫu cần bổ sung; đọc lại sau “Tôi đã hoàn tất”. Mẫu Sheet trong reference bắt buộc đúng ba trang, không tạo bảng tùy hứng. Gói runtime hiện tại vẫn là 0.3.0, dùng lại Tri thức/ảnh của khách và mặc định chưa bật đăng/lịch nền.
+Sau init và assess, **chạy `contentlab.cjs onboarding setup --workspace WORKSPACE_HIEN_TAI` bằng helper đã cài**. Hiển thị `customerMessage` thật trong chat: phần thiếu/cần xác nhận, câu hỏi cụ thể, link/attachment đúng mẫu thiếu, hướng dẫn nộp Tri thức và cả ba đường dẫn `mediaDestinations` đã tạo/kiểm. Luôn gửi nơi thêm **Video cảnh quay (B-roll)**, **Nhạc nền**, **Giọng đọc**, kể cả khách chưa chọn video. Thư mục ở máy chạy 9B, không phải link Internet; khách dùng điện thoại thì kiểm kênh nhận file/quyền trước khi đưa URL. Không chỉ lưu hướng dẫn ra file hoặc trả menu rồi bỏ qua bước này. Hồ sơ đủ cho bài chữ chưa có nghĩa đã đủ nhận diện.
+
+Sau đó trả PNG menu thực bằng attachment của 9B và mời chọn 0–9/chủ đề trong cùng chat. Giữ menu.session khi select; lượt tiếp theo native snapshot phải có contentlab. Đọc lại nguồn rồi resume + setup sau “Tôi đã hoàn tất”. Mẫu Sheet trong reference bắt buộc đúng ba trang, không tạo bảng tùy hứng. Dùng lại Tri thức/ảnh của khách và mặc định chưa bật đăng/lịch nền.
+
+Nếu khách yêu cầu **cập nhật và hoàn tất thiết lập** cho bản đã cài: dùng cùng luồng tải → prepare → tool config nếu cần → finalize; giữ nguyên dữ liệu/tiến độ của đúng agent. Sau đó đọc SKILL mới và thực hiện setup ngay trong yêu cầu này. Không bắt gỡ/cài mới, mở thư mục kỹ thuật hay gửi thêm câu lệnh để bắt đầu hỏi hồ sơ.
 
 Chi tiết tham số hoặc adapter ngoài 9B: [INSTALL.md](INSTALL.md). Nếu gặp lỗi, báo đúng bước, mã lỗi thật và trạng thái tệp/cấu hình đã đổi; không tự đề nghị cài thủ công từ một phỏng đoán thiếu tool hoặc từ output ZIP bị cắt.
