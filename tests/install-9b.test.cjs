@@ -20,12 +20,20 @@ test.after(() => {
   fs.rmSync(nodeTempRoot, { recursive: true, force: true });
 });
 function write(root, name, value) { const file = path.join(root, name); fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, value); return file; }
+function copyFixtureTree(source, target) {
+  fs.mkdirSync(target, { recursive: true });
+  for (const entry of fs.readdirSync(source, { withFileTypes: true })) {
+    if (entry.isDirectory()) copyFixtureTree(path.join(source, entry.name), path.join(target, entry.name));
+    else if (entry.isFile()) fs.copyFileSync(path.join(source, entry.name), path.join(target, entry.name));
+    else throw Error('Fixture source must contain regular files/directories only');
+  }
+}
 function fixture(t, change = () => {}) {
   const parent = fs.realpathSync(os.tmpdir()), root = fs.mkdtempSync(path.join(parent, 'freeup-install-9b-'));
   t.after(() => { const relative = path.relative(parent, root); assert.ok(relative.startsWith('freeup-install-9b-') && !relative.includes(path.sep)); fs.rmSync(root, { recursive: true, force: true }); });
   const source = path.join(root, 'Giải nén bộ quà'), hostRoot = path.join(root, '9B hiện tại'), workspace = path.join(hostRoot, 'openclaw-state', 'workspace-customer');
   fs.mkdirSync(source, { recursive: true }); fs.mkdirSync(workspace, { recursive: true });
-  for (const directory of ['package', 'templates', 'onboarding']) fs.cpSync(path.join(repository, directory), path.join(source, directory), { recursive: true });
+  for (const directory of ['package', 'templates', 'onboarding']) copyFixtureTree(path.join(repository, directory), path.join(source, directory));
   for (const file of ['package.json', 'install.cjs', 'activate-9b.cjs']) fs.copyFileSync(path.join(repository, file), path.join(source, file));
   fs.mkdirSync(path.join(source, 'assets/menu'), { recursive: true }); fs.copyFileSync(path.join(repository, 'assets/menu/he-thong-content-ngang-v2.png'), path.join(source, 'assets/menu/he-thong-content-ngang-v2.png'));
   const other = path.join(hostRoot, 'openclaw-state/workspace-main'), lab = path.join(hostRoot, 'openclaw-state/workspace-content-gon-test'); fs.mkdirSync(other); fs.mkdirSync(lab);
