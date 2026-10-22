@@ -6,13 +6,13 @@
   "files": [
     {
       "path": "AGENTS.md",
-      "sha256": "a4decce57b274cea76bd7c9b15fac14107e3bb3b7f811897ef5f5b8626527c48",
-      "size": 1588
+      "sha256": "c2c5c6d644021c1f3ab1096871cdf3317b0d51475787547b3474255488fd731b",
+      "size": 1797
     },
     {
       "path": "INSTALL.md",
-      "sha256": "c3572ba093176e70953e42d43b290ad59730f2d5fb27b3e1198c6d4e18d5b802",
-      "size": 7353
+      "sha256": "7b90b2d6f1c8cca870d885e8e6e8aca3ba131621fb593013e1365deac9e18285",
+      "size": 8940
     },
     {
       "path": "LICENSE",
@@ -21,18 +21,18 @@
     },
     {
       "path": "README.md",
-      "sha256": "ace68e4ddbf77ef6656ddbc427e79a577d4616447487a765299acbf840ad5407",
-      "size": 4205
+      "sha256": "30b8c3d77793230bc431d41b317265e4b5b49759e1a4658127b3810c010dfe43",
+      "size": 4269
     },
     {
       "path": "SKILL.md",
-      "sha256": "cfe03bd085eb431b9de464af8f2f1a2188b4acd5c55ccefa5427e824ea62c55a",
-      "size": 1195
+      "sha256": "2072067ee622e58daf5af3d1978a2f9fd11ca9c9409d30b0b30e1a94e55b34a6",
+      "size": 1357
     },
     {
       "path": "activate-9b.cjs",
-      "sha256": "fcc91b15c1c6e4d964a22d79755622fb2975a9aaeaf84afc4c56fb1620dcccf3",
-      "size": 12602
+      "sha256": "b8341e74645157f4a5c079b9375c549d4dddc6512fd817aa4dd1006fe5b2cbe7",
+      "size": 13185
     },
     {
       "path": "assets/menu/he-thong-content-ngang-v2.png",
@@ -61,8 +61,8 @@
     },
     {
       "path": "docs/CAI-DAT-VA-CAP-NHAT.md",
-      "sha256": "e7df1552c226b1ae3aba245f35d5c3c2b502e76a85884ed142900f4b0ca4aacb",
-      "size": 1647
+      "sha256": "2243aef66bd9b5bf9fd93e92c9142ffb00063ef5a6d39753da4b0f972cb4b21f",
+      "size": 1741
     },
     {
       "path": "docs/HUONG-DAN-KHACH-HANG.md",
@@ -71,8 +71,8 @@
     },
     {
       "path": "docs/KICH-HOAT-9B.md",
-      "sha256": "87c77d9cc301e73a4ab665fb16ff6202b7eae5df31dd277b77515210aee6d9f7",
-      "size": 1715
+      "sha256": "3aed0755da03cc415c65f77c1fae6851275157ac00353eb1a6621f2020d7c9c8",
+      "size": 2030
     },
     {
       "path": "docs/MODEL-VA-CHI-PHI.md",
@@ -86,13 +86,13 @@
     },
     {
       "path": "gift-manifest.json",
-      "sha256": "b56a9241541b6ae8511a5b5930610aaa7aa376e236ae621b619a18d859d22bb1",
-      "size": 1008
+      "sha256": "2dc127210bf6948d465bc2d7ff655688a5d57b06e22e900a11b70368b4660406",
+      "size": 1088
     },
     {
       "path": "install-9b.cjs",
-      "sha256": "934352cfa95181d86631ca353795a1190fff747712f1e9e17fd277e5c193ba89",
-      "size": 25981
+      "sha256": "230915fba910fb348cdba30c97afb803771d647dd2b719b7beb6d3ec809282cf",
+      "size": 33530
     },
     {
       "path": "install.cjs",

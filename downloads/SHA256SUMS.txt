@@ -1,3 +1,3 @@
-bcb3ef15991ed0cd8871b81a6535dd0f4edc5798cd158571ec89a6625223ecd4  freeup-content-gon-lab-0.3.0.zip
-125f15645dabafa03864e4de2b56ee8b40019fadb029603036d494bfbdc8de9d  release-manifest.json
+ac4bf280ba88528ae7f6db7e6e69fe424773b993df352992b880a55f08f46a9b  freeup-content-gon-lab-0.3.0.zip
+732bc08eb8b5a766ef085eb9d9d2bfd33ee1c64e7aa8f9262dcd5cde447cc14b  release-manifest.json
 3d4c28b4f6a61cad8a7a314b2f612d473ce454003d9611ccb8e74e1c879d151c  contentlab-claude-0.3.0.zip

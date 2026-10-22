@@ -39,8 +39,8 @@ fs.appendFileSync(path.join(path.dirname(file),'native-calls.jsonl'),JSON.string
 const m=a[2]?.match(/^agents\.entries\[(".*")\]\.skills$/);if(!m||a[0]!=='config'){process.stderr.write('Unsupported native route');process.exit(1);}
 const id=JSON.parse(m[1]),agent=c.agents.entries[id];if(!agent)process.exit(1);
 if(a[1]==='get'){
- if(c.testing?.denyGet){process.stderr.write('native policy denied '+c.credentials.token);process.exit(77);}
- if(!Object.hasOwn(agent,'skills')){process.stderr.write('Config path not found');process.exit(1);}
+ if(c.testing?.denyGet){process.stderr.write('native policy denied '+c.credentials.token);process.exit(c.testing?.denyGetExit1?1:77);}
+ if(!Object.hasOwn(agent,'skills')){process.stdout.write(JSON.stringify({ok:false,error:{type:'cli_error',message:'Config path is valid but unset: '+a[2]+'.'}}));process.exit(1);}
  process.stdout.write(JSON.stringify(agent.skills));process.exit(0);
 }
 if(a[1]!=='set')process.exit(1);
@@ -57,9 +57,80 @@ fs.writeFileSync(file,JSON.stringify(c,null,2));process.stdout.write('Updated ag
 
 test('help names exact one-command flags without touching host context', async () => {
   const result = await orchestrator.main(['--help'], { env: {} });
-  assert.equal(result.help, true); for (const flag of ['--workspace', '--agent', '--config', '--node', '--openclaw-entrypoint', '--check']) assert.ok(result.usage.includes(flag));
+  assert.equal(result.help, true); for (const flag of ['--workspace', '--agent', '--config', '--node', '--openclaw-entrypoint', '--check', '--prepare', '--finalize']) assert.ok(result.usage.includes(flag));
   assert.throws(() => orchestrator.parse(['--workspace']), { code: 'INVALID_ARGUMENT' });
-  assert.throws(() => orchestrator.parse(['--check', '--apply']), { code: 'INVALID_ARGUMENT' });
+  const modes = ['--check', '--apply', '--prepare', '--finalize'];
+  for (const a of modes) for (const b of modes) if (a !== b) assert.throws(() => orchestrator.parse([a, b]), { code: 'INVALID_ARGUMENT' });
+});
+test('prepare installs and verifies the real menu/template without native config calls or config writes', async t => {
+  const f = fixture(t), before = fs.readFileSync(f.configPath, 'utf8');
+  const result = await orchestrator.main([...f.args, '--prepare'], { env: f.env });
+  assert.equal(result.ok, true, JSON.stringify(result)); assert.equal(result.mode, 'prepare'); assert.equal(result.installed, true); assert.equal(result.configured, false); assert.equal(result.chatVerified, false); assert.equal(result.onboardingRequired, true); assert.equal(result.configWritesPerformed, false);
+  assert.equal(result.status, 'files-prepared-awaiting-tool-config'); assert.equal(result.template.verified, true); assert.ok(fs.existsSync(result.menu.mediaPath)); assert.equal(result.menu.displayedInChat, false);
+  assert.equal(fs.readFileSync(f.configPath, 'utf8'), before); assert.equal(f.calls().length, 0);
+  const plan = result.configActivation;
+  assert.equal(plan.targetPath, 'agents.entries["customer-agent"].skills'); assert.equal(plan.expectedAbsent, true); assert.equal(plan.needed, true); assert.deepEqual(plan.expectedEffectiveList, ['old-one', 'old-two']); assert.deepEqual(plan.nextList, ['old-one', 'old-two', 'contentlab']); assert.equal(Object.hasOwn(plan, 'currentExplicitList'), false);
+  assert.equal(plan.getMessage, 'config get agents.entries["customer-agent"].skills'); assert.equal(plan.inheritedGetMessage, 'config get agents.defaults.skills');
+  assert.equal(plan.setMessage, 'config set agents.entries["customer-agent"].skills ["old-one","old-two","contentlab"]'); assert.ok(!plan.setMessage.includes('--')); assert.ok(plan.instruction.includes('cắt ngắn'));
+  const baseline = JSON.parse(fs.readFileSync(result.preparationReceiptPath, 'utf8'));
+  assert.equal(baseline.agentId, 'customer-agent'); assert.equal(baseline.workspace, fs.realpathSync(f.workspace)); assert.match(baseline.otherSettingsSha256, /^[a-f0-9]{64}$/); assert.equal(baseline.inventorySha256, result.installation.inventorySha256);
+  assert.ok(!JSON.stringify(result).includes('NEVER_PRINT_CONFIG_SECRET')); assert.ok(!JSON.stringify(baseline).includes('NEVER_PRINT_CONFIG_SECRET'));
+});
+test('fresh prepare preserves full inherited lists and observes a changed explicit list before typed set', async t => {
+  const inherited = Array.from({ length: 167 }, (_, i) => 'existing-long-skill-name-' + i);
+  const f = fixture(t, config => { config.agents.defaults.skills = inherited; });
+  const first = await orchestrator.main([...f.args, '--prepare'], { env: f.env }); assert.equal(first.ok, true); assert.equal(first.configActivation.nextList.length, 168); assert.deepEqual(first.configActivation.nextList, [...inherited, 'contentlab']); assert.ok(first.configActivation.setMessage.length > 2000);
+  const config = f.config(); config.agents.entries['customer-agent'].skills = ['newly-enabled-skill']; fs.writeFileSync(f.configPath, JSON.stringify(config));
+  const second = await orchestrator.main([...f.args, '--prepare'], { env: f.env }); assert.equal(second.ok, true); assert.equal(second.installation.changed, false); assert.equal(second.configActivation.expectedAbsent, false); assert.deepEqual(second.configActivation.currentExplicitList, ['newly-enabled-skill']); assert.deepEqual(second.configActivation.nextList, ['newly-enabled-skill', 'contentlab']);
+  assert.equal(f.calls().length, 0);
+});
+function externalTypedSet(f, plan) {
+  // A fixture for the external typed tool's scoped write, outside the orchestrator.
+  assert.equal(plan.setMessage, 'config set ' + plan.targetPath + ' ' + JSON.stringify(plan.nextList));
+  return spawnSync(fixtureNode, [f.entrypoint, 'config', 'set', plan.targetPath, JSON.stringify(plan.nextList)], { env: f.env, encoding: 'utf8' });
+}
+test('finalize verifies an external typed tool write and is repeatable without reinstalling or native calls', async t => {
+  const f = fixture(t), prepared = await orchestrator.main([...f.args, '--prepare'], { env: f.env }); assert.equal(prepared.ok, true);
+  assert.equal(externalTypedSet(f, prepared.configActivation).status, 0); const before = fs.readFileSync(f.configPath, 'utf8');
+  const readsOnly = async (...args) => { assert.notEqual(path.basename(args[1]), 'install.cjs'); assert.notEqual(path.basename(args[1]), 'activate-9b.cjs'); assert.notEqual(args[1], f.entrypoint); return orchestrator.launch(...args); };
+  for (let repeat = 0; repeat < 2; repeat++) {
+    const result = await orchestrator.main([...f.args, '--finalize'], { env: f.env, launch: readsOnly });
+    assert.equal(result.ok, true, JSON.stringify(result)); assert.equal(result.mode, 'finalize'); assert.equal(result.installed, true); assert.equal(result.configured, true); assert.equal(result.chatVerified, false); assert.equal(result.onboardingRequired, true); assert.equal(result.configWritesPerformed, false); assert.equal(result.activation.route, 'openclaw-tool'); assert.equal(result.activation.otherSettingsUnchanged, true); assert.equal(result.menu.session, prepared.menu.session); assert.equal(result.template.verified, true);
+  }
+  assert.equal(f.calls().length, 1); assert.equal(f.calls()[0][1], 'set'); assert.equal(fs.readFileSync(f.configPath, 'utf8'), before);
+});
+test('finalize without prepare fails before installing or calling any native route', async t => {
+  const f = fixture(t), result = await orchestrator.main([...f.args, '--finalize'], { env: f.env });
+  assert.equal(result.ok, false); assert.equal(result.error.code, 'PREPARATION_REQUIRED'); assert.equal(result.installed, false); assert.equal(result.configured, false); assert.equal(f.calls().length, 0); assert.equal(fs.existsSync(path.join(f.workspace, 'freeup-content-gon-lab-data')), false);
+});
+test('a denied typed write or no config change makes finalize fail without a fallback write', async t => {
+  const f = fixture(t, config => { config.testing = { denySet: true }; }), before = fs.readFileSync(f.configPath, 'utf8');
+  const prepared = await orchestrator.main([...f.args, '--prepare'], { env: f.env }); assert.equal(prepared.ok, true); assert.equal(f.calls().length, 0);
+  assert.equal(externalTypedSet(f, prepared.configActivation).status, 77);
+  const result = await orchestrator.main([...f.args, '--finalize'], { env: f.env });
+  assert.equal(result.ok, false); assert.equal(result.installed, true); assert.equal(result.configured, false); assert.equal(result.error.code, 'CONFIGURATION_NOT_VERIFIED'); assert.equal(f.calls().length, 1); assert.equal(fs.readFileSync(f.configPath, 'utf8'), before);
+  assert.ok(fs.existsSync(prepared.preparationReceiptPath)); assert.ok(!JSON.stringify(result).includes('NEVER_PRINT_CONFIG_SECRET')); assert.ok(!fs.readFileSync(result.receiptPath, 'utf8').includes('NEVER_PRINT_CONFIG_SECRET'));
+});
+test('finalize rejects unrelated changes after prepare and never rolls back another setting', async t => {
+  const f = fixture(t), prepared = await orchestrator.main([...f.args, '--prepare'], { env: f.env }); assert.equal(prepared.ok, true); assert.equal(externalTypedSet(f, prepared.configActivation).status, 0);
+  const changed = f.config(); changed.tools.preset = 'changed-outside-scope'; fs.writeFileSync(f.configPath, JSON.stringify(changed)); const before = fs.readFileSync(f.configPath, 'utf8');
+  const result = await orchestrator.main([...f.args, '--finalize'], { env: f.env }); assert.equal(result.ok, false); assert.equal(result.configured, false); assert.equal(result.error.code, 'OTHER_CONFIG_CHANGED'); assert.equal(fs.readFileSync(f.configPath, 'utf8'), before); assert.equal(f.calls().length, 1);
+});
+test('finalize requires the exact planned allowlist rather than only the contentlab name', async t => {
+  const f = fixture(t, config => { config.agents.entries['customer-agent'].skills = ['keep-this']; });
+  const prepared = await orchestrator.main([...f.args, '--prepare'], { env: f.env }); assert.equal(prepared.ok, true); assert.deepEqual(prepared.configActivation.currentExplicitList, ['keep-this']);
+  const changed = f.config(); changed.agents.entries['customer-agent'].skills = ['contentlab']; fs.writeFileSync(f.configPath, JSON.stringify(changed));
+  const result = await orchestrator.main([...f.args, '--finalize'], { env: f.env }); assert.equal(result.ok, false); assert.equal(result.error.code, 'CONFIGURATION_NOT_VERIFIED'); assert.equal(f.calls().length, 0);
+});
+test('finalize checks the original prepared inventory and does not repair tampered installed code', async t => {
+  const f = fixture(t), prepared = await orchestrator.main([...f.args, '--prepare'], { env: f.env }); assert.equal(prepared.ok, true); assert.equal(externalTypedSet(f, prepared.configActivation).status, 0);
+  const skill = path.join(f.workspace, 'skills/freeup-content-gon-lab/SKILL.md'); fs.appendFileSync(skill, '\nchanged after prepare');
+  const result = await orchestrator.main([...f.args, '--finalize'], { env: f.env }); assert.equal(result.ok, false); assert.equal(result.error.code, 'INSTALL_NOT_VERIFIED'); assert.ok(fs.readFileSync(skill, 'utf8').endsWith('changed after prepare')); assert.equal(f.calls().length, 1);
+});
+test('prepare/finalize preserve an unrestricted allowlist and need no typed write', async t => {
+  const f = fixture(t, config => { delete config.agents.defaults.skills; }), before = fs.readFileSync(f.configPath, 'utf8');
+  const prepared = await orchestrator.main([...f.args, '--prepare'], { env: f.env }); assert.equal(prepared.ok, true); assert.equal(prepared.configActivation.needed, false); assert.equal(prepared.configActivation.nextList, null); assert.equal(prepared.configActivation.setMessage, null);
+  const result = await orchestrator.main([...f.args, '--finalize'], { env: f.env }); assert.equal(result.ok, true, JSON.stringify(result)); assert.equal(result.configured, true); assert.equal(result.activation.changed, false); assert.equal(fs.readFileSync(f.configPath, 'utf8'), before); assert.equal(f.calls().length, 0);
 });
 test('single command installs in registered current workspace and mutates only that agent allowlist', async t => {
   const f = fixture(t), before = f.config();
@@ -142,6 +213,13 @@ test('native read denial triggers no mutation or alternate activation route', as
   const f = fixture(t, config => { config.testing = { denyGet: true }; }); const before = fs.readFileSync(f.configPath, 'utf8');
   const result = await orchestrator.main(f.args, { env: f.env }); assert.equal(result.ok, false); assert.equal(result.installed, true); assert.equal(result.configured, false);
   assert.equal(f.calls().length, 1); assert.equal(f.calls()[0][1], 'get'); assert.equal(fs.readFileSync(f.configPath, 'utf8'), before); assert.ok(!JSON.stringify(result).includes('NEVER_PRINT_CONFIG_SECRET'));
+});
+test('native read denial with exit 1 is not mistaken for a valid unset allowlist', async t => {
+  const f = fixture(t, config => { config.testing = { denyGet: true, denyGetExit1: true }; }); const before = fs.readFileSync(f.configPath, 'utf8');
+  const result = await orchestrator.main(f.args, { env: f.env });
+  assert.equal(result.ok, false); assert.equal(result.installed, true); assert.equal(result.configured, false); assert.equal(result.chatVerified, false);
+  assert.equal(f.calls().length, 1); assert.equal(f.calls()[0][1], 'get'); assert.equal(f.calls().filter(call => call[1] === 'set').length, 0);
+  assert.equal(fs.readFileSync(f.configPath, 'utf8'), before); assert.ok(!JSON.stringify(result).includes('NEVER_PRINT_CONFIG_SECRET'));
 });
 test('other-setting native changes are rejected, reported and never raw-rolled-back', async t => {
   const f = fixture(t, config => { config.testing = { changeOthers: true }; });

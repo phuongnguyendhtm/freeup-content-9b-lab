@@ -25,7 +25,8 @@ if(!m){process.stderr.write('Unsupported path');process.exit(1);}
 const id=JSON.parse(m[1]), agent=cfg.agents.entries[id];
 if(a[0]!=='config'||!agent)process.exit(1);
 if(a[1]==='get'){
-  if(!Object.hasOwn(agent,'skills')){process.stderr.write('Config path not found');process.exit(1);}
+  if(cfg.testing?.denyGet){process.stdout.write(JSON.stringify({ok:false,error:{type:'cli_error',message:'Permission denied NEVER_PRINT_SECRET'}}));process.exit(1);}
+  if(!Object.hasOwn(agent,'skills')){process.stdout.write(JSON.stringify({ok:false,error:{type:'cli_error',message:'Config path is valid but unset: '+a[2]+'. Use config set to override.'}}));process.exit(1);}
   process.stdout.write(JSON.stringify(agent.skills));process.exit(cfg.testing?.rejectGetAfterOutput?1:0);
 }
 
@@ -85,6 +86,11 @@ test('registered workspace, owner marker and slash name must match before activa
 test('CLI that rejects mutation does not trigger direct config rewriting', async t => {
   const f = fixture(t, cfg => { cfg.testing = { noSet: true }; }); const before = fs.readFileSync(f.configFile, 'utf8');
   await assert.rejects(main([...f.args, '--apply']), { code: 'ACTIVATION_NOT_CONFIRMED' });
+  assert.equal(fs.readFileSync(f.configFile, 'utf8'), before);
+});
+test('inherited native read denial with exit 1 never becomes an accepted unset path', async t => {
+  const f = fixture(t, cfg => { cfg.testing = { denyGet: true }; }); const before = fs.readFileSync(f.configFile, 'utf8');
+  await assert.rejects(main([...f.args, '--apply']), { code: 'NATIVE_GET_FAILED' });
   assert.equal(fs.readFileSync(f.configFile, 'utf8'), before);
 });
 

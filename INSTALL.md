@@ -10,17 +10,25 @@ Tải **downloads/freeup-content-gon-lab-0.3.0.zip** cùng **downloads/SHA256SUM
 
 ## 2. 9BizClaw/OpenClaw: một lệnh cài và bật skill
 
-Dùng **install-9b.cjs**, không tách cài tệp và tự đoán thao tác config của tool openclaw. Bộ điều phối gọi bộ cài file và helper kích hoạt native đã giới hạn phạm vi.
+Dùng **install-9b.cjs --prepare**, sau đó thao tác cấu hình có kiểu qua công cụ **openclaw** của host và chạy **--finalize**. Đây là ba thao tác của agent trong một yêu cầu khách hàng. Tuân theo system prompt 9B yêu cầu cấu hình qua công cụ chính thức; không dùng exec chạy --apply/activate-9b để thay đường cấu hình trong chat.
 
 Lấy workspace **của agent đang trò chuyện** từ runtime/system prompt, đối chiếu roster agents.entries của host. Workspace không phải cwd của lệnh exec, thư mục xuất file, thư mục giải nén hay thư mục vendor cài chương trình. Không yêu cầu khách mở/chọn một thư mục kỹ thuật; không tự chọn agent mặc định, agent cũ hoặc agent của người tặng. Agent đăng ký hiện tại được dùng trực tiếp, không tạo hoặc chuyển sang content-gon-test cho khách.
 
 Agent chạy bằng đường dẫn Node và file đã giải nén thực:
 
-    node install-9b.cjs --workspace ABS_CURRENT_AGENT_WORKSPACE
+    node install-9b.cjs --workspace ABS_CURRENT_AGENT_WORKSPACE --prepare
 
 Helper nhận diện config/runtime theo host. Nếu cần chỉ định chính xác, đọc --help và truyền --config, --agent, --openclaw-entrypoint, --node từ host thực; khách không nhập các giá trị này. Host mơ hồ/sai workspace thì dừng trước cài, nêu đúng điều chưa xác minh.
 
-Bộ điều phối cài namespaced skill, kiểm inventory/manifest, thêm **contentlab** vào danh sách hiệu lực của đúng agent bằng native CLI có kiểm giá trị cũ, đọc lại và kiểm cấu hình khác không đổi. Nó không nới tools/policy, sửa defaults/kênh/model, chép credential hoặc ghi JSON config trực tiếp. Native CLI từ chối quyền thì dừng; không chuyển sang đường ghi khác để vượt từ chối. Trường hợp host không cấp quyền cài thực thì không báo thành công.
+Bước prepare cài namespaced skill, kiểm inventory/manifest và ghi mốc kiểm cấu hình, không ghi cấu hình host. Đọc configActivation trong JSON; gọi công cụ openclaw bằng `{message: getMessage}`, rồi khi cần `{message: setMessage}` đúng chuỗi helper trả. Đây là cú pháp có kiểu `config get PATH` / `config set PATH JSON_ARRAY`, không gửi yêu cầu tự do kiểu “hãy cài và cấu hình giúp tôi” vào bộ lập kế hoạch trung gian. Không thêm --strict-json/--expect-* vào message vì tool sẽ coi chúng là dữ liệu.
+
+Danh sách đầy đủ lấy từ prepare đọc local đúng config, giữ nguyên mọi skill cũ và chỉ thêm contentlab. Tool đọc danh sách dài có thể cắt kết quả; không ghép/copy mảng bị cắt để ghi. Nếu đã có thao tác hoặc thay đổi cấu hình xen giữa, chạy prepare mới ngay trước set. Tool hiện không cung cấp CAS giữa lần đọc và ghi; finalize sẽ phát hiện danh sách/khu vực khác lệch mốc, không báo thành công sai.
+
+Full Access của chủ có thể cho phép thao tác có kiểu trong cùng lượt. Nếu host trả yêu cầu phê duyệt, đưa đúng phê duyệt đó cho chủ; agent không tự approve. Native từ chối quyền thì dừng; không đổi sang exec hoặc ghi JSON để vượt từ chối. Khi công cụ xác nhận, chạy:
+
+    node install-9b.cjs --workspace ABS_CURRENT_AGENT_WORKSPACE --finalize
+
+Finalize đọc lại danh sách hiệu lực, kiểm inventory và cấu hình khác không đổi. Không nới tools/policy, sửa defaults/kênh/model, chép credential hoặc đổi agent. Quyền cài thực do host quyết định; chưa xác nhận thì không báo thành công. --apply/activate-9b chỉ là giao diện CLI cho người vận hành ngoài chat, không thay thế công cụ cấu hình bắt buộc của host.
 
 Đọc JSON kết quả: phải installed/configured được xác nhận, menu thật và reference Sheet hợp lệ. File receipt của install.cjs đơn lẻ chưa phải kết quả kích hoạt. **Khách không phải chạy lệnh kích hoạt thứ hai.**
 

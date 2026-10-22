@@ -104,14 +104,19 @@ async function main(argv = process.argv.slice(2)) {
   const config = read(options.config), before = state(config, options), hash = otherHash(config, options.agent);
   const targetPath = `agents.entries[${JSON.stringify(options.agent)}].skills`;
   const base = { ok: true, packageId: PACKAGE, agentId: options.agent, workspace: options.workspace, skillName: SKILL, targetPath, chatVerified: false, configured: before.allowed, changed: false, inheritedList: !before.explicit, previousSkillCount: before.current?.length ?? null, nextSkillCount: before.next?.length ?? null };
-  // Native read confirms this CLI understands the path; absent explicit override is expected exit 1.
+  // Native exit 1 also covers denials: accept only its exact valid-but-unset envelope.
   const get = await runNative(options, ['config', 'get', targetPath, '--json'], 'get');
   if (otherHash(read(options.config), options.agent) !== hash) fail('OTHER_CONFIG_CHANGED', 'Cấu hình khác đã đổi trong lúc kiểm; không xác nhận kích hoạt.');
   if (before.explicit) {
     if (get.code !== 0 && !get.terminatedAfterCompletion && !get.timedOut) fail('NATIVE_GET_FAILED', 'Native CLI từ chối đọc danh sách skill của agent; không chuyển sang đường đọc/ghi khác.');
     let list; try { list = JSON.parse(get.stdout.trim()); } catch { fail('NATIVE_GET_FAILED', 'Native CLI chưa đọc được danh sách skill của agent.'); }
     if (JSON.stringify(list) !== JSON.stringify(before.current)) fail('NATIVE_GET_FAILED', 'Danh sách native không khớp file cấu hình đã chỉ định.');
-  } else if (get.code !== 1 && get.code !== 0) fail('NATIVE_GET_FAILED', 'Không xác nhận được path skill của agent bằng native CLI.');
+  } else {
+    let value; try { value = JSON.parse(get.stdout.trim()); } catch { fail('NATIVE_GET_FAILED', 'Native CLI chưa xác nhận được path skill của agent.'); }
+    const validUnset = get.code === 1 && value?.ok === false && value?.error?.type === 'cli_error' && typeof value.error.message === 'string' && value.error.message.startsWith(`Config path is valid but unset: ${targetPath}.`);
+    const validList = (get.code === 0 || get.terminatedAfterCompletion) && Array.isArray(value) && JSON.stringify(value) === JSON.stringify(before.current);
+    if (!validUnset && !validList) fail('NATIVE_GET_FAILED', 'Native CLI từ chối hoặc chưa xác nhận đọc path skill; không chuyển sang đường đọc/ghi khác.');
+  }
   if (raw.check) return { ...base, status: before.allowed ? 'activation-configured' : 'activation-required', mode: 'check', instruction: before.allowed ? 'Danh sách hiện cho phép skill; cần lượt chat thật để kiểm host đã nạp.' : 'Có thể dùng --apply để thêm đúng contentlab cho agent này.' };
   if (before.allowed) return { ...base, status: 'activation-configured', mode: 'apply', instruction: 'Không cần sửa danh sách; chưa kiểm chat đã nạp skill.' };
   const expected = before.explicit ? ['--expect-current-json', JSON.stringify(before.current)] : ['--expect-current-absent'];

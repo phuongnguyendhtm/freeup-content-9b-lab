@@ -8,7 +8,7 @@ Gửi link repo này cho agent và nói:
 
 > Cài quà tặng này cho tôi: https://github.com/phuongnguyendhtm/freeup-content-9b-lab
 
-Agent đọc [INSTALL.md](INSTALL.md) và [AGENTS.md](AGENTS.md). **Trong 9B không cần mở/chọn thư mục:** bộ cài tự dùng workspace của agent đang trò chuyện, cài và kích hoạt trong một lượt, rồi mở menu. Khách không phải tự chọn thư mục kỹ thuật, cài Git, nhập npm hoặc sửa API key. Agent cần quyền đọc GitHub và chạy file; Claude web/Cowork cần bước bật skill của tài khoản theo nền tảng. Link không tự cấp quyền còn thiếu.
+Agent đọc [INSTALL.md](INSTALL.md) và [AGENTS.md](AGENTS.md). **Trong 9B không cần mở/chọn thư mục:** bộ cài tự dùng workspace của agent đang trò chuyện, chuẩn bị tệp, bật skill qua công cụ cấu hình 9B rồi kiểm lại và mở menu. Khách không phải cài Git, nhập npm hoặc sửa API key. Chủ dùng chat điều khiển có quyền cài; nếu host yêu cầu duyệt thao tác, chủ duyệt trong 9B. Claude web/Cowork cần bước bật skill của tài khoản theo nền tảng. Link không tự cấp quyền còn thiếu.
 
 [Tải bộ cài 0.3.0](https://github.com/phuongnguyendhtm/freeup-content-9b-lab/raw/refs/heads/main/downloads/freeup-content-gon-lab-0.3.0.zip) · [ZIP skill cho Claude](https://github.com/phuongnguyendhtm/freeup-content-9b-lab/raw/refs/heads/main/downloads/contentlab-claude-0.3.0.zip) · [SHA256](https://github.com/phuongnguyendhtm/freeup-content-9b-lab/raw/refs/heads/main/downloads/SHA256SUMS.txt)
 

@@ -1,6 +1,6 @@
 # Cài, cập nhật và nơi lưu dữ liệu
 
-Trên 9BizClaw/OpenClaw, agent dùng [install-9b.cjs](../install-9b.cjs) theo [INSTALL.md](../INSTALL.md). Một lệnh điều phối cài file, kiểm hash, kích hoạt contentlab bằng native CLI cho đúng workspace/agent và xuất menu/reference mẫu. Không yêu cầu khách mở thư mục, chạy kích hoạt riêng hoặc tạo agent mới. Cài lại cùng agent giữ hồ sơ/thành phẩm và không nhân đôi.
+Trên 9BizClaw/OpenClaw, agent dùng [install-9b.cjs](../install-9b.cjs) theo [INSTALL.md](../INSTALL.md): --prepare cài và kiểm file, công cụ openclaw thực hiện lệnh cấu hình có kiểu, --finalize đọc lại và xác minh. Ba thao tác kỹ thuật trong cùng một yêu cầu khách hàng, tuân theo luồng cấu hình của host. Không yêu cầu khách mở thư mục, chạy kích hoạt riêng hoặc tạo agent mới. Cài lại cùng agent giữ hồ sơ/thành phẩm và không nhân đôi.
 
 Skill ở workspace/skills/freeup-content-gon-lab; dữ liệu ở workspace/freeup-content-gon-lab-data; phần khách sử dụng ở workspace/Nội dung của tôi. Workspace lấy từ đăng ký host, không phải thư mục vendor, cwd hay file ZIP. Claude Code/Codex dùng thư mục skill của dự án.
 

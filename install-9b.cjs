@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 'use strict';
-// One native route: install files, then activate-9b --apply. Never rewrites host config.
+// Chat agents prepare files, use the typed openclaw config tool, then finalize.
+// Operator --apply retains the scoped native CLI route. Never rewrites host config.
 const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
@@ -8,7 +9,7 @@ const crypto = require('node:crypto');
 const { spawn } = require('node:child_process');
 const PACKAGE = 'freeup-content-gon-lab';
 const SKILL = 'contentlab';
-const USAGE = 'node install-9b.cjs [--workspace ABS_AGENT_WORKSPACE] [--agent REGISTERED_ID] [--config ABS_JSON] [--node ABS_NODE] [--openclaw-entrypoint ABS_JS] [--session CHAT_ID] [--check]\nWorkspace comes from the current agent runtime or OPENCLAW_WORKSPACE_DIR, never cwd. Default installs + scoped native activation; --check writes nothing.';
+const USAGE = 'node install-9b.cjs [--workspace ABS_AGENT_WORKSPACE] [--agent REGISTERED_ID] [--config ABS_JSON] [--node ABS_NODE] [--openclaw-entrypoint ABS_JS] [--session CHAT_ID] [--prepare|--finalize|--check|--apply]\nWorkspace comes from the current agent runtime or OPENCLAW_WORKSPACE_DIR, never cwd. Chat agent: --prepare, typed openclaw config tool, then --finalize. Prepare/finalize never write host config. --check writes nothing. Default/--apply is the operator native CLI route.';
 function fail(code, message) { const error = new Error(message); error.code = code; error.publicMessage = true; throw error; }
 function object(value) { return value && typeof value === 'object' && !Array.isArray(value); }
 function read(file) { try { const data = JSON.parse(fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, '')); if (!object(data)) throw Error(); return data; } catch { fail('INVALID_JSON', 'Không đọc được JSON của đúng host/gói; không hiển thị nội dung cấu hình.'); } }
@@ -32,11 +33,11 @@ function parse(argv) {
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i]; if (!arg.startsWith('--')) fail('INVALID_ARGUMENT', 'Chỉ dùng tham số có tên; xem --help.');
     const key = arg.slice(2);
-    if (!['workspace', 'agent', 'config', 'node', 'openclaw-entrypoint', 'source', 'session', 'help', 'check', 'apply'].includes(key) || Object.hasOwn(result, key)) fail('INVALID_ARGUMENT', 'Tham số không hợp lệ hoặc bị lặp.');
-    if (['help', 'check', 'apply'].includes(key)) result[key] = true;
+    if (!['workspace', 'agent', 'config', 'node', 'openclaw-entrypoint', 'source', 'session', 'help', 'check', 'apply', 'prepare', 'finalize'].includes(key) || Object.hasOwn(result, key)) fail('INVALID_ARGUMENT', 'Tham số không hợp lệ hoặc bị lặp.');
+    if (['help', 'check', 'apply', 'prepare', 'finalize'].includes(key)) result[key] = true;
     else { if (!argv[i + 1] || argv[i + 1].startsWith('--')) fail('INVALID_ARGUMENT', 'Tham số thiếu giá trị.'); result[key] = argv[++i]; }
   }
-  if (result.check && result.apply) fail('INVALID_ARGUMENT', 'Chỉ chọn --check hoặc --apply.'); return result;
+  if (['check', 'apply', 'prepare', 'finalize'].filter(key => result[key]).length > 1) fail('INVALID_ARGUMENT', 'Chỉ chọn một chế độ --prepare, --finalize, --check hoặc --apply.'); return result;
 }
 function sameSelection(explicit, trusted, directory, label) {
   const a = explicit ? regular(explicit, directory, label) : null;
@@ -134,6 +135,15 @@ function effectiveAllowed(config, agent) {
   if (!Array.isArray(list) || list.some(item => typeof item !== 'string')) fail('INVALID_ALLOWLIST', 'Danh sách skill chưa hợp lệ; không thay giới hạn bằng mặc định mới.');
   return list.includes(SKILL);
 }
+function activationPlan(config, agent) {
+  const entry = config.agents?.entries?.[agent];
+  if (!object(entry)) fail('AGENT_NOT_REGISTERED', 'Agent không còn trong config đã xác minh.');
+  const explicit = Object.hasOwn(entry, 'skills'), current = explicit ? entry.skills : config.agents.defaults?.skills;
+  if ((explicit && current === undefined) || (current !== undefined && (!Array.isArray(current) || current.some(item => typeof item !== 'string' || !item.trim())))) fail('INVALID_ALLOWLIST', 'Danh sách skill hiện tại chưa hợp lệ; không tự bỏ giới hạn.');
+  const needed = current !== undefined && !current.includes(SKILL);
+  const targetPath = `agents.entries[${JSON.stringify(agent)}].skills`, nextList = current === undefined ? null : [...current, ...(needed ? [SKILL] : [])];
+  return { targetPath, ...(explicit ? { currentExplicitList: [...current] } : {}), expectedAbsent: !explicit, expectedEffectiveList: current === undefined ? null : [...current], nextList, needed, getMessage: 'config get ' + targetPath, ...(!explicit ? { inheritedGetMessage: 'config get agents.defaults.skills' } : {}), setMessage: needed ? 'config set ' + targetPath + ' ' + JSON.stringify(nextList) : null, instruction: 'Dùng tool openclaw với {message:getMessage}; inheritedGetMessage chỉ để đọc danh sách mặc định khi path riêng unset. Không ghép danh sách từ output tool bị cắt ngắn. Ngay trước set, chạy --prepare lại để đọc đầy đủ danh sách local đúng agent và so với currentExplicitList/expectedEffectiveList cùng expectedAbsent. Nếu khác, dừng và xem kế hoạch mới; không ghi danh sách cũ. Nếu needed:true và vẫn khớp, dùng openclaw với {message:setMessage} mới nhất. Nếu tool từ chối hoặc yêu cầu duyệt, tuân thủ kết quả và dừng; không dùng exec/CLI hoặc ghi file config thay thế. Tool này không có compare-and-swap; --finalize sẽ đọc lại và kiểm danh sách chính xác.' };
+}
 function sourceComplete(source, installer) {
   const plan = installer.sourcePlan(source), paths = new Set(plan.files.map(item => item.path));
   for (const name of ['scripts/contentlab.cjs', 'scripts/onboarding.cjs', 'scripts/sheet.cjs', 'scripts/production.cjs', 'scripts/render.cjs', 'scripts/setup-renderer.cjs', 'references/onboarding.md', 'references/production.md', 'references/sheets.md', 'references/host-adapters.md', 'references/sheet-template.json']) if (!paths.has(name)) fail('SOURCE_INCOMPLETE', 'Gói chưa đủ helper/reference bắt buộc; không cài bản rút gọn rồi nhận hoàn tất.');
@@ -155,14 +165,29 @@ function verifyInstall(context, receipt, installer) {
   if (JSON.stringify(actual) !== JSON.stringify(saved.files) || crypto.createHash('sha256').update(JSON.stringify(actual)).digest('hex') !== saved.inventory_sha256) fail('INSTALL_NOT_VERIFIED', 'Inventory cài thật không khớp SHA256 receipt.');
   const skill = fs.readFileSync(path.join(target, 'SKILL.md'), 'utf8');
   if (!/^---\r?\n[\s\S]*?^name:\s*["']?contentlab["']?\s*$/m.test(skill)) fail('INSTALL_NOT_VERIFIED', 'Skill chưa có đúng tên slash command contentlab.');
-  return { target, receiptPath: file, version: saved.version, files: actual.length, releaseManifestVerified: saved.release_manifest_verified === true };
+  return { target, receiptPath: file, version: saved.version, files: actual.length, inventorySha256: saved.inventory_sha256, releaseManifestVerified: saved.release_manifest_verified === true };
 }
 function writeReport(context, file, value) {
   contained(context.workspace, file); const temporary = contained(context.workspace, file + '.tmp-' + crypto.randomUUID());
   fs.writeFileSync(temporary, JSON.stringify(value, null, 2) + '\n', { flag: 'wx', mode: 0o600 }); fs.renameSync(temporary, file);
 }
+async function prepareAssets(context, evidence, options, childEnv, runner) {
+  const entry = contained(context.workspace, path.join(evidence.target, 'scripts/contentlab.cjs'));
+  const session = options.session || 'install-preview-' + crypto.randomUUID();
+  const menu = await jsonCommand(context, entry, ['menu', '--workspace', context.workspace, '--session', session], childEnv, 'MENU_PREPARATION_FAILED', runner);
+  const menuPath = contained(context.workspace, menu.mediaPath || ''), png = fs.readFileSync(menuPath);
+  const packagedMenu = fs.readFileSync(contained(context.workspace, path.join(evidence.target, 'assets/menu/he-thong-content-ngang-v2.png')));
+  if (!menu.ok || menu.startsProduction !== false || menu.attachment !== 'MEDIA:' + menuPath || menu.items?.length !== 9 || menu.items[1].label !== 'Bài đăng kèm sản phẩm' || png.length < 33 || !png.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10])) || png.toString('ascii', 12, 16) !== 'IHDR' || png.readUInt32BE(16) <= png.readUInt32BE(20) || !png.equals(packagedMenu)) fail('MENU_PREPARATION_FAILED', 'Chưa xác minh được menu ngang PNG đủ chín định dạng.');
+  const template = await jsonCommand(context, entry, ['sheet', 'template', '--workspace', context.workspace], childEnv, 'TEMPLATE_PREPARATION_FAILED', runner);
+  if (template.template?.verified !== true) fail('TEMPLATE_PREPARATION_FAILED', 'Mẫu Sheet chưa được helper kiểm SHA256.');
+  for (const [key, hashKey] of [['xlsxPath', 'xlsxSha256'], ['schemaPath', 'schemaSha256']]) {
+    contained(context.workspace, template.template[key] || ''); regular(template.template[key], false, 'Template asset');
+    if (crypto.createHash('sha256').update(fs.readFileSync(template.template[key])).digest('hex') !== template.template[hashKey]) fail('TEMPLATE_PREPARATION_FAILED', 'SHA256 file mẫu thực không khớp kết quả helper.');
+  }
+  return { menu: { mediaPath: menuPath, attachment: menu.attachment, prepared: true, session, items: menu.items, shortcut: menu.shortcut, displayedInChat: false }, template: template.template };
+}
 async function run(options = {}, dependencies = {}) {
-  const result = { ok: false, packageId: PACKAGE, host: '9bizclaw', installed: false, configured: false, configuredScope: 'current-agent-skill-allowlist', chatVerified: false, onboardingRequired: true, stage: 'discovery' };
+  const result = { ok: false, packageId: PACKAGE, host: '9bizclaw', mode: options.prepare ? 'prepare' : options.finalize ? 'finalize' : options.check ? 'check' : 'apply', installed: false, configured: false, configuredScope: 'current-agent-skill-allowlist', chatVerified: false, onboardingRequired: true, stage: 'discovery' };
   let context, descriptor, lock, reportPath;
   try {
     const env = dependencies.env || process.env;
@@ -185,38 +210,65 @@ async function run(options = {}, dependencies = {}) {
       }
       return { ...result, ok: true, stage: 'checked', status: 'ready-to-install', dryRun: true, installed, configured: effectiveAllowed(context.configData, context.agentId), message: 'Đã xác định đúng host/agent/workspace và gói đầy đủ. Chưa cài, chưa đổi config, chưa kiểm chat hoặc onboarding.' };
     }
-    const data = contained(context.workspace, path.join(context.workspace, PACKAGE + '-data/install')); fs.mkdirSync(data, { recursive: true });
+    const data = contained(context.workspace, path.join(context.workspace, PACKAGE + '-data/install'));
+    const preparationPath = contained(context.workspace, path.join(data, 'install-9b-preparation.json'));
+    if (options.finalize && !fs.existsSync(preparationPath)) fail('PREPARATION_REQUIRED', 'Chưa có receipt --prepare của đúng workspace; không tự cài hoặc kích hoạt trong --finalize.');
+    if (!options.finalize) fs.mkdirSync(data, { recursive: true });
     lock = contained(context.workspace, path.join(data, '.install-9b.lock')); reportPath = contained(context.workspace, path.join(data, 'install-9b-receipt.json'));
     try { descriptor = fs.openSync(lock, 'wx', 0o600); } catch (error) { if (error.code === 'EEXIST') fail('INSTALL_BUSY', 'Một lượt điều phối cài 9B khác đang chạy; không kích hoạt song song.'); throw error; }
     fs.writeFileSync(descriptor, JSON.stringify({ package_id: PACKAGE, pid: process.pid, agentId: context.agentId, startedAt: new Date().toISOString() }));
-    result.stage = 'file-install';
-    const installed = await jsonCommand(context, path.join(source, 'install.cjs'), ['--host', '9bizclaw', '--workspace', context.workspace], childEnv, 'FILE_INSTALL_FAILED', runner);
-    const evidence = verifyInstall(context, installed, installer);
-    Object.assign(result, { installed: true, installation: { ...evidence, changed: installed.changed, installMode: installed.install_mode }, receiptPath: reportPath });
-    if (activation.otherHash(read(context.config), context.agentId) !== beforeHash) fail('OTHER_CONFIG_CHANGED', 'Cấu hình ngoài scope thay đổi trong lúc cài; chưa gọi kích hoạt.');
-    result.stage = 'native-activation';
-    const configured = await jsonCommand(context, path.join(source, 'activate-9b.cjs'), ['--workspace', context.workspace, '--agent', context.agentId, '--config', context.config, '--openclaw-entrypoint', context.entrypoint, '--node', context.node, '--apply'], childEnv, 'ACTIVATION_FAILED', runner);
-    const after = read(context.config);
-    if (activation.otherHash(after, context.agentId) !== beforeHash) fail('OTHER_CONFIG_CHANGED', 'Cấu hình ngoài danh sách skill mục tiêu đã đổi; không tự rollback hoặc ghi lại config.');
-    if (configured.configured !== true || configured.agentId !== context.agentId || configured.workspace !== context.workspace || !effectiveAllowed(after, context.agentId)) fail('CONFIGURATION_NOT_VERIFIED', 'Native activation chưa được đọc lại đúng agent/workspace.');
-    result.configured = true; result.activation = { changed: configured.changed === true, status: configured.status, otherSettingsUnchanged: true };
-    result.stage = 'prepare-assets';
-    const entry = contained(context.workspace, path.join(evidence.target, 'scripts/contentlab.cjs'));
-    const session = options.session || 'install-preview-' + crypto.randomUUID();
-    const menu = await jsonCommand(context, entry, ['menu', '--workspace', context.workspace, '--session', session], childEnv, 'MENU_PREPARATION_FAILED', runner);
-    const menuPath = contained(context.workspace, menu.mediaPath || ''), png = fs.readFileSync(menuPath);
-    const packagedMenu = fs.readFileSync(contained(context.workspace, path.join(evidence.target, 'assets/menu/he-thong-content-ngang-v2.png')));
-    if (!menu.ok || menu.startsProduction !== false || menu.attachment !== 'MEDIA:' + menuPath || menu.items?.length !== 9 || menu.items[1].label !== 'Bài đăng kèm sản phẩm' || png.length < 33 || !png.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10])) || png.toString('ascii', 12, 16) !== 'IHDR' || png.readUInt32BE(16) <= png.readUInt32BE(20) || !png.equals(packagedMenu)) fail('MENU_PREPARATION_FAILED', 'Chưa xác minh được menu ngang PNG đủ chín định dạng.');
-    const template = await jsonCommand(context, entry, ['sheet', 'template', '--workspace', context.workspace], childEnv, 'TEMPLATE_PREPARATION_FAILED', runner);
-    if (template.template?.verified !== true) fail('TEMPLATE_PREPARATION_FAILED', 'Mẫu Sheet chưa được helper kiểm SHA256.');
-    for (const [key, hashKey] of [['xlsxPath', 'xlsxSha256'], ['schemaPath', 'schemaSha256']]) {
-      contained(context.workspace, template.template[key] || ''); regular(template.template[key], false, 'Template asset');
-      if (crypto.createHash('sha256').update(fs.readFileSync(template.template[key])).digest('hex') !== template.template[hashKey]) fail('TEMPLATE_PREPARATION_FAILED', 'SHA256 file mẫu thực không khớp kết quả helper.');
+    let installed, evidence, baseline;
+    if (options.finalize) {
+      result.stage = 'verify-preparation';
+      regular(preparationPath, false, 'Preparation receipt'); baseline = read(preparationPath);
+      if (baseline.schemaVersion !== 1 || baseline.packageId !== PACKAGE || baseline.host !== '9bizclaw' || baseline.agentId !== context.agentId || baseline.workspace !== context.workspace || baseline.configPath !== context.config || baseline.source !== source || baseline.node !== context.node || baseline.entrypoint !== context.entrypoint || !/^[a-f0-9]{64}$/.test(baseline.otherSettingsSha256 || '') || !/^[a-f0-9]{64}$/.test(baseline.inventorySha256 || '') || !object(baseline.configActivation) || baseline.configActivation.targetPath !== `agents.entries[${JSON.stringify(context.agentId)}].skills`) fail('PREPARATION_NOT_VERIFIED', 'Receipt --prepare không khớp đúng gói/host/agent/workspace; không xác nhận cấu hình.');
+      installed = read(contained(context.workspace, path.join(data, 'receipt.json')));
+      evidence = verifyInstall(context, installed, installer);
+      if (evidence.inventorySha256 !== baseline.inventorySha256 || evidence.version !== baseline.version) fail('INSTALL_NOT_VERIFIED', 'Inventory/version hiện tại khác receipt --prepare; cần kiểm gói trước khi xác nhận.');
+    } else {
+      result.stage = 'file-install';
+      installed = await jsonCommand(context, path.join(source, 'install.cjs'), ['--host', '9bizclaw', '--workspace', context.workspace], childEnv, 'FILE_INSTALL_FAILED', runner);
+      evidence = verifyInstall(context, installed, installer);
     }
+    Object.assign(result, { installed: true, installation: { ...evidence, changed: installed.changed, installMode: installed.install_mode }, receiptPath: reportPath });
+    const expectedOtherHash = baseline?.otherSettingsSha256 || beforeHash;
+    if (activation.otherHash(read(context.config), context.agentId) !== expectedOtherHash) fail('OTHER_CONFIG_CHANGED', 'Cấu hình ngoài scope khác baseline; không tự rollback, ghi lại config hoặc thử route kích hoạt khác.');
+    let plan;
+    const finalized = () => {
+      const current = read(context.config), entry = current.agents?.entries?.[context.agentId], expected = baseline.configActivation;
+      if (activation.otherHash(current, context.agentId) !== expectedOtherHash) fail('OTHER_CONFIG_CHANGED', 'Cấu hình ngoài scope đã đổi từ --prepare; không xác nhận hoàn tất.');
+      const exactTarget = expected.needed ? Object.hasOwn(entry, 'skills') && JSON.stringify(entry.skills) === JSON.stringify(expected.nextList) : expected.expectedAbsent ? !Object.hasOwn(entry, 'skills') : JSON.stringify(entry.skills) === JSON.stringify(expected.currentExplicitList);
+      if (!exactTarget || !effectiveAllowed(current, context.agentId)) fail('CONFIGURATION_NOT_VERIFIED', 'Tool cấu hình chưa ghi đúng danh sách đã chuẩn bị hoặc bị từ chối; --finalize không ghi config và không thử route khác.');
+    };
+    if (options.prepare) {
+      plan = activationPlan(read(context.config), context.agentId);
+      result.configured = effectiveAllowed(read(context.config), context.agentId);
+      result.configActivation = plan;
+    } else if (options.finalize) {
+      result.stage = 'verify-tool-activation'; finalized();
+      result.configured = true; result.activation = { route: 'openclaw-tool', changed: baseline.configActivation.needed, status: 'activation-configured', otherSettingsUnchanged: true };
+    } else {
+      result.stage = 'native-activation';
+      const configured = await jsonCommand(context, path.join(source, 'activate-9b.cjs'), ['--workspace', context.workspace, '--agent', context.agentId, '--config', context.config, '--openclaw-entrypoint', context.entrypoint, '--node', context.node, '--apply'], childEnv, 'ACTIVATION_FAILED', runner);
+      const after = read(context.config);
+      if (activation.otherHash(after, context.agentId) !== expectedOtherHash) fail('OTHER_CONFIG_CHANGED', 'Cấu hình ngoài danh sách skill mục tiêu đã đổi; không tự rollback hoặc ghi lại config.');
+      if (configured.configured !== true || configured.agentId !== context.agentId || configured.workspace !== context.workspace || !effectiveAllowed(after, context.agentId)) fail('CONFIGURATION_NOT_VERIFIED', 'Native activation chưa được đọc lại đúng agent/workspace.');
+      result.configured = true; result.activation = { route: 'native-cli-operator', changed: configured.changed === true, status: configured.status, otherSettingsUnchanged: true };
+    }
+    result.stage = 'prepare-assets';
+    const assets = await prepareAssets(context, evidence, { ...options, session: options.session || baseline?.session }, childEnv, runner);
     verifyInstall(context, installed, installer);
-    if (activation.otherHash(read(context.config), context.agentId) !== beforeHash) fail('OTHER_CONFIG_CHANGED', 'Cấu hình khác đã đổi sau khi chuẩn bị tài sản; không xác nhận hoàn tất.');
-    if (!effectiveAllowed(read(context.config), context.agentId)) fail('CONFIGURATION_NOT_VERIFIED', 'Danh sách skill mục tiêu đã đổi; chưa xác nhận cấu hình.');
-    Object.assign(result, { ok: true, stage: 'complete', status: 'installed-and-configured', menu: { mediaPath: menuPath, attachment: menu.attachment, prepared: true, session, items: menu.items, shortcut: menu.shortcut, displayedInChat: false }, template: template.template, next: 'Dùng /contentlab hoặc hệ thống content ở lượt tiếp theo trong cùng chat để kiểm snapshot skill và attachment thật. Agent phải đọc hồ sơ/Tri thức/ảnh qua native tools rồi chạy assess từ nguồn thực; cài gói và đếm file không hoàn tất onboarding.' });
+    if (activation.otherHash(read(context.config), context.agentId) !== expectedOtherHash) fail('OTHER_CONFIG_CHANGED', 'Cấu hình khác đã đổi sau khi chuẩn bị tài sản; không xác nhận hoàn tất.');
+    if (options.prepare) {
+      if (JSON.stringify(activationPlan(read(context.config), context.agentId)) !== JSON.stringify(plan)) fail('CONFIGURATION_CHANGED', 'Danh sách skill đổi trong lúc chuẩn bị; chạy --prepare lại trước khi đề xuất typed config set.');
+      const prepared = { schemaVersion: 1, packageId: PACKAGE, host: '9bizclaw', agentId: context.agentId, workspace: context.workspace, configPath: context.config, source, node: context.node, entrypoint: context.entrypoint, version: evidence.version, inventorySha256: evidence.inventorySha256, otherSettingsSha256: expectedOtherHash, configActivation: plan, session: assets.menu.session, preparedAt: new Date().toISOString() };
+      writeReport(context, preparationPath, prepared);
+      Object.assign(result, { ok: true, stage: 'prepared', status: plan.needed ? 'files-prepared-awaiting-tool-config' : 'files-prepared-awaiting-finalize', ...assets, preparationReceiptPath: preparationPath, configWritesPerformed: false, next: 'Thực hiện configActivation bằng tool openclaw đúng ngữ cảnh và quyền của host. Đọc lại ngay trước set, so khớp danh sách và dừng nếu bị từ chối/yêu cầu duyệt. Sau tool thành công, chạy cùng lệnh với --finalize. Chưa xác minh chat hoặc hoàn tất onboarding.' });
+    } else {
+      if (options.finalize) finalized();
+      else if (!effectiveAllowed(read(context.config), context.agentId)) fail('CONFIGURATION_NOT_VERIFIED', 'Danh sách skill mục tiêu đã đổi; chưa xác nhận cấu hình.');
+      Object.assign(result, { ok: true, stage: 'complete', status: 'installed-and-configured', ...assets, ...(options.finalize ? { preparationReceiptPath: preparationPath, configWritesPerformed: false } : {}), next: 'Dùng /contentlab hoặc hệ thống content ở lượt tiếp theo trong cùng chat để kiểm snapshot skill và attachment thật. Agent phải đọc hồ sơ/Tri thức/ảnh qua native tools rồi chạy assess từ nguồn thực; cài gói và đếm file không hoàn tất onboarding.' });
+    }
     writeReport(context, reportPath, result); return result;
   } catch (error) {
     const code = typeof error.code === 'string' && /^[A-Z][A-Z0-9_]{1,80}$/.test(error.code) ? error.code : 'INSTALL_9B_FAILED';
