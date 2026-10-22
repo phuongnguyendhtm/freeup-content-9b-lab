@@ -5,6 +5,8 @@ description: "Nhận và cài FreeUp Content Gọn từ GitHub cho 9BizClaw/Open
 
 # Nhận quà FreeUp Content Gọn
 
+Trước khi nhận là không cài được, làm bước 0 trong INSTALL.md: kiểm công cụ thật và thử thao tác chỉ đọc theo schema. Không bắt buộc tool tên “cài skill”; khả năng chạy lệnh/ghi file đã được cấp có thể thực hiện bộ cài. Không nhầm giới hạn của phiên cấu hình trung gian với phiên chủ hiện tại. Thiếu quyền thật thì báo đúng phần thiếu, không tự nâng quyền hoặc chuyển sang đường khác để né từ chối.
+
 Đọc [INSTALL.md](INSTALL.md), lấy bản raw hiện tại nếu HTML cũ/bị cắt. Khi chủ yêu cầu cài từ link, tự làm phần kỹ thuật. **9B/OpenClaw:** install-9b.cjs --prepare → lệnh config có kiểu qua công cụ openclaw của host → --finalize cho workspace agent đã đăng ký hiện tại. Không dùng exec --apply thay công cụ cấu hình bắt buộc. Không bắt khách chọn thư mục, chạy lệnh thứ hai hoặc đổi agent; không tự dùng content-gon-test của người tặng. Giữ nguyên quyền/cấu hình khác và dừng nếu native từ chối.
 
 Root SKILL này chỉ hướng dẫn cài. Sau configured thật, đọc SKILL sản xuất đã cài để mở menu và chạy onboarding có đọc tài liệu/assess; không kết luận đủ từ đếm tài liệu. Lượt chọn tiếp theo cùng chat dùng snapshot đã cập nhật. Mẫu Sheet trong reference là bắt buộc. Claude/Codex dùng adapter của host, Claude web/Cowork cần enable skill tài khoản.
